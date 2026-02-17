@@ -1,0 +1,195 @@
+"""
+PSX Stock Analyzer - FastAPI Backend
+
+Provides an API to scrape and analyze stocks listed on the Pakistan Stock Exchange.
+"""
+
+import asyncio
+import logging
+
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from slowapi.util import get_remote_address
+
+from analyzer import analyze
+from comparator import compare_stocks
+from config import settings
+from models import (
+    AnalyzeRequest,
+    AnalyzeResponse,
+    CompareRequest,
+    CompareResponse,
+    ErrorResponse,
+    HealthResponse,
+)
+from scraper import ScraperError, scrape_company
+
+# ── Logging ─────────────────────────────────────────────────────────────────
+
+logging.basicConfig(
+    level=logging.DEBUG if settings.debug else logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+)
+logger = logging.getLogger(__name__)
+
+# ── Rate Limiter ────────────────────────────────────────────────────────────
+
+limiter = Limiter(key_func=get_remote_address)
+
+# ── FastAPI App ─────────────────────────────────────────────────────────────
+
+app = FastAPI(
+    title=settings.app_name,
+    description="Scrapes and analyzes PSX-listed stocks for simple, human-readable insights.",
+    version="1.0.0",
+)
+
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+# ── CORS ────────────────────────────────────────────────────────────────────
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.allowed_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# ── Routes ──────────────────────────────────────────────────────────────────
+
+
+@app.get("/api/health", response_model=HealthResponse)
+async def health_check():
+    """Health check endpoint."""
+    return HealthResponse()
+
+
+@app.post(
+    "/api/analyze",
+    response_model=AnalyzeResponse,
+    responses={
+        400: {"model": ErrorResponse, "description": "Invalid URL"},
+        404: {"model": ErrorResponse, "description": "Company not found"},
+        502: {"model": ErrorResponse, "description": "PSX unreachable"},
+        429: {"description": "Rate limit exceeded"},
+    },
+)
+@limiter.limit(settings.rate_limit)
+async def analyze_company(request: Request, body: AnalyzeRequest):
+    """Scrape a PSX company page and return structured analysis."""
+    logger.info("Analyzing: %s", body.url)
+
+    try:
+        scraped = await scrape_company(body.url)
+    except ScraperError as e:
+        error_msg = str(e)
+        if "not found" in error_msg.lower():
+            return JSONResponse(status_code=404, content={"detail": error_msg})
+        return JSONResponse(status_code=502, content={"detail": error_msg})
+    except Exception:
+        logger.exception("Unexpected error analyzing %s", body.url)
+        return JSONResponse(
+            status_code=500,
+            content={"detail": "An internal error occurred. Please try again."},
+        )
+
+    analysis = analyze(
+        company=scraped["company"],
+        price=scraped["price"],
+        equity=scraped["equity"],
+        financials_annual=scraped["financials_annual"],
+        ratios=scraped["ratios"],
+        payouts=scraped["payouts"],
+    )
+
+    return AnalyzeResponse(
+        company=scraped["company"],
+        price=scraped["price"],
+        equity=scraped["equity"],
+        financials_annual=scraped["financials_annual"],
+        financials_quarterly=scraped["financials_quarterly"],
+        ratios=scraped["ratios"],
+        payouts=scraped["payouts"],
+        analysis=analysis,
+        indices=scraped.get("indices", []),
+    )
+
+
+@app.post(
+    "/api/compare",
+    response_model=CompareResponse,
+    responses={
+        400: {"model": ErrorResponse, "description": "Invalid URL"},
+        404: {"model": ErrorResponse, "description": "Company not found"},
+        502: {"model": ErrorResponse, "description": "PSX unreachable"},
+        429: {"description": "Rate limit exceeded"},
+    },
+)
+@limiter.limit(settings.rate_limit)
+async def compare_companies(request: Request, body: CompareRequest):
+    """Scrape two PSX companies and return a side-by-side comparison."""
+    logger.info("Comparing: %s vs %s", body.url_a, body.url_b)
+
+    # Scrape both stocks concurrently
+    try:
+        scraped_a, scraped_b = await asyncio.gather(
+            scrape_company(body.url_a),
+            scrape_company(body.url_b),
+        )
+    except ScraperError as e:
+        error_msg = str(e)
+        if "not found" in error_msg.lower():
+            return JSONResponse(status_code=404, content={"detail": error_msg})
+        return JSONResponse(status_code=502, content={"detail": error_msg})
+    except Exception:
+        logger.exception("Unexpected error comparing %s vs %s", body.url_a, body.url_b)
+        return JSONResponse(
+            status_code=500,
+            content={"detail": "An internal error occurred. Please try again."},
+        )
+
+    # Analyze each stock individually
+    def _build_response(scraped: dict) -> AnalyzeResponse:
+        analysis = analyze(
+            company=scraped["company"],
+            price=scraped["price"],
+            equity=scraped["equity"],
+            financials_annual=scraped["financials_annual"],
+            ratios=scraped["ratios"],
+            payouts=scraped["payouts"],
+        )
+        return AnalyzeResponse(
+            company=scraped["company"],
+            price=scraped["price"],
+            equity=scraped["equity"],
+            financials_annual=scraped["financials_annual"],
+            financials_quarterly=scraped["financials_quarterly"],
+            ratios=scraped["ratios"],
+            payouts=scraped["payouts"],
+            analysis=analysis,
+            indices=scraped.get("indices", []),
+        )
+
+    stock_a = _build_response(scraped_a)
+    stock_b = _build_response(scraped_b)
+
+    comparison = compare_stocks(stock_a, stock_b)
+
+    return CompareResponse(
+        stock_a=stock_a,
+        stock_b=stock_b,
+        comparison=comparison,
+    )
+
+
+# ── Startup ─────────────────────────────────────────────────────────────────
+
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
