@@ -6,6 +6,3 @@ startCommand = "python main.py"
 healthcheckPath = "/api/health"
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 3
-
-[service]
-rootDirectory = "backend"
