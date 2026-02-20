@@ -41,6 +41,11 @@ import {
   Tooltip as RechartsTooltip,
   ResponsiveContainer,
 } from "recharts";
+import dynamic from "next/dynamic";
+
+const ReactApexChart = dynamic(() => import("react-apexcharts"), {
+  ssr: false,
+});
 
 /* ─────────────────────────── Types ─────────────────────────── */
 
@@ -416,6 +421,14 @@ export function ComparisonView({ data }: ComparisonViewProps) {
 
       {/* 5 — 4-Year Financial Trends */}
       <FinancialTrendsSection
+        stockA={stock_a}
+        stockB={stock_b}
+        symA={symA}
+        symB={symB}
+      />
+
+      {/* 6 — Area Trend Comparison */}
+      <AreaTrendsSection
         stockA={stock_a}
         stockB={stock_b}
         symA={symA}
@@ -1155,6 +1168,300 @@ function FinancialTrendsSection({
               unit=""
             />
           )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+/* ═══════════ Overall Performance Index (Area Chart) ═════════ */
+
+/**
+ * Normalise a single TrendDataPoint[] series to 0–100 per metric.
+ * For each data point the min/max across BOTH stocks across ALL years
+ * is used so the scale is fair.
+ */
+function normaliseSeries(data: TrendDataPoint[]): TrendDataPoint[] {
+  const allVals = data.flatMap((d) =>
+    [d.valueA, d.valueB].filter((v): v is number => v != null),
+  );
+  if (allVals.length === 0) return [];
+  const min = Math.min(...allVals);
+  const max = Math.max(...allVals);
+  const range = max - min || 1; // avoid /0
+  return data.map((d) => ({
+    year: d.year,
+    valueA: d.valueA != null ? ((d.valueA - min) / range) * 100 : null,
+    valueB: d.valueB != null ? ((d.valueB - min) / range) * 100 : null,
+  }));
+}
+
+interface CompositePoint {
+  year: string;
+  scoreA: number;
+  scoreB: number;
+  metricsUsed: number;
+}
+
+function buildCompositeIndex(
+  allSeries: TrendDataPoint[][],
+): CompositePoint[] {
+  // Normalise each metric independently
+  const normed = allSeries.map(normaliseSeries).filter((s) => s.length > 0);
+  if (normed.length === 0) return [];
+
+  // Collect all years across every metric
+  const yearSet = new Set<string>();
+  normed.forEach((s) => s.forEach((d) => yearSet.add(d.year)));
+  const years = Array.from(yearSet).sort();
+
+  return years.map((year) => {
+    let sumA = 0,
+      countA = 0,
+      sumB = 0,
+      countB = 0;
+    for (const series of normed) {
+      const point = series.find((d) => d.year === year);
+      if (point?.valueA != null) {
+        sumA += point.valueA;
+        countA++;
+      }
+      if (point?.valueB != null) {
+        sumB += point.valueB;
+        countB++;
+      }
+    }
+    return {
+      year,
+      scoreA: countA > 0 ? Math.round(sumA / countA) : 0,
+      scoreB: countB > 0 ? Math.round(sumB / countB) : 0,
+      metricsUsed: Math.max(countA, countB),
+    };
+  });
+}
+
+function AreaTrendsSection({
+  stockA,
+  stockB,
+  symA,
+  symB,
+}: {
+  stockA: StockData;
+  stockB: StockData;
+  symA: string;
+  symB: string;
+}) {
+  const hasFinancials =
+    stockA.financials_annual.length > 0 || stockB.financials_annual.length > 0;
+  const hasRatios = stockA.ratios.length > 0 || stockB.ratios.length > 0;
+
+  if (!hasFinancials && !hasRatios) return null;
+
+  // Gather all available metric series
+  const allSeries: TrendDataPoint[][] = [];
+  if (hasFinancials) {
+    allSeries.push(
+      alignFinancialData(
+        stockA.financials_annual,
+        stockB.financials_annual,
+        "total_income",
+      ),
+      alignFinancialData(
+        stockA.financials_annual,
+        stockB.financials_annual,
+        "profit_after_tax",
+      ),
+      alignFinancialData(
+        stockA.financials_annual,
+        stockB.financials_annual,
+        "eps",
+      ),
+    );
+  }
+  if (hasRatios) {
+    allSeries.push(
+      alignRatioData(stockA.ratios, stockB.ratios, "net_profit_margin"),
+      alignRatioData(stockA.ratios, stockB.ratios, "eps_growth"),
+    );
+  }
+
+  const composite = buildCompositeIndex(allSeries);
+  if (composite.length === 0) return null;
+
+  const latestA = composite[composite.length - 1].scoreA;
+  const latestB = composite[composite.length - 1].scoreB;
+  const leader = latestA > latestB ? symA : latestB > latestA ? symB : null;
+
+  const series = [
+    { name: symA, data: composite.map((d) => d.scoreA) },
+    { name: symB, data: composite.map((d) => d.scoreB) },
+  ];
+
+  const options: ApexCharts.ApexOptions = {
+    chart: {
+      type: "area",
+      height: 280,
+      toolbar: { show: false },
+      zoom: { enabled: false },
+      fontFamily: "inherit",
+    },
+    colors: [STOCK_A_COLOR, STOCK_B_COLOR],
+    fill: { type: "solid", opacity: 0.2 },
+    stroke: { curve: "smooth", width: 2.5 },
+    dataLabels: { enabled: false },
+    xaxis: {
+      categories: composite.map((d) => d.year),
+      labels: { style: { colors: "#404E3F", fontSize: "12px" } },
+      axisBorder: { color: "#E5E0D9" },
+      axisTicks: { color: "#E5E0D9" },
+    },
+    yaxis: {
+      min: 0,
+      max: 100,
+      labels: {
+        style: { colors: "#404E3F", fontSize: "12px" },
+        formatter: (v) => `${Math.round(v)}`,
+      },
+    },
+    grid: { borderColor: "#E5E0D9", strokeDashArray: 3 },
+    tooltip: {
+      y: { formatter: (v) => `${Math.round(v)} / 100` },
+      theme: "light",
+      style: { fontSize: "12px" },
+    },
+    legend: { show: false },
+    annotations: {
+      yaxis: [
+        {
+          y: 50,
+          borderColor: "#E5E0D9",
+          strokeDashArray: 6,
+          label: {
+            text: "Average (50)",
+            position: "front",
+            style: {
+              color: "#404E3F",
+              background: "transparent",
+              fontSize: "10px",
+            },
+          },
+        },
+      ],
+    },
+  };
+
+  return (
+    <div>
+      <div className="flex items-center gap-2.5 mb-3">
+        <div className="w-9 h-9 rounded-lg bg-[#404E3F] text-white flex items-center justify-center">
+          <TrendingUp className="h-5 w-5" />
+        </div>
+        <div>
+          <h3 className="text-base font-bold text-[#404E3F]">
+            Overall Performance Index
+          </h3>
+          <p className="text-xs text-[#404E3F]/50">
+            Combined score (0–100) from income, profit, EPS, margin &amp; growth
+          </p>
+        </div>
+      </div>
+
+      <Card className="border-[#E5E0D9] bg-white shadow-sm">
+        <CardContent className="py-5 px-5 space-y-4">
+          {/* Color legend + leader badge */}
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-4 text-xs text-[#404E3F]/70 p-2 rounded-md bg-[#F8F3EA]/60 border border-[#E5E0D9]/50">
+              <span className="flex items-center gap-1.5">
+                <span
+                  className="inline-block w-3 h-3 rounded-sm"
+                  style={{ backgroundColor: STOCK_A_COLOR }}
+                />
+                {symA}
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span
+                  className="inline-block w-3 h-3 rounded-sm"
+                  style={{ backgroundColor: STOCK_B_COLOR }}
+                />
+                {symB}
+              </span>
+            </div>
+            {leader && (
+              <Badge className="bg-[#4BC232]/10 text-[#3a9927] border-[#4BC232]/30 text-xs gap-1">
+                <Trophy className="h-3 w-3" />
+                {leader} leads overall
+              </Badge>
+            )}
+          </div>
+
+          {/* The area chart */}
+          <div className="h-[280px]">
+            <ReactApexChart
+              type="area"
+              height={280}
+              options={options}
+              series={series}
+            />
+          </div>
+
+          {/* Score summary */}
+          <div className="grid grid-cols-2 gap-3">
+            <div
+              className={`text-center p-3 rounded-lg border ${
+                latestA >= latestB
+                  ? "bg-[#4BC232]/10 border-[#4BC232]/40"
+                  : "bg-[#F3F1E5] border-transparent"
+              }`}
+            >
+              <p className="text-xs font-medium text-[#404E3F]/60 mb-0.5">
+                {symA} Latest Score
+              </p>
+              <p
+                className={`text-2xl font-bold ${
+                  latestA >= latestB ? "text-[#4BC232]" : "text-[#404E3F]"
+                }`}
+              >
+                {latestA}
+                <span className="text-sm font-normal text-[#404E3F]/40">
+                  /100
+                </span>
+              </p>
+            </div>
+            <div
+              className={`text-center p-3 rounded-lg border ${
+                latestB >= latestA
+                  ? "bg-[#2B5288]/10 border-[#2B5288]/40"
+                  : "bg-[#F3F1E5] border-transparent"
+              }`}
+            >
+              <p className="text-xs font-medium text-[#404E3F]/60 mb-0.5">
+                {symB} Latest Score
+              </p>
+              <p
+                className={`text-2xl font-bold ${
+                  latestB >= latestA ? "text-[#2B5288]" : "text-[#404E3F]"
+                }`}
+              >
+                {latestB}
+                <span className="text-sm font-normal text-[#404E3F]/40">
+                  /100
+                </span>
+              </p>
+            </div>
+          </div>
+
+          {/* Explainer */}
+          <div className="p-3 rounded-lg bg-[#F8F3EA] border border-[#E5E0D9]/50">
+            <div className="flex items-start gap-2">
+              <Lightbulb className="h-4 w-4 text-amber-500 mt-0.5 shrink-0" />
+              <p className="text-xs text-[#404E3F]/70 leading-relaxed">
+                This index normalises each financial metric (income, profit,
+                EPS, margin, growth) to a 0–100 scale, then averages them.
+                The stock with the higher area is performing better overall.
+                The gap between the two areas shows how far apart they are.
+              </p>
+            </div>
+          </div>
         </CardContent>
       </Card>
     </div>

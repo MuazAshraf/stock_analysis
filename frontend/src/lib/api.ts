@@ -1,6 +1,13 @@
-import type { StockData, CompareResponse } from "@/types/stock";
+import type { StockData, CompareResponse, StockListItem } from "@/types/stock";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
+export async function getStocks(index: string = "KSE100"): Promise<StockListItem[]> {
+  const res = await fetch(`${API_URL}/api/stocks?index=${index}`);
+  if (!res.ok) throw new Error("Failed to load stock list");
+  const data = await res.json();
+  return data.stocks;
+}
 
 export async function analyzeStock(url: string): Promise<StockData> {
   const response = await fetch(`${API_URL}/api/analyze`, {

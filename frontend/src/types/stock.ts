@@ -1,3 +1,8 @@
+export interface StockListItem {
+  symbol: string;
+  name: string;
+}
+
 export interface Company {
   name: string;
   symbol: string;

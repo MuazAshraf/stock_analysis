@@ -1,9 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
-import { Search, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
+import { getStocks } from "@/lib/api";
+import { StockCombobox } from "@/components/stock-combobox";
+import { IndexToggle, type PsxIndex } from "@/components/index-toggle";
 
 interface SearchBarProps {
   onAnalyze: (url: string) => void;
@@ -11,34 +14,50 @@ interface SearchBarProps {
 }
 
 export function SearchBar({ onAnalyze, isLoading }: SearchBarProps) {
-  const [url, setUrl] = useState("");
+  const [index, setIndex] = useState<PsxIndex>("KSE100");
+  const [selected, setSelected] = useState<string | null>(null);
 
-  const isValidUrl = /^https:\/\/dps\.psx\.com\.pk\/company\/[A-Za-z0-9]+\/?$/.test(url.trim());
+  const { data: stocks = [], isLoading: stocksLoading } = useQuery({
+    queryKey: ["stocks", index],
+    queryFn: () => getStocks(index),
+    staleTime: 1000 * 60 * 60,
+  });
+
+  function handleIndexChange(newIndex: PsxIndex) {
+    setIndex(newIndex);
+    setSelected(null);
+  }
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (isValidUrl && !isLoading) {
-      onAnalyze(url.trim());
+    if (selected && !isLoading) {
+      onAnalyze(`https://dps.psx.com.pk/company/${selected}`);
     }
   }
 
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-2xl mx-auto">
+      <div className="flex justify-center mb-4">
+        <IndexToggle
+          value={index}
+          onChange={handleIndexChange}
+          disabled={isLoading}
+        />
+      </div>
       <div className="flex flex-col sm:flex-row gap-3">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-[#404E3F]/50" />
-          <Input
-            type="url"
-            placeholder="Paste PSX stock URL, e.g. https://dps.psx.com.pk/company/ENGRO"
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            className="pl-10 h-12 text-base border-[#E5E0D9] bg-white focus-visible:ring-[#4BC232] focus-visible:border-[#4BC232]"
+        <div className="flex-1">
+          <StockCombobox
+            stocks={stocks}
+            value={selected}
+            onChange={setSelected}
+            placeholder="Pick a stock to analyze..."
             disabled={isLoading}
+            isLoading={stocksLoading}
           />
         </div>
         <Button
           type="submit"
-          disabled={!isValidUrl || isLoading}
+          disabled={!selected || isLoading}
           className="h-12 px-8 text-base font-semibold bg-[#4BC232] hover:bg-[#3da828] text-white disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
         >
           {isLoading ? (
@@ -51,11 +70,6 @@ export function SearchBar({ onAnalyze, isLoading }: SearchBarProps) {
           )}
         </Button>
       </div>
-      {url.length > 0 && !isValidUrl && (
-        <p className="text-sm text-red-500 mt-2">
-          Please paste a valid PSX URL like: https://dps.psx.com.pk/company/ENGRO
-        </p>
-      )}
     </form>
   );
 }

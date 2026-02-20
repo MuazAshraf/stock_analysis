@@ -6,8 +6,9 @@ Provides an API to scrape and analyze stocks listed on the Pakistan Stock Exchan
 
 import asyncio
 import logging
+import time
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from slowapi import Limiter, _rate_limit_exceeded_handler
@@ -24,8 +25,9 @@ from models import (
     CompareResponse,
     ErrorResponse,
     HealthResponse,
+    StockListResponse,
 )
-from scraper import ScraperError, scrape_company
+from scraper import ScraperError, fetch_all_stocks, scrape_company, scrape_stock_list
 
 # ── Logging ─────────────────────────────────────────────────────────────────
 
@@ -60,7 +62,47 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# ── Stock List Cache (per index) ───────────────────────────────────────────
+
+_stock_list_cache: dict[str, StockListResponse] = {}
+_stock_list_cache_time: dict[str, float] = {}
+_STOCK_LIST_TTL = 3600  # 1 hour
+_VALID_INDICES = {"KSE100", "KSE30", "ALL"}
+
 # ── Routes ──────────────────────────────────────────────────────────────────
+
+
+@app.get("/api/stocks", response_model=StockListResponse)
+async def list_stocks(
+    index: str = Query("KSE100", description="PSX index: KSE100, KSE30, or ALL"),
+):
+    """Return the stock list for a specific PSX index, or all equities."""
+    index = index.upper()
+    if index not in _VALID_INDICES:
+        return JSONResponse(
+            status_code=400,
+            content={"detail": f"Invalid index. Must be one of: {', '.join(sorted(_VALID_INDICES))}"},
+        )
+
+    # Check cache
+    if index in _stock_list_cache and (time.time() - _stock_list_cache_time.get(index, 0)) < _STOCK_LIST_TTL:
+        return StockListResponse(stocks=_stock_list_cache[index].stocks, cached=True)
+
+    try:
+        if index == "ALL":
+            stocks = await fetch_all_stocks()
+        else:
+            stocks = await scrape_stock_list(index)
+    except ScraperError as e:
+        return JSONResponse(status_code=502, content={"detail": str(e)})
+
+    stocks.sort(key=lambda s: s.symbol)
+
+    response = StockListResponse(stocks=stocks)
+    _stock_list_cache[index] = response
+    _stock_list_cache_time[index] = time.time()
+
+    return response
 
 
 @app.get("/api/health", response_model=HealthResponse)

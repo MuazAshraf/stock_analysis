@@ -112,8 +112,8 @@ export function Dashboard() {
             </h2>
             <p className="text-[#404E3F]/60 max-w-lg mx-auto mb-8">
               {activeTab === "analyze"
-                ? "New to investing? Paste any Pakistan Stock Exchange company link and get a clear, jargon-free analysis that anyone can understand."
-                : "Paste two PSX stock URLs and see a head-to-head comparison of key financial metrics to help you decide."}
+                ? "New to investing? Pick any Pakistan Stock Exchange company and get a clear, jargon-free analysis that anyone can understand."
+                : "Pick two PSX stocks and see a head-to-head comparison of key financial metrics to help you decide."}
             </p>
           </div>
         )}
@@ -228,8 +228,8 @@ export function Dashboard() {
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto">
                   <StepCard
                     step="1"
-                    title="Paste a PSX URL"
-                    description="Go to dps.psx.com.pk, find any company, and copy the URL"
+                    title="Pick a Stock"
+                    description="Search and select any PSX-listed company from the dropdown"
                   />
                   <StepCard
                     step="2"
@@ -291,8 +291,8 @@ export function Dashboard() {
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto">
                   <StepCard
                     step="1"
-                    title="Paste Two PSX URLs"
-                    description="Find two companies on dps.psx.com.pk and copy both URLs"
+                    title="Pick Two Stocks"
+                    description="Search and select two PSX-listed companies from the dropdowns"
                   />
                   <StepCard
                     step="2"

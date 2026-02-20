@@ -20,6 +20,7 @@ from models import (
     PayoutRecord,
     PriceData,
     RatioYear,
+    StockListItem,
 )
 
 logger = logging.getLogger(__name__)
@@ -515,6 +516,72 @@ def _parse_indices(soup: BeautifulSoup) -> list[IndexPoint]:
             ))
 
     return indices
+
+
+# ── Stock List Scraper ─────────────────────────────────────────────────────
+
+
+async def scrape_stock_list(index: str) -> list[StockListItem]:
+    """Scrape the list of stocks from a PSX index page (e.g. KSE100, KSE30)."""
+    url = f"https://dps.psx.com.pk/indices/{index}"
+    logger.info("Scraping stock list from %s", url)
+
+    try:
+        html = await fetch_page(url)
+    except (httpx.HTTPStatusError, httpx.TimeoutException, httpx.RequestError) as e:
+        raise ScraperError(f"Failed to fetch {index} index page: {e}") from e
+
+    soup = BeautifulSoup(html, "html.parser")
+    stocks: list[StockListItem] = []
+
+    table = soup.select_one("table.tbl")
+    if not table:
+        logger.warning("No table found on %s index page", index)
+        return stocks
+
+    for row in table.select("tbody tr"):
+        cells = row.select("td")
+        if len(cells) < 2:
+            continue
+        # First cell contains a link like /company/ENGRO
+        link = cells[0].select_one("a")
+        if link:
+            symbol = link.get_text(strip=True).upper()
+            name = cells[1].get_text(strip=True)
+            if symbol:
+                stocks.append(StockListItem(symbol=symbol, name=name))
+
+    return stocks
+
+
+async def fetch_all_stocks() -> list[StockListItem]:
+    """Fetch all PSX equity stocks from the /symbols JSON endpoint."""
+    url = "https://dps.psx.com.pk/symbols"
+    logger.info("Fetching all stocks from %s", url)
+
+    try:
+        async with httpx.AsyncClient(
+            timeout=settings.request_timeout,
+            follow_redirects=False,
+            headers={"User-Agent": settings.user_agent},
+        ) as client:
+            response = await client.get(url)
+            response.raise_for_status()
+            data = response.json()
+    except (httpx.HTTPStatusError, httpx.TimeoutException, httpx.RequestError) as e:
+        raise ScraperError(f"Failed to fetch symbols from PSX: {e}") from e
+
+    stocks: list[StockListItem] = []
+    for item in data:
+        # Skip debt instruments and ETFs — only keep equities
+        if item.get("isDebt") or item.get("isETF"):
+            continue
+        symbol = (item.get("symbol") or "").strip().upper()
+        name = (item.get("name") or "").strip()
+        if symbol and name:
+            stocks.append(StockListItem(symbol=symbol, name=name))
+
+    return stocks
 
 
 # ── Public API ──────────────────────────────────────────────────────────────

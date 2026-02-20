@@ -111,6 +111,16 @@ class AnalyzeResponse(BaseModel):
     indices: list[IndexPoint] = Field(default_factory=list, description="Market index data (KSE 100, KSE 30, etc.)")
 
 
+class StockListItem(BaseModel):
+    symbol: str
+    name: str
+
+
+class StockListResponse(BaseModel):
+    stocks: list[StockListItem]
+    cached: bool = False
+
+
 class HealthResponse(BaseModel):
     status: str = "healthy"
 
