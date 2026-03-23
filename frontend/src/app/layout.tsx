@@ -18,6 +18,9 @@ export const metadata: Metadata = {
   title: "PSX Stock Analyzer - Simple Stock Analysis for Pakistani Investors",
   description:
     "Understand any Pakistan Stock Exchange (PSX) stock in plain English. Free, simple, beginner-friendly stock analysis.",
+  verification: {
+    google: "HahM2s5z9jWUt1JshB_gegjrRqFOImX4hOLI1ZZiyRU",
+  },
 };
 
 export default function RootLayout({
@@ -27,6 +30,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2132134425369055"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
