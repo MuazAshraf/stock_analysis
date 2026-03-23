@@ -81,6 +81,47 @@ export interface IndexPoint {
   change_percent: number | null;
 }
 
+export interface IncomeStatementPeriod {
+  period: string;
+  revenue: number | null;
+  gross_profit: number | null;
+  operating_income: number | null;
+  pretax_income: number | null;
+  tax: number | null;
+  net_income: number | null;
+  eps: number | null;
+}
+
+export interface BalanceSheetPeriod {
+  period: string;
+  total_assets: number | null;
+  total_equity: number | null;
+  total_liabilities: number | null;
+  total_debt: number | null;
+  cash: number | null;
+  current_assets: number | null;
+  current_liabilities: number | null;
+}
+
+export interface CashFlowPeriod {
+  period: string;
+  operating_cash_flow: number | null;
+  investing_cash_flow: number | null;
+  financing_cash_flow: number | null;
+  free_cash_flow: number | null;
+  capital_expenditure: number | null;
+  end_cash: number | null;
+}
+
+export interface FinancialStatements {
+  income_annual: IncomeStatementPeriod[];
+  income_quarterly: IncomeStatementPeriod[];
+  balance_annual: BalanceSheetPeriod[];
+  balance_quarterly: BalanceSheetPeriod[];
+  cashflow_annual: CashFlowPeriod[];
+  cashflow_quarterly: CashFlowPeriod[];
+}
+
 export interface StockData {
   company: Company;
   price: Price;
@@ -92,6 +133,7 @@ export interface StockData {
   analysis: Analysis;
   indices: IndexPoint[];
   is_shariah: boolean;
+  statements: FinancialStatements | null;
 }
 
 export interface ComparisonMetric {

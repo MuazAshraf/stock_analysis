@@ -99,6 +99,50 @@ class AnalysisResult(BaseModel):
     summary_points: list[str] = Field(..., description="4-6 plain English summary points")
 
 
+# ── Financial Statement Models ─────────────────────────────────────────────
+
+
+class IncomeStatementPeriod(BaseModel):
+    period: str
+    revenue: float | None = None
+    gross_profit: float | None = None
+    operating_income: float | None = None
+    pretax_income: float | None = None
+    tax: float | None = None
+    net_income: float | None = None
+    eps: float | None = None
+
+
+class BalanceSheetPeriod(BaseModel):
+    period: str
+    total_assets: float | None = None
+    total_equity: float | None = None
+    total_liabilities: float | None = None
+    total_debt: float | None = None
+    cash: float | None = None
+    current_assets: float | None = None
+    current_liabilities: float | None = None
+
+
+class CashFlowPeriod(BaseModel):
+    period: str
+    operating_cash_flow: float | None = None
+    investing_cash_flow: float | None = None
+    financing_cash_flow: float | None = None
+    free_cash_flow: float | None = None
+    capital_expenditure: float | None = None
+    end_cash: float | None = None
+
+
+class FinancialStatements(BaseModel):
+    income_annual: list[IncomeStatementPeriod] = Field(default_factory=list)
+    income_quarterly: list[IncomeStatementPeriod] = Field(default_factory=list)
+    balance_annual: list[BalanceSheetPeriod] = Field(default_factory=list)
+    balance_quarterly: list[BalanceSheetPeriod] = Field(default_factory=list)
+    cashflow_annual: list[CashFlowPeriod] = Field(default_factory=list)
+    cashflow_quarterly: list[CashFlowPeriod] = Field(default_factory=list)
+
+
 class AnalyzeResponse(BaseModel):
     company: CompanyInfo
     price: PriceData
@@ -110,6 +154,7 @@ class AnalyzeResponse(BaseModel):
     analysis: AnalysisResult
     indices: list[IndexPoint] = Field(default_factory=list, description="Market index data (KSE 100, KSE 30, etc.)")
     is_shariah: bool = Field(default=False, description="Whether the stock is in the KMI All Shares Islamic index")
+    statements: FinancialStatements | None = Field(default=None, description="Detailed financial statements from Yahoo Finance")
 
 
 class StockListItem(BaseModel):

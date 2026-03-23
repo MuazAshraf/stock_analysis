@@ -33,6 +33,20 @@ export function formatCompact(value: number): string {
   return `${sign}${abs.toFixed(0)}`;
 }
 
+/** Format large raw numbers as Billions/Millions (for financial statements) */
+export function formatBillions(value: number | null): string {
+  if (value == null) return "—";
+  const abs = Math.abs(value);
+  const sign = value < 0 ? "-" : "";
+  if (abs >= 1_000_000_000) {
+    return `${sign}Rs. ${(abs / 1_000_000_000).toFixed(1)}B`;
+  }
+  if (abs >= 1_000_000) {
+    return `${sign}Rs. ${(abs / 1_000_000).toFixed(1)}M`;
+  }
+  return `${sign}Rs. ${abs.toLocaleString("en-PK")}`;
+}
+
 /** Format a number as percentage with sign */
 export function formatPercent(value: number): string {
   const sign = value > 0 ? "+" : "";

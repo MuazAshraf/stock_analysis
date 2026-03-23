@@ -17,6 +17,7 @@ import { FinalVerdict } from "@/components/sections/final-verdict";
 import { Formulas } from "@/components/sections/formulas";
 import { MarketTicker } from "@/components/sections/market-ticker";
 import { ComparisonView } from "@/components/sections/comparison-view";
+import { FinancialStatementsSection } from "@/components/sections/financial-statements";
 import {
   AlertCircle,
   BarChart3,
@@ -211,6 +212,9 @@ export function Dashboard() {
                   data.financials_annual.length > 0 && (
                     <MoneyTalk financials={data.financials_annual} />
                   )}
+                {data.statements && (
+                  <FinancialStatementsSection statements={data.statements} />
+                )}
                 {data.ratios && (
                   <HealthCheck price={data.price} ratios={data.ratios} />
                 )}
