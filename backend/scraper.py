@@ -455,7 +455,7 @@ def _parse_ratios(soup: BeautifulSoup) -> list[RatioYear]:
 
 
 def _parse_payouts(soup: BeautifulSoup) -> list[PayoutRecord]:
-    """Parse the #payouts section."""
+    """Parse the #payouts section (kept as fallback)."""
     payouts_section = soup.select_one("#payouts")
     if not payouts_section:
         return []
@@ -478,6 +478,104 @@ def _parse_payouts(soup: BeautifulSoup) -> list[PayoutRecord]:
         results.append(record)
 
     return results
+
+
+async def fetch_payouts(symbol: str) -> list[PayoutRecord]:
+    """Fetch dividend/payout history from the PSX payouts endpoint."""
+    url = "https://dps.psx.com.pk/payouts"
+    logger.info("Fetching payouts for %s", symbol)
+
+    try:
+        async with httpx.AsyncClient(
+            timeout=settings.request_timeout,
+            follow_redirects=False,
+            headers={
+                "User-Agent": settings.user_agent,
+                "Content-Type": "application/json",
+            },
+        ) as client:
+            response = await client.post(url, json={"symbol": symbol})
+            response.raise_for_status()
+            html = response.text
+    except (httpx.HTTPStatusError, httpx.TimeoutException, httpx.RequestError) as e:
+        logger.warning("Failed to fetch payouts for %s: %s", symbol, e)
+        return []
+
+    soup = BeautifulSoup(html, "html.parser")
+    table = soup.select_one("table.tbl")
+    if not table:
+        return []
+
+    results: list[PayoutRecord] = []
+    for row in table.select("tbody tr"):
+        cells = row.select("td")
+        if len(cells) < 6:
+            continue
+        # Columns: Symbol, Company, Sector, Dividend Announcement, Date/Time, Book Closure
+        raw_details = cells[3].get_text(strip=True)
+        record = PayoutRecord(
+            date=cells[4].get_text(strip=True) or None,
+            financial_results=cells[1].get_text(strip=True) or None,
+            details=_humanize_dividend(raw_details) if raw_details else None,
+            book_closure=cells[5].get_text(strip=True) or None,
+        )
+        results.append(record)
+
+    return results
+
+
+def _humanize_dividend(raw: str) -> str:
+    """Convert PSX dividend codes into plain English.
+
+    Examples:
+        '42.50%(ii) (D)'  → '42.50% - 2nd Interim Cash Dividend'
+        '50%(F) (D)'      → '50% - Final Cash Dividend'
+        '20%(i) (D) (B)'  → '20% - 1st Interim Cash Dividend + Bonus Shares'
+    """
+    text = raw.strip()
+
+    # Extract the percentage part (e.g. '42.50%')
+    pct_match = re.match(r"([\d.]+%)", text)
+    pct = pct_match.group(1) if pct_match else ""
+
+    # Map interim codes
+    interim_map = {
+        "(i)": "1st Interim",
+        "(ii)": "2nd Interim",
+        "(iii)": "3rd Interim",
+        "(iv)": "4th Interim",
+        "(F)": "Final",
+    }
+
+    # Map type codes
+    type_map = {
+        "(D)": "Cash Dividend",
+        "(B)": "Bonus Shares",
+        "(R)": "Right Shares",
+    }
+
+    upper = text.upper()
+    period = ""
+    for code, label in interim_map.items():
+        if code.lower() in text.lower() or code in text:
+            period = label
+            break
+
+    types: list[str] = []
+    for code, label in type_map.items():
+        if code in upper or code.lower() in text.lower():
+            types.append(label)
+
+    if not types:
+        # Fallback: return original if we can't parse it
+        return text
+
+    type_str = " + ".join(types)
+    parts = [p for p in [pct, period, type_str] if p]
+
+    if len(parts) >= 2:
+        return f"{parts[0]} - {' '.join(parts[1:])}"
+    return " - ".join(parts) if parts else text
 
 
 def _parse_indices(soup: BeautifulSoup) -> list[IndexPoint]:
@@ -573,7 +671,7 @@ async def fetch_all_stocks() -> list[StockListItem]:
 
     stocks: list[StockListItem] = []
     for item in data:
-        # Skip debt instruments and ETFs — only keep equities
+        # Skip debt instruments and ETFs -- only keep equities
         if item.get("isDebt") or item.get("isETF"):
             continue
         symbol = (item.get("symbol") or "").strip().upper()
@@ -627,8 +725,10 @@ async def scrape_company(url: str) -> dict:
     equity = _parse_equity(soup)
     annual, quarterly = _parse_financials(soup)
     ratios = _parse_ratios(soup)
-    payouts = _parse_payouts(soup)
     indices = _parse_indices(soup)
+
+    # Fetch payouts from the dedicated endpoint (the company page doesn't render them)
+    payouts = await fetch_payouts(symbol)
 
     return {
         "company": company,

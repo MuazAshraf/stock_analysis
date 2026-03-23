@@ -69,6 +69,31 @@ _stock_list_cache_time: dict[str, float] = {}
 _STOCK_LIST_TTL = 3600  # 1 hour
 _VALID_INDICES = {"KSE100", "KSE30", "ALL"}
 
+# ── Shariah Compliance Cache ───────────────────────────────────────────────
+
+_shariah_symbols: set[str] = set()
+_shariah_cache_time: float = 0.0
+_SHARIAH_TTL = 86400  # 24 hours (list changes quarterly)
+
+
+async def _get_shariah_symbols() -> set[str]:
+    """Return the cached set of Shariah-compliant symbols (KMIALLSHR index)."""
+    global _shariah_symbols, _shariah_cache_time
+
+    if _shariah_symbols and (time.time() - _shariah_cache_time) < _SHARIAH_TTL:
+        return _shariah_symbols
+
+    try:
+        stocks = await scrape_stock_list("KMIALLSHR")
+        _shariah_symbols = {s.symbol for s in stocks}
+        _shariah_cache_time = time.time()
+        logger.info("Loaded %d Shariah-compliant symbols", len(_shariah_symbols))
+    except ScraperError:
+        logger.warning("Failed to fetch Shariah list, using stale cache")
+
+    return _shariah_symbols
+
+
 # ── Routes ──────────────────────────────────────────────────────────────────
 
 
@@ -149,6 +174,9 @@ async def analyze_company(request: Request, body: AnalyzeRequest):
         payouts=scraped["payouts"],
     )
 
+    shariah_set = await _get_shariah_symbols()
+    symbol = scraped["company"].symbol.upper()
+
     return AnalyzeResponse(
         company=scraped["company"],
         price=scraped["price"],
@@ -159,6 +187,7 @@ async def analyze_company(request: Request, body: AnalyzeRequest):
         payouts=scraped["payouts"],
         analysis=analysis,
         indices=scraped.get("indices", []),
+        is_shariah=symbol in shariah_set,
     )
 
 
@@ -195,6 +224,8 @@ async def compare_companies(request: Request, body: CompareRequest):
             content={"detail": "An internal error occurred. Please try again."},
         )
 
+    shariah_set = await _get_shariah_symbols()
+
     # Analyze each stock individually
     def _build_response(scraped: dict) -> AnalyzeResponse:
         analysis = analyze(
@@ -205,6 +236,7 @@ async def compare_companies(request: Request, body: CompareRequest):
             ratios=scraped["ratios"],
             payouts=scraped["payouts"],
         )
+        symbol = scraped["company"].symbol.upper()
         return AnalyzeResponse(
             company=scraped["company"],
             price=scraped["price"],
@@ -215,6 +247,7 @@ async def compare_companies(request: Request, body: CompareRequest):
             payouts=scraped["payouts"],
             analysis=analysis,
             indices=scraped.get("indices", []),
+            is_shariah=symbol in shariah_set,
         )
 
     stock_a = _build_response(scraped_a)

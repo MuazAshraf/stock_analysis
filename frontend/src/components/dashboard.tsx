@@ -204,6 +204,7 @@ export function Dashboard() {
                   company={data.company}
                   price={data.price}
                   equity={data.equity}
+                  isShariah={data.is_shariah}
                 />
                 <TradingInfo price={data.price} />
                 {data.financials_annual &&

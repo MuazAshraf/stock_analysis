@@ -18,12 +18,14 @@ interface CompanyOverviewProps {
   company: Company;
   price: Price;
   equity: Equity;
+  isShariah?: boolean;
 }
 
 export function CompanyOverview({
   company,
   price,
   equity,
+  isShariah = false,
 }: CompanyOverviewProps) {
   const change = price.change ?? 0;
   const isPositive = change >= 0;
@@ -57,6 +59,11 @@ export function CompanyOverview({
               >
                 {company.sector}
               </Badge>
+              {isShariah && (
+                <Badge className="bg-emerald-600 text-white text-xs">
+                  Shariah Compliant
+                </Badge>
+              )}
             </div>
           </div>
           <div className="text-right">

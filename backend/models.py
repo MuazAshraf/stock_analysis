@@ -109,6 +109,7 @@ class AnalyzeResponse(BaseModel):
     payouts: list[PayoutRecord]
     analysis: AnalysisResult
     indices: list[IndexPoint] = Field(default_factory=list, description="Market index data (KSE 100, KSE 30, etc.)")
+    is_shariah: bool = Field(default=False, description="Whether the stock is in the KMI All Shares Islamic index")
 
 
 class StockListItem(BaseModel):

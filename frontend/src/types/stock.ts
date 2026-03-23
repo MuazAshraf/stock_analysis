@@ -91,6 +91,7 @@ export interface StockData {
   payouts: Payout[];
   analysis: Analysis;
   indices: IndexPoint[];
+  is_shariah: boolean;
 }
 
 export interface ComparisonMetric {
