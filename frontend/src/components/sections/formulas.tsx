@@ -3,10 +3,23 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calculator, BookOpen } from "lucide-react";
+import { Calculator, BookOpen, Tag } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-type EducationTab = "glossary" | "formulas";
+type EducationTab = "glossary" | "formulas" | "symbols";
+
+const MARKET_SYMBOLS = [
+  { symbol: "XD", meaning: "Ex-Dividend — The stock is trading without the right to the upcoming dividend. If you buy on or after this date, you won't get the dividend." },
+  { symbol: "XB", meaning: "Ex-Bonus — The stock is trading without the right to upcoming bonus shares. Buyers after this date won't receive the bonus." },
+  { symbol: "XR", meaning: "Ex-Right — The stock is trading without the right to subscribe to new shares at a discounted price." },
+  { symbol: "N", meaning: "Newly Listed — This company was recently listed on the exchange. It may have limited trading history." },
+  { symbol: "UL", meaning: "Upper Lock / Upper Circuit — The stock hit its maximum allowed price increase for the day. No more buying is possible until the next session." },
+  { symbol: "LL", meaning: "Lower Lock / Lower Circuit — The stock hit its maximum allowed price decrease for the day. No more selling is possible until the next session." },
+  { symbol: "NC", meaning: "Not in any index Category — The stock is not part of KSE-100, KSE-30, or KMI-30 indices." },
+  { symbol: "S", meaning: "Suspended — Trading in this stock has been temporarily halted by the exchange, usually due to non-compliance or pending announcements." },
+  { symbol: "H", meaning: "Halt — Trading is temporarily paused, often due to a significant pending announcement that could affect the stock price." },
+  { symbol: "Z", meaning: "Defaulter / Non-Compliant — The company has failed to meet PSX listing requirements (e.g., not filing reports). Trade with extra caution." },
+];
 
 export function Formulas() {
   const [activeTab, setActiveTab] = useState<EducationTab>("glossary");
@@ -53,6 +66,19 @@ export function Formulas() {
           >
             <Calculator className="h-4 w-4" />
             Formulas
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab("symbols")}
+            className={cn(
+              "flex items-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition-all cursor-pointer",
+              activeTab === "symbols"
+                ? "bg-white text-[#404E3F] shadow-sm"
+                : "text-[#404E3F]/50 hover:text-[#404E3F]"
+            )}
+          >
+            <Tag className="h-4 w-4" />
+            Market Symbols
           </button>
         </div>
 
@@ -111,6 +137,39 @@ export function Formulas() {
               term="Shariah Compliant"
               definition="Stocks that meet Islamic finance screening criteria set by PSX. These are part of the KMI (KSE Meezan Index) All Shares index. The screening checks the company's business activities and financial ratios against Shariah guidelines."
             />
+          </div>
+        )}
+
+        {/* Market Symbols tab */}
+        {activeTab === "symbols" && (
+          <div className="overflow-x-auto rounded-lg border border-[#E5E0D9]">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-[#F3F1E5]">
+                  <th className="text-left p-3 font-semibold text-[#404E3F] w-24">
+                    Symbol
+                  </th>
+                  <th className="text-left p-3 font-semibold text-[#404E3F]">
+                    What It Means
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {MARKET_SYMBOLS.map((s) => (
+                  <tr
+                    key={s.symbol}
+                    className="border-t border-[#E5E0D9] hover:bg-[#F8F3EA]/50"
+                  >
+                    <td className="p-3">
+                      <span className="inline-flex items-center rounded bg-[#2B5288]/10 px-2 py-0.5 text-xs font-bold text-[#2B5288]">
+                        {s.symbol}
+                      </span>
+                    </td>
+                    <td className="p-3 text-[#404E3F]/80">{s.meaning}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
 
