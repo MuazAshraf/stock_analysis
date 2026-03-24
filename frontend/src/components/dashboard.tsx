@@ -227,9 +227,9 @@ export function Dashboard() {
               </div>
             )}
 
-            {/* Empty state hint */}
+            {/* Idle state: steps + educational content */}
             {isAnalyzeIdle && (
-              <div className="text-center mt-12">
+              <div className="mt-12 space-y-10">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto">
                   <StepCard
                     step="1"
@@ -246,6 +246,50 @@ export function Dashboard() {
                     title="Read the Results"
                     description="Get a clear, simple analysis anyone can understand"
                   />
+                </div>
+
+                {/* What You Get section */}
+                <div className="max-w-3xl mx-auto">
+                  <h3 className="text-lg font-bold text-[#404E3F] text-center mb-4">
+                    What You Get With Every Analysis
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {[
+                      { title: "Company Overview", desc: "Company name, sector, CEO, market cap, 52-week price range, and current trading data." },
+                      { title: "Financial Statements", desc: "Income Statement, Balance Sheet, and Cash Flow highlights with annual and quarterly views." },
+                      { title: "Health Check", desc: "P/E ratio gauge, profit margins, EPS growth trends, and key financial ratios at a glance." },
+                      { title: "Dividend History", desc: "Complete payout history with dates, amounts, and book closure details from PSX records." },
+                      { title: "Shariah Compliance", desc: "Instant badge showing whether the stock is in the KMI All Shares Islamic index." },
+                      { title: "Final Verdict", desc: "Plain English summary with business verdict, risk level, and actionable insights for beginners." },
+                    ].map((item) => (
+                      <div key={item.title} className="p-4 rounded-xl bg-white border border-[#E5E0D9]">
+                        <h4 className="text-sm font-semibold text-[#404E3F] mb-1">{item.title}</h4>
+                        <p className="text-xs text-[#404E3F]/60 leading-relaxed">{item.desc}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* FAQ section */}
+                <div className="max-w-3xl mx-auto">
+                  <h3 className="text-lg font-bold text-[#404E3F] text-center mb-4">
+                    Frequently Asked Questions
+                  </h3>
+                  <div className="space-y-3">
+                    {[
+                      { q: "What is the Pakistan Stock Exchange (PSX)?", a: "PSX is the national stock exchange of Pakistan, located in Karachi. It lists over 500 companies across sectors like banking, cement, oil & gas, fertilizer, and technology. The KSE-100 index tracks the top 100 companies by market capitalization." },
+                      { q: "Do I need a finance degree to use this tool?", a: "Not at all! This tool is built specifically for beginners. Every metric is explained in plain English. We translate complex financial jargon into simple, easy-to-understand language so anyone can make informed decisions." },
+                      { q: "Where does the data come from?", a: "Stock prices and company data come directly from the PSX Data Portal (dps.psx.com.pk). Financial statements (Income Statement, Balance Sheet, Cash Flow) are sourced from Yahoo Finance. Shariah compliance is checked against the KMI All Shares index." },
+                      { q: "Is this financial advice?", a: "No. This tool is for educational purposes only. It provides data and analysis to help you understand stocks, but you should always do your own research and consult a qualified financial advisor before investing." },
+                      { q: "What does Shariah Compliant mean?", a: "Stocks that meet Islamic finance screening criteria are part of the KMI (KSE Meezan Index) All Shares index. PSX screens companies based on their business activities and financial ratios against Shariah guidelines. Look for the green Shariah Compliant badge on qualifying stocks." },
+                      { q: "How often is the data updated?", a: "Stock prices and trading data are fetched live from PSX each time you analyze a stock. Financial statements update quarterly or annually based on company filings. The stock list is cached for 1 hour." },
+                    ].map((faq) => (
+                      <div key={faq.q} className="p-4 rounded-xl bg-white border border-[#E5E0D9]">
+                        <h4 className="text-sm font-semibold text-[#404E3F] mb-1">{faq.q}</h4>
+                        <p className="text-xs text-[#404E3F]/60 leading-relaxed">{faq.a}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             )}
@@ -290,9 +334,9 @@ export function Dashboard() {
               <ComparisonView data={compareData} />
             )}
 
-            {/* Empty state hint */}
+            {/* Idle state: steps + content */}
             {isCompareIdle && (
-              <div className="text-center mt-12">
+              <div className="mt-12 space-y-10">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto">
                   <StepCard
                     step="1"
@@ -309,6 +353,25 @@ export function Dashboard() {
                     title="See the Winner"
                     description="Get a clear comparison with scores and a final verdict"
                   />
+                </div>
+
+                <div className="max-w-3xl mx-auto">
+                  <h3 className="text-lg font-bold text-[#404E3F] text-center mb-4">
+                    How the Comparison Works
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {[
+                      { title: "7 Key Metrics", desc: "We compare stocks across P/E ratio, profit margin, EPS growth, dividend yield, market cap, revenue growth, and risk level." },
+                      { title: "Head-to-Head Scoring", desc: "Each metric has a winner. The stock that wins more metrics gets the overall edge, with a clear final verdict." },
+                      { title: "Plain English Explanations", desc: "Every metric comparison includes a simple explanation of what the numbers mean and why one stock scored better." },
+                      { title: "Same Sector or Different", desc: "Compare stocks within the same sector (e.g., two cement companies) or across sectors to find the best opportunity." },
+                    ].map((item) => (
+                      <div key={item.title} className="p-4 rounded-xl bg-white border border-[#E5E0D9]">
+                        <h4 className="text-sm font-semibold text-[#404E3F] mb-1">{item.title}</h4>
+                        <p className="text-xs text-[#404E3F]/60 leading-relaxed">{item.desc}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             )}
