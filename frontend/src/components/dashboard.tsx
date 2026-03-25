@@ -87,7 +87,10 @@ export function Dashboard() {
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 py-8">
+      <main
+        className="max-w-5xl mx-auto px-4 py-8"
+        aria-label="PSX Stock Analyzer — Free Pakistan Stock Exchange analysis tool"
+      >
         {/* Hero section when idle on either tab */}
         {((activeTab === "analyze" && isAnalyzeIdle) ||
           (activeTab === "compare" && isCompareIdle)) && (
@@ -96,7 +99,14 @@ export function Dashboard() {
               <TrendingUp className="h-4 w-4" />
               Free Stock Analysis for Pakistani Investors
             </div>
-            <h2 className="text-3xl sm:text-4xl font-bold text-[#404E3F] mb-3">
+            <h2
+              className="text-3xl sm:text-4xl font-bold text-[#404E3F] mb-3"
+              aria-label={
+                activeTab === "analyze"
+                  ? "Understand Any PSX Stock in Plain English — Free Pakistan Stock Exchange Analysis"
+                  : "Compare Two PSX Stocks Side by Side — Free KSE 100 Stock Comparison Tool"
+              }
+            >
               {activeTab === "analyze" ? (
                 <>
                   Understand Any PSX Stock
@@ -113,7 +123,7 @@ export function Dashboard() {
             </h2>
             <p className="text-[#404E3F]/60 max-w-lg mx-auto mb-8">
               {activeTab === "analyze"
-                ? "New to investing? Pick any Pakistan Stock Exchange company and get a clear, jargon-free analysis that anyone can understand."
+                ? "New to investing? Pick any Pakistan Stock Exchange (PSX) company and get a clear, jargon-free KSE stock analysis that anyone can understand."
                 : "Pick two PSX stocks and see a head-to-head comparison of key financial metrics to help you decide."}
             </p>
           </div>
@@ -274,7 +284,12 @@ export function Dashboard() {
                 </div>
 
                 {/* FAQ section */}
-                <div className="max-w-3xl mx-auto">
+                <section
+                  className="max-w-3xl mx-auto"
+                  aria-label="Frequently Asked Questions about PSX Stock Analyzer"
+                  itemScope
+                  itemType="https://schema.org/FAQPage"
+                >
                   <h3 className="text-lg font-bold text-[#404E3F] text-center mb-4">
                     Frequently Asked Questions
                   </h3>
@@ -286,14 +301,36 @@ export function Dashboard() {
                       { q: "Is this financial advice?", a: "No. This tool is for educational purposes only. It provides data and analysis to help you understand stocks, but you should always do your own research and consult a qualified financial advisor before investing." },
                       { q: "What does Shariah Compliant mean?", a: "Stocks that meet Islamic finance screening criteria are part of the KMI (KSE Meezan Index) All Shares index. PSX screens companies based on their business activities and financial ratios against Shariah guidelines. Look for the green Shariah Compliant badge on qualifying stocks." },
                       { q: "How often is the data updated?", a: "Stock prices and trading data are fetched live from PSX each time you analyze a stock. Financial statements update quarterly or annually based on company filings. The stock list is cached for 1 hour." },
+                      { q: "Can I compare two PSX stocks against each other?", a: "Yes! Use the Compare tab to run a side-by-side comparison of any two PSX-listed companies. The tool scores each stock across 7 key metrics — P/E ratio, profit margin, EPS growth, dividend yield, market cap, revenue growth, and risk level — and declares an overall winner." },
+                      { q: "Is the PSX Stock Analyzer free to use?", a: "Yes, PSX Stock Analyzer is completely free to use. There are no subscriptions, no sign-ups, and no hidden fees. Simply search for any PSX-listed company and get instant analysis." },
                     ].map((faq) => (
-                      <div key={faq.q} className="p-4 rounded-xl bg-white border border-[#E5E0D9]">
-                        <h4 className="text-sm font-semibold text-[#404E3F] mb-1">{faq.q}</h4>
-                        <p className="text-xs text-[#404E3F]/60 leading-relaxed">{faq.a}</p>
+                      <div
+                        key={faq.q}
+                        className="p-4 rounded-xl bg-white border border-[#E5E0D9]"
+                        itemScope
+                        itemType="https://schema.org/Question"
+                      >
+                        <h4
+                          className="text-sm font-semibold text-[#404E3F] mb-1"
+                          itemProp="name"
+                        >
+                          {faq.q}
+                        </h4>
+                        <div
+                          itemScope
+                          itemType="https://schema.org/Answer"
+                        >
+                          <p
+                            className="text-xs text-[#404E3F]/60 leading-relaxed"
+                            itemProp="text"
+                          >
+                            {faq.a}
+                          </p>
+                        </div>
                       </div>
                     ))}
                   </div>
-                </div>
+                </section>
               </div>
             )}
           </>
@@ -383,12 +420,30 @@ export function Dashboard() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-[#E5E0D9] mt-16 py-6">
-        <div className="max-w-5xl mx-auto px-4 text-center">
+      <footer
+        className="border-t border-[#E5E0D9] mt-16 py-6"
+        aria-label="Site footer"
+        itemScope
+        itemType="https://schema.org/WPFooter"
+      >
+        <div className="max-w-5xl mx-auto px-4 text-center space-y-2">
+          <p className="text-xs text-[#404E3F]/60 font-medium">
+            PSX Stock Analyzer &mdash; Free Pakistan Stock Exchange (PSX) &amp; KSE 100 Analysis Tool
+          </p>
           <p className="text-xs text-[#404E3F]/40">
             For educational purposes only. Not financial advice. Always do your
-            own research before investing.
+            own research before investing in PSX-listed companies.
           </p>
+          <nav
+            aria-label="Footer navigation"
+            className="flex flex-wrap justify-center gap-x-4 gap-y-1 pt-1"
+          >
+            <span className="text-xs text-[#404E3F]/30">PSX Analysis</span>
+            <span className="text-xs text-[#404E3F]/30">KSE 100 Stocks</span>
+            <span className="text-xs text-[#404E3F]/30">Shariah Compliant Stocks</span>
+            <span className="text-xs text-[#404E3F]/30">Dividend Stocks Pakistan</span>
+            <span className="text-xs text-[#404E3F]/30">Pakistan Stock Market</span>
+          </nav>
         </div>
       </footer>
     </div>

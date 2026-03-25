@@ -52,6 +52,35 @@ function getRiskConfig(risk: string) {
   return { percent: 50, color: "#d97706", label: "Medium Risk" };
 }
 
+function getUrduHealth(health: string): string {
+  const h = health.toLowerCase();
+  if (h.includes("healthy")) return "Company ki financial halat achi hai";
+  if (h.includes("stable")) return "Company ki financial halat theek hai, lekin behtari ki gunjaish hai";
+  if (h.includes("concerning")) return "Company ki financial halat mushkil mein hai — ehtiyaat zaruri hai";
+  return "";
+}
+
+function getUrduRisk(risk: string): string {
+  const r = risk.toLowerCase();
+  if (r.includes("low")) return "Ye stock kam risk wala hai — naye investors ke liye munasib";
+  if (r.includes("high")) return "Ye stock zyada risk wala hai — sirf tajrubakaar investors ke liye";
+  return "Ye stock darmiyani risk wala hai — thori ehtiyaat zaruri hai";
+}
+
+function getUrduValuation(val: string): string {
+  const v = val.toLowerCase();
+  if (v.includes("undervalued")) return "Ye stock filhal sasta lag raha hai apni value ke muqable mein";
+  if (v.includes("overvalued")) return "Ye stock filhal mehenga lag raha hai apni value ke muqable mein";
+  return "Ye stock apni sahi qeemat ke qareeb lag raha hai";
+}
+
+function getUrduVerdict(verdict: string): string {
+  const v = verdict.toLowerCase();
+  if (v.includes("strong")) return "Company ka karobar mazboot hai — achi nishani hai";
+  if (v.includes("weak")) return "Company ka karobar kamzor hai — ehtiyaat karein";
+  return "Company ka karobar theek hai — lekin behtari ki gunjaish hai";
+}
+
 export function FinalVerdict({ analysis }: FinalVerdictProps) {
   const healthConfig = getHealthConfig(analysis.financial_health);
   const riskConfig = getRiskConfig(analysis.risk_level);
@@ -92,6 +121,11 @@ export function FinalVerdict({ analysis }: FinalVerdictProps) {
                 {analysis.financial_health}
               </span>
             </div>
+            {getUrduHealth(analysis.financial_health) && (
+              <p className="text-xs text-[#404E3F]/50 mt-2 italic">
+                {getUrduHealth(analysis.financial_health)}
+              </p>
+            )}
           </div>
 
           {/* Risk Meter */}
@@ -118,6 +152,9 @@ export function FinalVerdict({ analysis }: FinalVerdictProps) {
             >
               {riskConfig.label}
             </Badge>
+            <p className="text-xs text-[#404E3F]/50 mt-2 italic">
+              {getUrduRisk(analysis.risk_level)}
+            </p>
           </div>
         </div>
 
@@ -131,6 +168,9 @@ export function FinalVerdict({ analysis }: FinalVerdictProps) {
               </p>
               <p className="text-sm text-[#404E3F]/80 mt-1">
                 {analysis.valuation}
+              </p>
+              <p className="text-xs text-[#404E3F]/50 mt-1 italic">
+                {getUrduValuation(analysis.valuation)}
               </p>
             </div>
           </div>
@@ -146,6 +186,9 @@ export function FinalVerdict({ analysis }: FinalVerdictProps) {
               </p>
               <p className="text-sm text-[#404E3F]/80 mt-1">
                 {analysis.business_verdict}
+              </p>
+              <p className="text-xs text-[#404E3F]/50 mt-1 italic">
+                {getUrduVerdict(analysis.business_verdict)}
               </p>
             </div>
           </div>
