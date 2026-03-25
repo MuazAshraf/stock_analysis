@@ -122,53 +122,71 @@ class YahooData:
 
 def _fetch_all_yahoo_data_sync(symbol: str) -> YahooData:
     """Fetch all Yahoo Finance data using a SINGLE ticker object to avoid rate limits."""
+    import time
     import yfinance as yf
 
-    ticker = yf.Ticker(f"{symbol}.KA")
-
-    # 1. Financial statements
     statements = None
-    try:
-        stmts = FinancialStatements(
-            income_annual=_parse_income(ticker.income_stmt),
-            income_quarterly=_parse_income(ticker.quarterly_income_stmt),
-            balance_annual=_parse_balance(ticker.balance_sheet),
-            balance_quarterly=_parse_balance(ticker.quarterly_balance_sheet),
-            cashflow_annual=_parse_cashflow(ticker.cashflow),
-            cashflow_quarterly=_parse_cashflow(ticker.quarterly_cashflow),
-        )
-        has_data = (
-            len(stmts.income_annual) > 0
-            or len(stmts.balance_annual) > 0
-            or len(stmts.cashflow_annual) > 0
-        )
-        if has_data:
-            statements = stmts
-    except Exception:
-        logger.warning("Failed to fetch financial statements for %s", symbol)
-
-    # 2. Price history
     price_history: list[PricePoint] = []
-    try:
-        df = ticker.history(period="1y", interval="1wk")
-        if df is not None and not df.empty:
-            for date, row in df.iterrows():
-                close = _safe(row.get("Close"))
-                if close is not None:
-                    price_history.append(PricePoint(
-                        date=date.strftime("%Y-%m-%d"),
-                        close=close,
-                    ))
-    except Exception:
-        logger.warning("Failed to fetch price history for %s", symbol)
-
-    # 3. Book value
     book_value = None
-    try:
-        info = ticker.info or {}
-        book_value = _safe(info.get("bookValue"))
-    except Exception:
-        logger.warning("Failed to fetch book value for %s", symbol)
+
+    for attempt in range(3):
+        try:
+            ticker = yf.Ticker(f"{symbol}.KA")
+
+            # 1. Book value + info (lightest call first)
+            if book_value is None:
+                try:
+                    info = ticker.info or {}
+                    book_value = _safe(info.get("bookValue"))
+                except Exception:
+                    logger.warning("Failed to fetch book value for %s (attempt %d)", symbol, attempt + 1)
+
+            # 2. Price history
+            if not price_history:
+                try:
+                    df = ticker.history(period="1y", interval="1wk")
+                    if df is not None and not df.empty:
+                        for date, row in df.iterrows():
+                            close = _safe(row.get("Close"))
+                            if close is not None:
+                                price_history.append(PricePoint(
+                                    date=date.strftime("%Y-%m-%d"),
+                                    close=close,
+                                ))
+                except Exception:
+                    logger.warning("Failed to fetch price history for %s (attempt %d)", symbol, attempt + 1)
+
+            # 3. Financial statements (heaviest call last)
+            if statements is None:
+                try:
+                    stmts = FinancialStatements(
+                        income_annual=_parse_income(ticker.income_stmt),
+                        income_quarterly=_parse_income(ticker.quarterly_income_stmt),
+                        balance_annual=_parse_balance(ticker.balance_sheet),
+                        balance_quarterly=_parse_balance(ticker.quarterly_balance_sheet),
+                        cashflow_annual=_parse_cashflow(ticker.cashflow),
+                        cashflow_quarterly=_parse_cashflow(ticker.quarterly_cashflow),
+                    )
+                    has_data = (
+                        len(stmts.income_annual) > 0
+                        or len(stmts.balance_annual) > 0
+                        or len(stmts.cashflow_annual) > 0
+                    )
+                    if has_data:
+                        statements = stmts
+                except Exception:
+                    logger.warning("Failed to fetch statements for %s (attempt %d)", symbol, attempt + 1)
+
+            # If we got everything, stop retrying
+            if statements and price_history and book_value is not None:
+                break
+
+        except Exception:
+            logger.warning("Yahoo Finance attempt %d failed for %s", attempt + 1, symbol)
+
+        # Wait before retry (2s, 4s)
+        if attempt < 2:
+            time.sleep(2 * (attempt + 1))
 
     return YahooData(
         statements=statements,
