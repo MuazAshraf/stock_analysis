@@ -7,6 +7,7 @@ PSX stocks use the .KA suffix on Yahoo Finance (e.g., PPL.KA, OGDC.KA).
 import logging
 import math
 from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass
 
 from models import (
     BalanceSheetPeriod,
@@ -18,7 +19,6 @@ from models import (
 
 logger = logging.getLogger(__name__)
 
-# yfinance is synchronous; we run it in a thread pool
 _executor = ThreadPoolExecutor(max_workers=2)
 
 
@@ -81,7 +81,6 @@ def _parse_balance(df) -> list[BalanceSheetPeriod]:
     return results
 
 
-# PSX companies often use direct-method cash flow, so the field name differs.
 _OPERATING_CF_KEYS = [
     "Operating Cash Flow",
     "Cash Flowsfromusedin Operating Activities Direct",
@@ -93,7 +92,6 @@ def _parse_cashflow(df) -> list[CashFlowPeriod]:
         return []
     results = []
     for col in df.columns:
-        # Find operating cash flow (differs between direct/indirect method)
         ocf = None
         for key in _OPERATING_CF_KEYS:
             ocf = _get_val(df, key, col)
@@ -112,111 +110,88 @@ def _parse_cashflow(df) -> list[CashFlowPeriod]:
     return results
 
 
-def _fetch_statements_sync(symbol: str) -> FinancialStatements:
-    """Synchronous function that fetches all statements from Yahoo Finance."""
+# ── Combined Yahoo Finance data ───────────────────────────────────────────
+
+
+@dataclass
+class YahooData:
+    statements: FinancialStatements | None
+    price_history: list[PricePoint]
+    book_value: float | None
+
+
+def _fetch_all_yahoo_data_sync(symbol: str) -> YahooData:
+    """Fetch all Yahoo Finance data using a SINGLE ticker object to avoid rate limits."""
     import yfinance as yf
 
     ticker = yf.Ticker(f"{symbol}.KA")
 
-    return FinancialStatements(
-        income_annual=_parse_income(ticker.income_stmt),
-        income_quarterly=_parse_income(ticker.quarterly_income_stmt),
-        balance_annual=_parse_balance(ticker.balance_sheet),
-        balance_quarterly=_parse_balance(ticker.quarterly_balance_sheet),
-        cashflow_annual=_parse_cashflow(ticker.cashflow),
-        cashflow_quarterly=_parse_cashflow(ticker.quarterly_cashflow),
+    # 1. Financial statements
+    statements = None
+    try:
+        stmts = FinancialStatements(
+            income_annual=_parse_income(ticker.income_stmt),
+            income_quarterly=_parse_income(ticker.quarterly_income_stmt),
+            balance_annual=_parse_balance(ticker.balance_sheet),
+            balance_quarterly=_parse_balance(ticker.quarterly_balance_sheet),
+            cashflow_annual=_parse_cashflow(ticker.cashflow),
+            cashflow_quarterly=_parse_cashflow(ticker.quarterly_cashflow),
+        )
+        has_data = (
+            len(stmts.income_annual) > 0
+            or len(stmts.balance_annual) > 0
+            or len(stmts.cashflow_annual) > 0
+        )
+        if has_data:
+            statements = stmts
+    except Exception:
+        logger.warning("Failed to fetch financial statements for %s", symbol)
+
+    # 2. Price history
+    price_history: list[PricePoint] = []
+    try:
+        df = ticker.history(period="1y", interval="1wk")
+        if df is not None and not df.empty:
+            for date, row in df.iterrows():
+                close = _safe(row.get("Close"))
+                if close is not None:
+                    price_history.append(PricePoint(
+                        date=date.strftime("%Y-%m-%d"),
+                        close=close,
+                    ))
+    except Exception:
+        logger.warning("Failed to fetch price history for %s", symbol)
+
+    # 3. Book value
+    book_value = None
+    try:
+        info = ticker.info or {}
+        book_value = _safe(info.get("bookValue"))
+    except Exception:
+        logger.warning("Failed to fetch book value for %s", symbol)
+
+    return YahooData(
+        statements=statements,
+        price_history=price_history,
+        book_value=book_value,
     )
 
 
-async def fetch_financial_statements(symbol: str) -> FinancialStatements | None:
-    """Fetch financial statements for a PSX stock via Yahoo Finance.
-
-    Returns None if data is unavailable or the request fails.
-    """
+async def fetch_all_yahoo_data(symbol: str) -> YahooData:
+    """Fetch all Yahoo Finance data for a PSX stock in one call."""
     import asyncio
 
     try:
         loop = asyncio.get_event_loop()
-        result = await loop.run_in_executor(_executor, _fetch_statements_sync, symbol)
-
-        # Check if we got any meaningful data
-        has_data = (
-            len(result.income_annual) > 0
-            or len(result.balance_annual) > 0
-            or len(result.cashflow_annual) > 0
-        )
-        if not has_data:
-            logger.warning("No financial statements found on Yahoo Finance for %s", symbol)
-            return None
-
+        result = await loop.run_in_executor(_executor, _fetch_all_yahoo_data_sync, symbol)
         logger.info(
-            "Fetched statements for %s: %d annual income, %d annual balance, %d annual cashflow",
+            "Yahoo data for %s: statements=%s, prices=%d, book_value=%s",
             symbol,
-            len(result.income_annual),
-            len(result.balance_annual),
-            len(result.cashflow_annual),
+            result.statements is not None,
+            len(result.price_history),
+            result.book_value,
         )
         return result
-
     except Exception:
         logger.exception("Failed to fetch Yahoo Finance data for %s", symbol)
-        return None
-
-
-def _fetch_price_history_sync(symbol: str) -> list[PricePoint]:
-    """Fetch 1-year weekly closing prices from Yahoo Finance."""
-    import yfinance as yf
-
-    ticker = yf.Ticker(f"{symbol}.KA")
-    df = ticker.history(period="1y", interval="1wk")
-
-    if df is None or df.empty:
-        return []
-
-    points: list[PricePoint] = []
-    for date, row in df.iterrows():
-        close = _safe(row.get("Close"))
-        if close is not None:
-            points.append(PricePoint(
-                date=date.strftime("%Y-%m-%d"),
-                close=close,
-            ))
-
-    return points
-
-
-async def fetch_price_history(symbol: str) -> list[PricePoint]:
-    """Fetch 1-year price history for a PSX stock."""
-    import asyncio
-
-    try:
-        loop = asyncio.get_event_loop()
-        result = await loop.run_in_executor(_executor, _fetch_price_history_sync, symbol)
-        logger.info("Fetched %d price points for %s", len(result), symbol)
-        return result
-    except Exception:
-        logger.exception("Failed to fetch price history for %s", symbol)
-        return []
-
-
-def _fetch_book_value_sync(symbol: str) -> float | None:
-    """Fetch book value per share from Yahoo Finance."""
-    import yfinance as yf
-
-    ticker = yf.Ticker(f"{symbol}.KA")
-    info = ticker.info or {}
-    return _safe(info.get("bookValue"))
-
-
-async def fetch_book_value(symbol: str) -> float | None:
-    """Fetch book value per share for a PSX stock."""
-    import asyncio
-
-    try:
-        loop = asyncio.get_event_loop()
-        result = await loop.run_in_executor(_executor, _fetch_book_value_sync, symbol)
-        logger.info("Book value for %s: %s", symbol, result)
-        return result
-    except Exception:
-        logger.exception("Failed to fetch book value for %s", symbol)
-        return None
+        return YahooData(statements=None, price_history=[], book_value=None)
