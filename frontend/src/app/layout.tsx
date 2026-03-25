@@ -14,7 +14,8 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const BASE_URL = "https://psxstockanalyzer.com";
+// Change this when you buy a custom domain
+const BASE_URL = "https://stock-analysis-two-psi.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),

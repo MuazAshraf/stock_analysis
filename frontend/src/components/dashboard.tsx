@@ -444,6 +444,11 @@ export function Dashboard() {
             <span className="text-xs text-[#404E3F]/30">Dividend Stocks Pakistan</span>
             <span className="text-xs text-[#404E3F]/30">Pakistan Stock Market</span>
           </nav>
+          <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 pt-2">
+            <a href="https://dps.psx.com.pk" target="_blank" rel="noopener noreferrer" className="text-xs text-[#2B5288]/50 hover:text-[#2B5288] transition-colors">PSX Data Portal</a>
+            <a href="https://www.psx.com.pk" target="_blank" rel="noopener noreferrer" className="text-xs text-[#2B5288]/50 hover:text-[#2B5288] transition-colors">Pakistan Stock Exchange</a>
+            <a href="https://www.secp.gov.pk" target="_blank" rel="noopener noreferrer" className="text-xs text-[#2B5288]/50 hover:text-[#2B5288] transition-colors">SECP</a>
+          </div>
         </div>
       </footer>
     </div>

@@ -102,6 +102,11 @@ export function DividendCheck({ payouts, dividendStatus }: DividendCheckProps) {
             <p className="text-xs text-[#404E3F]/50 mt-2 text-center">
               Showing all {payouts.length} records from PSX Data Portal
             </p>
+            <p className="text-xs text-[#404E3F]/40 mt-1 text-center">
+              Tip: &quot;% of face value&quot; means percentage of the share&apos;s
+              par value (usually Rs. 10, but can be Rs. 5 or Rs. 1 depending
+              on the company). Check the company profile for exact face value.
+            </p>
           </div>
         )}
 
