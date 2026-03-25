@@ -219,6 +219,8 @@ def _parse_profile(soup: BeautifulSoup, symbol: str) -> CompanyInfo:
     # Company name from .quote__name
     name_el = soup.select_one(".quote__name")
     name = name_el.get_text(strip=True) if name_el else symbol
+    # Strip PSX trading markers (XD, XR, XB, XA) from company name
+    name = re.sub(r"(XD|XR|XB|XA)$", "", name).strip()
 
     # Sector from .quote__sector
     sector_el = soup.select_one(".quote__sector")
@@ -528,15 +530,21 @@ def _humanize_dividend(raw: str) -> str:
     """Convert PSX dividend codes into plain English.
 
     Examples:
-        '42.50%(ii) (D)'  → '42.50% - 2nd Interim Cash Dividend'
-        '50%(F) (D)'      → '50% - Final Cash Dividend'
-        '20%(i) (D) (B)'  → '20% - 1st Interim Cash Dividend + Bonus Shares'
+        '42.50%(ii) (D)'  → '42.50% (Rs. 4.25/share) - 2nd Interim Cash Dividend'
+        '50%(F) (D)'      → '50% (Rs. 5.00/share) - Final Cash Dividend'
+        '20%(i) (D) (B)'  → '20% (Rs. 2.00/share) - 1st Interim Cash Dividend + Bonus Shares'
     """
     text = raw.strip()
 
-    # Extract the percentage part (e.g. '42.50%')
-    pct_match = re.match(r"([\d.]+%)", text)
-    pct = pct_match.group(1) if pct_match else ""
+    # Extract the percentage value (e.g. '42.50')
+    pct_match = re.match(r"([\d.]+)%", text)
+    pct_num = float(pct_match.group(1)) if pct_match else None
+    pct = f"{pct_match.group(1)}%" if pct_match else ""
+
+    # Calculate per-share amount (standard PSX face value = Rs. 10)
+    if pct_num is not None:
+        per_share = pct_num * 10 / 100
+        pct = f"{pct} (Rs. {per_share:.2f}/share)"
 
     # Map interim codes
     interim_map = {

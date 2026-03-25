@@ -17,7 +17,7 @@ import { FinalVerdict } from "@/components/sections/final-verdict";
 import { Formulas } from "@/components/sections/formulas";
 import { MarketTicker } from "@/components/sections/market-ticker";
 import { ComparisonView } from "@/components/sections/comparison-view";
-import { FinancialStatementsSection } from "@/components/sections/financial-statements";
+import { PriceChart } from "@/components/sections/price-chart";
 import {
   AlertCircle,
   BarChart3,
@@ -207,14 +207,17 @@ export function Dashboard() {
                   equity={data.equity}
                   isShariah={data.is_shariah}
                 />
+                {data.price_history && data.price_history.length > 0 && (
+                  <PriceChart
+                    data={data.price_history}
+                    symbol={data.company.symbol}
+                  />
+                )}
                 <TradingInfo price={data.price} />
                 {data.financials_annual &&
                   data.financials_annual.length > 0 && (
                     <MoneyTalk financials={data.financials_annual} />
                   )}
-                {data.statements && (
-                  <FinancialStatementsSection statements={data.statements} />
-                )}
                 {data.ratios && (
                   <HealthCheck price={data.price} ratios={data.ratios} />
                 )}
@@ -223,7 +226,7 @@ export function Dashboard() {
                   dividendStatus={data.analysis?.dividend_status || ""}
                 />
                 {data.analysis && <FinalVerdict analysis={data.analysis} />}
-                <Formulas />
+                <Formulas statements={data.statements} />
               </div>
             )}
 

@@ -143,6 +143,11 @@ class FinancialStatements(BaseModel):
     cashflow_quarterly: list[CashFlowPeriod] = Field(default_factory=list)
 
 
+class PricePoint(BaseModel):
+    date: str
+    close: float
+
+
 class AnalyzeResponse(BaseModel):
     company: CompanyInfo
     price: PriceData
@@ -155,6 +160,7 @@ class AnalyzeResponse(BaseModel):
     indices: list[IndexPoint] = Field(default_factory=list, description="Market index data (KSE 100, KSE 30, etc.)")
     is_shariah: bool = Field(default=False, description="Whether the stock is in the KMI All Shares Islamic index")
     statements: FinancialStatements | None = Field(default=None, description="Detailed financial statements from Yahoo Finance")
+    price_history: list[PricePoint] = Field(default_factory=list, description="1-year weekly closing prices")
 
 
 class StockListItem(BaseModel):

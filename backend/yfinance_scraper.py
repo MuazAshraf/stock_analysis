@@ -13,6 +13,7 @@ from models import (
     CashFlowPeriod,
     FinancialStatements,
     IncomeStatementPeriod,
+    PricePoint,
 )
 
 logger = logging.getLogger(__name__)
@@ -160,3 +161,39 @@ async def fetch_financial_statements(symbol: str) -> FinancialStatements | None:
     except Exception:
         logger.exception("Failed to fetch Yahoo Finance data for %s", symbol)
         return None
+
+
+def _fetch_price_history_sync(symbol: str) -> list[PricePoint]:
+    """Fetch 1-year weekly closing prices from Yahoo Finance."""
+    import yfinance as yf
+
+    ticker = yf.Ticker(f"{symbol}.KA")
+    df = ticker.history(period="1y", interval="1wk")
+
+    if df is None or df.empty:
+        return []
+
+    points: list[PricePoint] = []
+    for date, row in df.iterrows():
+        close = _safe(row.get("Close"))
+        if close is not None:
+            points.append(PricePoint(
+                date=date.strftime("%Y-%m-%d"),
+                close=close,
+            ))
+
+    return points
+
+
+async def fetch_price_history(symbol: str) -> list[PricePoint]:
+    """Fetch 1-year price history for a PSX stock."""
+    import asyncio
+
+    try:
+        loop = asyncio.get_event_loop()
+        result = await loop.run_in_executor(_executor, _fetch_price_history_sync, symbol)
+        logger.info("Fetched %d price points for %s", len(result), symbol)
+        return result
+    except Exception:
+        logger.exception("Failed to fetch price history for %s", symbol)
+        return []

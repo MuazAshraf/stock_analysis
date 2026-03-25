@@ -3,10 +3,17 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calculator, BookOpen, Tag } from "lucide-react";
+import { Calculator, BookOpen, Tag, FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { formatBillions } from "@/lib/format";
+import type { FinancialStatements } from "@/types/stock";
 
-type EducationTab = "glossary" | "formulas" | "symbols";
+type EducationTab = "glossary" | "formulas" | "symbols" | "statements";
+type FreqTab = "annual" | "quarterly";
+
+interface FormulasProps {
+  statements?: FinancialStatements | null;
+}
 
 const MARKET_SYMBOLS = [
   { symbol: "XD", meaning: "Ex-Dividend — The stock is trading without the right to the upcoming dividend. If you buy on or after this date, you won't get the dividend." },
@@ -21,8 +28,15 @@ const MARKET_SYMBOLS = [
   { symbol: "Z", meaning: "Defaulter / Non-Compliant — The company has failed to meet PSX listing requirements (e.g., not filing reports). Trade with extra caution." },
 ];
 
-export function Formulas() {
+export function Formulas({ statements }: FormulasProps) {
   const [activeTab, setActiveTab] = useState<EducationTab>("glossary");
+  const [freq, setFreq] = useState<FreqTab>("annual");
+
+  const hasStatements =
+    statements &&
+    (statements.income_annual.length > 0 ||
+      statements.balance_annual.length > 0 ||
+      statements.cashflow_annual.length > 0);
 
   return (
     <Card className="border-[#E5E0D9] bg-white shadow-sm">
@@ -40,46 +54,33 @@ export function Formulas() {
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Tab toggle */}
-        <div className="inline-flex rounded-lg border border-[#E5E0D9] bg-[#F8F3EA] p-1 gap-1">
-          <button
-            type="button"
+        <div className="flex flex-wrap gap-1 rounded-lg border border-[#E5E0D9] bg-[#F8F3EA] p-1">
+          <TabButton
+            active={activeTab === "glossary"}
             onClick={() => setActiveTab("glossary")}
-            className={cn(
-              "flex items-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition-all cursor-pointer",
-              activeTab === "glossary"
-                ? "bg-white text-[#404E3F] shadow-sm"
-                : "text-[#404E3F]/50 hover:text-[#404E3F]"
-            )}
-          >
-            <BookOpen className="h-4 w-4" />
-            Glossary
-          </button>
-          <button
-            type="button"
+            icon={<BookOpen className="h-4 w-4" />}
+            label="Glossary"
+          />
+          <TabButton
+            active={activeTab === "formulas"}
             onClick={() => setActiveTab("formulas")}
-            className={cn(
-              "flex items-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition-all cursor-pointer",
-              activeTab === "formulas"
-                ? "bg-white text-[#404E3F] shadow-sm"
-                : "text-[#404E3F]/50 hover:text-[#404E3F]"
-            )}
-          >
-            <Calculator className="h-4 w-4" />
-            Formulas
-          </button>
-          <button
-            type="button"
+            icon={<Calculator className="h-4 w-4" />}
+            label="Formulas"
+          />
+          <TabButton
+            active={activeTab === "symbols"}
             onClick={() => setActiveTab("symbols")}
-            className={cn(
-              "flex items-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition-all cursor-pointer",
-              activeTab === "symbols"
-                ? "bg-white text-[#404E3F] shadow-sm"
-                : "text-[#404E3F]/50 hover:text-[#404E3F]"
-            )}
-          >
-            <Tag className="h-4 w-4" />
-            Market Symbols
-          </button>
+            icon={<Tag className="h-4 w-4" />}
+            label="Market Symbols"
+          />
+          {hasStatements && (
+            <TabButton
+              active={activeTab === "statements"}
+              onClick={() => setActiveTab("statements")}
+              icon={<FileText className="h-4 w-4" />}
+              label="Financial Statements"
+            />
+          )}
         </div>
 
         {/* Glossary tab */}
@@ -214,8 +215,248 @@ export function Formulas() {
             />
           </div>
         )}
+
+        {/* Financial Statements tab */}
+        {activeTab === "statements" && statements && (
+          <StatementsTab statements={statements} freq={freq} onFreqChange={setFreq} />
+        )}
       </CardContent>
     </Card>
+  );
+}
+
+// ── Sub-components ────────────────────────────────────────────────────────
+
+function TabButton({
+  active,
+  onClick,
+  icon,
+  label,
+}: {
+  active: boolean;
+  onClick: () => void;
+  icon: React.ReactNode;
+  label: string;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        "flex items-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition-all cursor-pointer",
+        active
+          ? "bg-white text-[#404E3F] shadow-sm"
+          : "text-[#404E3F]/50 hover:text-[#404E3F]"
+      )}
+    >
+      {icon}
+      {label}
+    </button>
+  );
+}
+
+function StatementsTab({
+  statements,
+  freq,
+  onFreqChange,
+}: {
+  statements: FinancialStatements;
+  freq: FreqTab;
+  onFreqChange: (f: FreqTab) => void;
+}) {
+  const income =
+    freq === "annual" ? statements.income_annual : statements.income_quarterly;
+  const balance =
+    freq === "annual" ? statements.balance_annual : statements.balance_quarterly;
+  const cashflow =
+    freq === "annual" ? statements.cashflow_annual : statements.cashflow_quarterly;
+
+  return (
+    <div className="space-y-6">
+      {/* Annual / Quarterly toggle */}
+      <div className="flex items-center justify-between">
+        <p className="text-sm text-[#404E3F]/60">
+          Key highlights from this company&apos;s financial filings.
+        </p>
+        <div className="inline-flex rounded-lg border border-[#E5E0D9] bg-white p-1 gap-1">
+          <button
+            type="button"
+            onClick={() => onFreqChange("annual")}
+            className={cn(
+              "px-4 py-1.5 rounded-md text-xs font-semibold transition-all cursor-pointer",
+              freq === "annual"
+                ? "bg-[#4BC232] text-white shadow-sm"
+                : "text-[#404E3F]/50 hover:text-[#404E3F]"
+            )}
+          >
+            Annual
+          </button>
+          <button
+            type="button"
+            onClick={() => onFreqChange("quarterly")}
+            className={cn(
+              "px-4 py-1.5 rounded-md text-xs font-semibold transition-all cursor-pointer",
+              freq === "quarterly"
+                ? "bg-[#4BC232] text-white shadow-sm"
+                : "text-[#404E3F]/50 hover:text-[#404E3F]"
+            )}
+          >
+            Quarterly
+          </button>
+        </div>
+      </div>
+
+      {/* Income Statement — full width */}
+      {income.length > 0 && (
+        <StatementBlock title="Income Statement" color="#4BC232">
+          <FullWidthTable
+            headers={["Item", ...income.map((p) => p.period)]}
+            rows={[
+              { label: "Revenue", values: income.map((p) => formatBillions(p.revenue)) },
+              { label: "Gross Profit", values: income.map((p) => formatBillions(p.gross_profit)), hide: income.every((p) => p.gross_profit == null) },
+              { label: "Operating Income", values: income.map((p) => formatBillions(p.operating_income)), hide: income.every((p) => p.operating_income == null) },
+              { label: "Profit Before Tax", values: income.map((p) => formatBillions(p.pretax_income)) },
+              { label: "Tax", values: income.map((p) => formatBillions(p.tax)) },
+              { label: "Net Income", values: income.map((p) => formatBillions(p.net_income)), highlight: true },
+              { label: "EPS (per share)", values: income.map((p) => p.eps != null ? `Rs. ${p.eps.toFixed(2)}` : "---"), highlight: true },
+            ]}
+          />
+        </StatementBlock>
+      )}
+
+      {/* Balance Sheet — full width */}
+      {balance.length > 0 && (
+        <StatementBlock title="Balance Sheet" color="#2B5288">
+          <FullWidthTable
+            headers={["Item", ...balance.map((p) => p.period)]}
+            rows={[
+              { label: "Total Assets", values: balance.map((p) => formatBillions(p.total_assets)), highlight: true },
+              { label: "Current Assets", values: balance.map((p) => formatBillions(p.current_assets)), hide: balance.every((p) => p.current_assets == null) },
+              { label: "Total Equity", values: balance.map((p) => formatBillions(p.total_equity)), highlight: true },
+              { label: "Total Liabilities", values: balance.map((p) => formatBillions(p.total_liabilities)) },
+              { label: "Total Debt", values: balance.map((p) => formatBillions(p.total_debt)), hide: balance.every((p) => p.total_debt == null) },
+              { label: "Cash & Equivalents", values: balance.map((p) => formatBillions(p.cash)) },
+              { label: "Current Liabilities", values: balance.map((p) => formatBillions(p.current_liabilities)), hide: balance.every((p) => p.current_liabilities == null) },
+            ]}
+          />
+        </StatementBlock>
+      )}
+
+      {/* Cash Flow — full width */}
+      {cashflow.length > 0 && (
+        <StatementBlock title="Cash Flow Statement" color="#E5A100">
+          <FullWidthTable
+            headers={["Item", ...cashflow.map((p) => p.period)]}
+            rows={[
+              { label: "Operating Cash Flow", values: cashflow.map((p) => formatBillions(p.operating_cash_flow)), highlight: true },
+              { label: "Investing Cash Flow", values: cashflow.map((p) => formatBillions(p.investing_cash_flow)) },
+              { label: "Financing Cash Flow", values: cashflow.map((p) => formatBillions(p.financing_cash_flow)) },
+              { label: "Free Cash Flow", values: cashflow.map((p) => formatBillions(p.free_cash_flow)), highlight: true },
+              { label: "Capital Expenditure", values: cashflow.map((p) => formatBillions(p.capital_expenditure)), hide: cashflow.every((p) => p.capital_expenditure == null) },
+              { label: "Cash at End of Period", values: cashflow.map((p) => formatBillions(p.end_cash)) },
+            ]}
+          />
+        </StatementBlock>
+      )}
+
+      <p className="text-xs text-[#404E3F]/40 text-center">
+        Data sourced from Yahoo Finance. All amounts in PKR. Numbers may differ
+        slightly from PSX filings due to rounding or data timing.
+      </p>
+    </div>
+  );
+}
+
+function StatementBlock({
+  title,
+  color,
+  children,
+}: {
+  title: string;
+  color: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="rounded-xl border border-[#E5E0D9] overflow-hidden">
+      <div
+        className="px-5 py-3 text-white font-semibold"
+        style={{ backgroundColor: color }}
+      >
+        {title}
+      </div>
+      {children}
+    </div>
+  );
+}
+
+interface TableRow {
+  label: string;
+  values: string[];
+  highlight?: boolean;
+  hide?: boolean;
+}
+
+function FullWidthTable({
+  headers,
+  rows,
+}: {
+  headers: string[];
+  rows: TableRow[];
+}) {
+  const visibleRows = rows.filter((r) => !r.hide);
+
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full text-sm">
+        <thead>
+          <tr className="bg-[#F8F3EA]">
+            {headers.map((h, i) => (
+              <th
+                key={i}
+                className={cn(
+                  "p-4 font-semibold text-[#404E3F] whitespace-nowrap",
+                  i === 0 ? "text-left min-w-[180px]" : "text-right min-w-[120px]"
+                )}
+              >
+                {h}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {visibleRows.map((row) => (
+            <tr
+              key={row.label}
+              className={cn(
+                "border-t border-[#E5E0D9]",
+                row.highlight ? "bg-[#F8F3EA]/60" : "hover:bg-[#F8F3EA]/30"
+              )}
+            >
+              <td
+                className={cn(
+                  "p-4 text-[#404E3F] whitespace-nowrap",
+                  row.highlight && "font-semibold"
+                )}
+              >
+                {row.label}
+              </td>
+              {row.values.map((val, i) => (
+                <td
+                  key={i}
+                  className={cn(
+                    "p-4 text-right whitespace-nowrap",
+                    row.highlight && "font-semibold",
+                    val.startsWith("-") ? "text-red-500" : "text-[#404E3F]"
+                  )}
+                >
+                  {val}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
 

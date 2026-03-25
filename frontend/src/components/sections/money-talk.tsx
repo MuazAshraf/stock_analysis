@@ -30,26 +30,27 @@ export function MoneyTalk({ financials }: MoneyTalkProps) {
     a.period.localeCompare(b.period)
   );
 
-  const incomes = sorted.map((f) => f.total_income ?? 0);
-  const profits = sorted.map((f) => f.profit_after_tax ?? 0);
+  const incomes = sorted.map((f) => (f.total_income ?? 0) * 1000);
+  const profits = sorted.map((f) => (f.profit_after_tax ?? 0) * 1000);
   const isGrowingIncome =
     incomes.length >= 2 && incomes[incomes.length - 1] > incomes[0];
   const isGrowingProfit =
     profits.length >= 2 && profits[profits.length - 1] > profits[0];
 
+  // PSX financials are "in thousands" — multiply by 1000 for real PKR values
   const incomeData = sorted.map((f) => ({
     year: f.period,
-    value: f.total_income ?? 0,
+    value: (f.total_income ?? 0) * 1000,
   }));
 
   const profitData = sorted.map((f) => ({
     year: f.period,
-    value: f.profit_after_tax ?? 0,
+    value: (f.profit_after_tax ?? 0) * 1000,
   }));
 
   const epsData = sorted.map((f) => ({
     year: f.period,
-    value: f.eps ?? 0,
+    value: f.eps ?? 0,  // EPS is already per-share, no conversion
   }));
 
   return (

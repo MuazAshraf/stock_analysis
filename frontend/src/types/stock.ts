@@ -122,6 +122,11 @@ export interface FinancialStatements {
   cashflow_quarterly: CashFlowPeriod[];
 }
 
+export interface PricePoint {
+  date: string;
+  close: number;
+}
+
 export interface StockData {
   company: Company;
   price: Price;
@@ -134,6 +139,7 @@ export interface StockData {
   indices: IndexPoint[];
   is_shariah: boolean;
   statements: FinancialStatements | null;
+  price_history: PricePoint[];
 }
 
 export interface ComparisonMetric {
