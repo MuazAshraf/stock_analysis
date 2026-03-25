@@ -1,0 +1,130 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { BarChart3, TrendingUp, Shield, FileText, BookOpen, ArrowLeftRight } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "About",
+  description:
+    "About PSX Stock Analyzer — a free stock analysis tool built for Pakistani investors who want to understand PSX stocks in plain English.",
+  alternates: { canonical: "https://psxstocksanalyzer.com/about" },
+};
+
+const FEATURES = [
+  { icon: TrendingUp, title: "Stock Analysis", desc: "Get a complete breakdown of any PSX-listed company — price, financials, dividends, and a plain English verdict." },
+  { icon: ArrowLeftRight, title: "Stock Comparison", desc: "Compare two stocks head-to-head across 7 key metrics with a clear winner and explanation." },
+  { icon: Shield, title: "Shariah Compliance", desc: "Instantly see if a stock is in the KMI All Shares Islamic index with a green Shariah Compliant badge." },
+  { icon: FileText, title: "Financial Statements", desc: "View Income Statement, Balance Sheet, and Cash Flow data with annual and quarterly breakdowns." },
+  { icon: BarChart3, title: "Price Charts", desc: "1-year price history chart showing the stock's performance trend at a glance." },
+  { icon: BookOpen, title: "Education", desc: "Glossary, formulas, market symbols — all explained in plain English with a Roman Urdu toggle." },
+];
+
+export default function AboutPage() {
+  return (
+    <div className="min-h-screen bg-[#F8F3EA]">
+      <header className="bg-white border-b border-[#E5E0D9] py-4">
+        <div className="max-w-3xl mx-auto px-4">
+          <Link href="/" className="text-lg font-bold text-[#404E3F] hover:text-[#4BC232] transition-colors">
+            PSX Stock Analyzer
+          </Link>
+        </div>
+      </header>
+
+      <main className="max-w-3xl mx-auto px-4 py-10">
+        <div className="bg-white rounded-xl border border-[#E5E0D9] p-8 space-y-8">
+          <div>
+            <h1 className="text-2xl font-bold text-[#404E3F]">About PSX Stock Analyzer</h1>
+            <p className="text-sm text-[#404E3F]/60 mt-2 leading-relaxed">
+              Making Pakistan&apos;s stock market accessible to everyone.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            <h2 className="text-base font-semibold text-[#404E3F]">Our Mission</h2>
+            <p className="text-sm text-[#404E3F]/70 leading-relaxed">
+              PSX Stock Analyzer is a free tool built for Pakistani investors who find stock analysis
+              intimidating. We believe everyone deserves to understand where their money is going —
+              without needing a finance degree.
+            </p>
+            <p className="text-sm text-[#404E3F]/70 leading-relaxed">
+              We translate complex financial jargon into plain, simple English that anyone can
+              understand. Whether you&apos;re looking at your first stock or comparing two companies,
+              our tool gives you clear, honest analysis with no hidden agenda.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            <h2 className="text-base font-semibold text-[#404E3F]">What We Offer</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {FEATURES.map((f) => (
+                <div key={f.title} className="flex items-start gap-3 p-4 rounded-xl bg-[#F8F3EA]">
+                  <f.icon className="h-5 w-5 text-[#4BC232] mt-0.5 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-sm font-semibold text-[#404E3F]">{f.title}</h3>
+                    <p className="text-xs text-[#404E3F]/60 mt-0.5 leading-relaxed">{f.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h2 className="text-base font-semibold text-[#404E3F]">Where Our Data Comes From</h2>
+            <div className="space-y-2">
+              <div className="p-3 rounded-lg bg-[#F8F3EA]">
+                <p className="text-sm text-[#404E3F]">
+                  <strong>PSX Data Portal</strong> (dps.psx.com.pk) — Live stock prices, company profiles,
+                  trading data, dividend history, and index constituents.
+                </p>
+              </div>
+              <div className="p-3 rounded-lg bg-[#F8F3EA]">
+                <p className="text-sm text-[#404E3F]">
+                  <strong>Yahoo Finance</strong> — Financial statements (Income Statement, Balance Sheet,
+                  Cash Flow), price history charts, and book value data.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="p-4 rounded-xl bg-[#4BC232]/10 border border-[#4BC232]/20">
+            <p className="text-sm text-[#404E3F] text-center leading-relaxed">
+              Built with passion for making Pakistan&apos;s stock market accessible to everyone.
+              <br />
+              <span className="text-[#4BC232] font-semibold">100% free. No sign-up. No hidden fees.</span>
+            </p>
+          </div>
+
+          <div className="text-sm text-[#404E3F]/50 text-center">
+            <p>
+              PSX Stock Analyzer is an educational tool only. We do not provide financial advice.
+              <br />
+              Please read our{" "}
+              <Link href="/terms" className="text-[#2B5288] underline">Terms of Service</Link>
+              {" "}and{" "}
+              <Link href="/privacy" className="text-[#2B5288] underline">Privacy Policy</Link>.
+            </p>
+          </div>
+        </div>
+      </main>
+
+      <Footer />
+    </div>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="border-t border-[#E5E0D9] mt-16 py-6">
+      <div className="max-w-3xl mx-auto px-4 text-center space-y-2">
+        <p className="text-xs text-[#404E3F]/40">
+          For educational purposes only. Not financial advice.
+        </p>
+        <div className="flex flex-wrap justify-center gap-x-4 gap-y-1">
+          <Link href="/privacy" className="text-xs text-[#2B5288] hover:underline">Privacy Policy</Link>
+          <Link href="/terms" className="text-xs text-[#2B5288] hover:underline">Terms of Service</Link>
+          <Link href="/about" className="text-xs text-[#2B5288] hover:underline">About</Link>
+          <Link href="/contact" className="text-xs text-[#2B5288] hover:underline">Contact</Link>
+        </div>
+      </div>
+    </footer>
+  );
+}

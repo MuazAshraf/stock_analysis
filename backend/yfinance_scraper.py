@@ -19,7 +19,7 @@ from models import (
 
 logger = logging.getLogger(__name__)
 
-_executor = ThreadPoolExecutor(max_workers=2)
+_executor = ThreadPoolExecutor(max_workers=4)
 
 
 def _safe(val) -> float | None:
@@ -112,12 +112,18 @@ def _parse_cashflow(df) -> list[CashFlowPeriod]:
 
 # ── Combined Yahoo Finance data ───────────────────────────────────────────
 
+import time as _time
 
 @dataclass
 class YahooData:
     statements: FinancialStatements | None
     price_history: list[PricePoint]
     book_value: float | None
+
+
+# Cache successful Yahoo responses for 6 hours (financial data doesn't change often)
+_yahoo_cache: dict[str, tuple[YahooData, float]] = {}
+_YAHOO_CACHE_TTL = 6 * 3600
 
 
 def _fetch_all_yahoo_data_sync(symbol: str) -> YahooData:
@@ -196,8 +202,16 @@ def _fetch_all_yahoo_data_sync(symbol: str) -> YahooData:
 
 
 async def fetch_all_yahoo_data(symbol: str) -> YahooData:
-    """Fetch all Yahoo Finance data for a PSX stock in one call."""
+    """Fetch all Yahoo Finance data for a PSX stock in one call. Cached for 6 hours."""
     import asyncio
+
+    # Check cache first
+    cached = _yahoo_cache.get(symbol)
+    if cached:
+        data, ts = cached
+        if (_time.time() - ts) < _YAHOO_CACHE_TTL:
+            logger.info("Yahoo cache HIT for %s", symbol)
+            return data
 
     try:
         loop = asyncio.get_event_loop()
@@ -209,6 +223,11 @@ async def fetch_all_yahoo_data(symbol: str) -> YahooData:
             len(result.price_history),
             result.book_value,
         )
+
+        # Only cache if we got meaningful data
+        if result.statements or result.price_history or result.book_value is not None:
+            _yahoo_cache[symbol] = (result, _time.time())
+
         return result
     except Exception:
         logger.exception("Failed to fetch Yahoo Finance data for %s", symbol)

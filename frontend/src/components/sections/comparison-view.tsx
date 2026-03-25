@@ -427,13 +427,8 @@ export function ComparisonView({ data }: ComparisonViewProps) {
         symB={symB}
       />
 
-      {/* 6 — Area Trend Comparison */}
-      <AreaTrendsSection
-        stockA={stock_a}
-        stockB={stock_b}
-        symA={symA}
-        symB={symB}
-      />
+      {/* Performance Index removed — it used a different scoring system
+         that could contradict the 7-metric comparison winner */}
     </div>
   );
 }

@@ -17,6 +17,7 @@ import { Formulas } from "@/components/sections/formulas";
 import { MarketTicker } from "@/components/sections/market-ticker";
 import { ComparisonView } from "@/components/sections/comparison-view";
 import { PriceChart } from "@/components/sections/price-chart";
+import Link from "next/link";
 import {
   AlertCircle,
   BarChart3,
@@ -444,6 +445,12 @@ export function Dashboard() {
             <span className="text-xs text-[#404E3F]/30">Dividend Stocks Pakistan</span>
             <span className="text-xs text-[#404E3F]/30">Pakistan Stock Market</span>
           </nav>
+          <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 pt-2">
+            <Link href="/privacy" className="text-xs font-medium text-[#404E3F]/50 hover:text-[#4BC232] transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="text-xs font-medium text-[#404E3F]/50 hover:text-[#4BC232] transition-colors">Terms of Service</Link>
+            <Link href="/about" className="text-xs font-medium text-[#404E3F]/50 hover:text-[#4BC232] transition-colors">About</Link>
+            <Link href="/contact" className="text-xs font-medium text-[#404E3F]/50 hover:text-[#4BC232] transition-colors">Contact</Link>
+          </div>
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 pt-3">
             <a href="https://dps.psx.com.pk" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-[#2B5288] hover:text-[#4BC232] transition-colors underline underline-offset-2">PSX Data Portal</a>
             <a href="https://www.psx.com.pk" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-[#2B5288] hover:text-[#4BC232] transition-colors underline underline-offset-2">Pakistan Stock Exchange</a>
