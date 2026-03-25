@@ -125,7 +125,7 @@ export const metadata: Metadata = {
     ],
   },
   verification: {
-    google: "HahM2s5z9jWUt1JshB_gegjrRqFOImX4hOLI1ZZiyRU",
+    google: "1wzYGb4EKRXFu3pEizjcUWa5ats8vquWomV8ukRGUtI",
   },
   other: {
     "application-name": "PSX Stock Analyzer",
