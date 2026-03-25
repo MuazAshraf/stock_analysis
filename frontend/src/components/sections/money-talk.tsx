@@ -30,7 +30,11 @@ export function MoneyTalk({ financials }: MoneyTalkProps) {
     a.period.localeCompare(b.period)
   );
 
-  const incomes = sorted.map((f) => (f.total_income ?? 0) * 1000);
+  // PSX uses "Sales" for non-financial companies and "Total Income" for banks
+  const getRevenue = (f: FinancialYear) => f.total_income ?? f.sales ?? 0;
+  const revenueLabel = sorted.some((f) => f.total_income != null) ? "Total Income" : "Sales Revenue";
+
+  const incomes = sorted.map((f) => getRevenue(f) * 1000);
   const profits = sorted.map((f) => (f.profit_after_tax ?? 0) * 1000);
   const isGrowingIncome =
     incomes.length >= 2 && incomes[incomes.length - 1] > incomes[0];
@@ -40,7 +44,7 @@ export function MoneyTalk({ financials }: MoneyTalkProps) {
   // PSX financials are "in thousands" — multiply by 1000 for real PKR values
   const incomeData = sorted.map((f) => ({
     year: f.period,
-    value: (f.total_income ?? 0) * 1000,
+    value: getRevenue(f) * 1000,
   }));
 
   const profitData = sorted.map((f) => ({
@@ -67,12 +71,12 @@ export function MoneyTalk({ financials }: MoneyTalkProps) {
         </p>
       </CardHeader>
       <CardContent className="space-y-6">
-        {/* Total Income */}
+        {/* Revenue / Total Income */}
         <div>
           <div className="flex items-center justify-between mb-3">
             <MetricExplainer
-              label="Total Income"
-              explanation="All the money the company earned from its business operations before paying any expenses. Higher is generally better."
+              label={revenueLabel}
+              explanation="All the money the company earned from its business operations before paying any expenses. For banks this is called Total Income, for other companies it's Sales Revenue. Higher is generally better."
             />
             <TrendBadge isGrowing={isGrowingIncome} />
           </div>
@@ -92,7 +96,7 @@ export function MoneyTalk({ financials }: MoneyTalkProps) {
                 <RechartsTooltip
                   formatter={(value) => [
                     `Rs. ${Number(value).toLocaleString("en-PK")}`,
-                    "Total Income",
+                    revenueLabel,
                   ]}
                   contentStyle={{
                     backgroundColor: "#F8F3EA",
