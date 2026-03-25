@@ -161,6 +161,7 @@ class AnalyzeResponse(BaseModel):
     is_shariah: bool = Field(default=False, description="Whether the stock is in the KMI All Shares Islamic index")
     statements: FinancialStatements | None = Field(default=None, description="Detailed financial statements from Yahoo Finance")
     price_history: list[PricePoint] = Field(default_factory=list, description="1-year weekly closing prices")
+    book_value: float | None = Field(default=None, description="Book value per share from Yahoo Finance")
 
 
 class StockListItem(BaseModel):

@@ -28,7 +28,7 @@ from models import (
     StockListResponse,
 )
 from scraper import ScraperError, fetch_all_stocks, scrape_company, scrape_stock_list
-from yfinance_scraper import fetch_financial_statements, fetch_price_history
+from yfinance_scraper import fetch_financial_statements, fetch_price_history, fetch_book_value
 
 # ── Logging ─────────────────────────────────────────────────────────────────
 
@@ -178,10 +178,11 @@ async def analyze_company(request: Request, body: AnalyzeRequest):
     shariah_set = await _get_shariah_symbols()
     symbol = scraped["company"].symbol.upper()
 
-    # Fetch Yahoo Finance data concurrently (statements + price history)
-    statements, price_history = await asyncio.gather(
+    # Fetch Yahoo Finance data concurrently (statements + price history + book value)
+    statements, price_history, book_value = await asyncio.gather(
         fetch_financial_statements(symbol),
         fetch_price_history(symbol),
+        fetch_book_value(symbol),
     )
 
     return AnalyzeResponse(
@@ -197,6 +198,7 @@ async def analyze_company(request: Request, body: AnalyzeRequest):
         is_shariah=symbol in shariah_set,
         statements=statements,
         price_history=price_history,
+        book_value=book_value,
     )
 
 

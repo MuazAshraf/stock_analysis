@@ -11,7 +11,6 @@ import { ComparisonLoadingSkeleton } from "@/components/comparison-loading-skele
 import { CompanyOverview } from "@/components/sections/company-overview";
 import { TradingInfo } from "@/components/sections/trading-info";
 import { MoneyTalk } from "@/components/sections/money-talk";
-import { HealthCheck } from "@/components/sections/health-check";
 import { DividendCheck } from "@/components/sections/dividend-check";
 import { FinalVerdict } from "@/components/sections/final-verdict";
 import { Formulas } from "@/components/sections/formulas";
@@ -216,6 +215,7 @@ export function Dashboard() {
                   price={data.price}
                   equity={data.equity}
                   isShariah={data.is_shariah}
+                  bookValue={data.book_value}
                 />
                 {data.price_history && data.price_history.length > 0 && (
                   <PriceChart
@@ -223,14 +223,14 @@ export function Dashboard() {
                     symbol={data.company.symbol}
                   />
                 )}
-                <TradingInfo price={data.price} />
+                <TradingInfo
+                  price={data.price}
+                  ratios={data.ratios}
+                />
                 {data.financials_annual &&
                   data.financials_annual.length > 0 && (
                     <MoneyTalk financials={data.financials_annual} />
                   )}
-                {data.ratios && (
-                  <HealthCheck price={data.price} ratios={data.ratios} />
-                )}
                 <DividendCheck
                   payouts={data.payouts || []}
                   dividendStatus={data.analysis?.dividend_status || ""}
@@ -444,10 +444,11 @@ export function Dashboard() {
             <span className="text-xs text-[#404E3F]/30">Dividend Stocks Pakistan</span>
             <span className="text-xs text-[#404E3F]/30">Pakistan Stock Market</span>
           </nav>
-          <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 pt-2">
-            <a href="https://dps.psx.com.pk" target="_blank" rel="noopener noreferrer" className="text-xs text-[#2B5288]/50 hover:text-[#2B5288] transition-colors">PSX Data Portal</a>
-            <a href="https://www.psx.com.pk" target="_blank" rel="noopener noreferrer" className="text-xs text-[#2B5288]/50 hover:text-[#2B5288] transition-colors">Pakistan Stock Exchange</a>
-            <a href="https://www.secp.gov.pk" target="_blank" rel="noopener noreferrer" className="text-xs text-[#2B5288]/50 hover:text-[#2B5288] transition-colors">SECP</a>
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 pt-3">
+            <a href="https://dps.psx.com.pk" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-[#2B5288] hover:text-[#4BC232] transition-colors underline underline-offset-2">PSX Data Portal</a>
+            <a href="https://www.psx.com.pk" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-[#2B5288] hover:text-[#4BC232] transition-colors underline underline-offset-2">Pakistan Stock Exchange</a>
+            <a href="https://www.secp.gov.pk" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-[#2B5288] hover:text-[#4BC232] transition-colors underline underline-offset-2">SECP</a>
+            <a href="https://www.tradingview.com/markets/stocks-pakistan/" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-[#2B5288] hover:text-[#4BC232] transition-colors underline underline-offset-2">TradingView</a>
           </div>
         </div>
       </footer>

@@ -140,6 +140,7 @@ export interface StockData {
   is_shariah: boolean;
   statements: FinancialStatements | null;
   price_history: PricePoint[];
+  book_value: number | null;
 }
 
 export interface ComparisonMetric {

@@ -3,14 +3,20 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { MetricExplainer } from "@/components/metric-explainer";
-import { ShieldCheck, ShieldAlert, Users } from "lucide-react";
-import type { Price } from "@/types/stock";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { ShieldCheck, ShieldAlert, Users, TrendingUp, TrendingDown, Info } from "lucide-react";
+import type { Price, RatioYear } from "@/types/stock";
 
 interface TradingInfoProps {
   price: Price;
+  ratios?: RatioYear[];
 }
 
-export function TradingInfo({ price }: TradingInfoProps) {
+export function TradingInfo({ price, ratios }: TradingInfoProps) {
   const ldcp = price.ldcp;
   const currentClose = price.current;
   const openPrice = price.open;
@@ -22,6 +28,12 @@ export function TradingInfo({ price }: TradingInfoProps) {
 
   const cbLow = price.circuit_breaker_low;
   const cbHigh = price.circuit_breaker_high;
+
+  // Get latest ratio data
+  const latestRatio = ratios && ratios.length > 0 ? ratios[ratios.length - 1] : null;
+  const peRatio = price.pe_ratio;
+  const netProfitMargin = latestRatio?.net_profit_margin ?? null;
+  const epsGrowth = latestRatio?.eps_growth ?? null;
 
   return (
     <Card className="border-[#E5E0D9] bg-white shadow-sm">
@@ -37,34 +49,114 @@ export function TradingInfo({ price }: TradingInfoProps) {
         </p>
       </CardHeader>
       <CardContent className="space-y-4">
-        {/* LDCP */}
-        {ldcp != null && (
-          <div className="p-4 rounded-xl bg-[#F8F3EA]">
-            <MetricExplainer
-              label="LDCP"
-              fullForm="Last Day Closing Price"
-              explanation="The price at which this stock closed yesterday. Compare it with today's price to see if the stock went up or down from yesterday."
-            />
-            <div className="mt-2 flex items-center gap-4">
-              <span className="text-2xl font-bold text-[#404E3F]">
-                Rs. {ldcp.toFixed(2)}
-              </span>
-              {currentClose != null && (
-                <Badge
-                  className={`text-white ${
-                    currentClose > ldcp ? "bg-[#4BC232]" : currentClose < ldcp ? "bg-red-500" : "bg-gray-400"
-                  }`}
-                >
-                  {currentClose > ldcp
-                    ? `Up Rs. ${(currentClose - ldcp).toFixed(2)} from yesterday`
-                    : currentClose < ldcp
-                      ? `Down Rs. ${(ldcp - currentClose).toFixed(2)} from yesterday`
-                      : "Same as yesterday"}
-                </Badge>
-              )}
-            </div>
-          </div>
-        )}
+        {/* Quick Health Snapshot — 4 columns */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* LDCP */}
+          <QuickMetric
+            label="LDCP"
+            info="Last Day Closing Price — the price at which this stock closed yesterday. Today's gain or loss is measured from this price."
+          >
+            {ldcp != null ? (
+              <>
+                <p className="text-xl font-bold text-[#404E3F]">Rs. {ldcp.toFixed(2)}</p>
+                {currentClose != null && currentClose !== ldcp && (
+                  <p className={`text-xs font-medium mt-1 ${currentClose > ldcp ? "text-[#4BC232]" : "text-red-500"}`}>
+                    {currentClose > ldcp ? "+" : ""}{(currentClose - ldcp).toFixed(2)} today
+                  </p>
+                )}
+              </>
+            ) : (
+              <p className="text-sm text-[#404E3F]/40">N/A</p>
+            )}
+          </QuickMetric>
+
+          {/* P/E Ratio — SVG gauge */}
+          <QuickMetric
+            label="P/E Ratio"
+            info="Price to Earnings Ratio — how much investors pay for every Rs. 1 of profit. A low P/E may mean the stock is cheap, a high P/E may mean it's expensive or investors expect fast growth."
+          >
+            {peRatio != null ? (
+              <>
+                {/* Mini SVG gauge */}
+                <div className="relative w-24 h-12 mx-auto overflow-hidden">
+                  <svg viewBox="0 0 200 100" className="w-full h-full">
+                    <path d="M 10 95 A 85 85 0 0 1 64 22" fill="none" stroke="#4BC232" strokeWidth="14" strokeLinecap="round" />
+                    <path d="M 64 22 A 85 85 0 0 1 136 22" fill="none" stroke="#d97706" strokeWidth="14" strokeLinecap="round" />
+                    <path d="M 136 22 A 85 85 0 0 1 190 95" fill="none" stroke="#ef4444" strokeWidth="14" strokeLinecap="round" />
+                    <line
+                      x1="100" y1="95"
+                      x2={100 + 70 * Math.cos(Math.PI - (Math.min(Math.max(peRatio / 50, 0), 1)) * Math.PI)}
+                      y2={95 - 70 * Math.sin(Math.PI - (Math.min(Math.max(peRatio / 50, 0), 1)) * Math.PI)}
+                      stroke="#404E3F" strokeWidth="3" strokeLinecap="round"
+                    />
+                    <circle cx="100" cy="95" r="5" fill="#404E3F" />
+                  </svg>
+                </div>
+                <p className="text-xl font-bold text-[#404E3F]">{peRatio.toFixed(1)}</p>
+                <p className="text-xs text-[#404E3F]/60 mt-1">
+                  {peRatio < 15 ? "Looks Cheap" : peRatio < 25 ? "Fair Price" : "Expensive"}
+                </p>
+                <p className="text-[10px] text-[#404E3F]/40 mt-0.5">
+                  &lt;15 cheap | 15-25 fair | &gt;25 expensive
+                </p>
+              </>
+            ) : (
+              <p className="text-sm text-[#404E3F]/40">N/A</p>
+            )}
+          </QuickMetric>
+
+          {/* Net Profit Margin */}
+          <QuickMetric
+            label="Profit Margin"
+            info="Net Profit Margin — out of every Rs. 100 the company earns from sales, how much becomes actual profit after all expenses. Above 15% is strong, 5-15% is average, below 5% is thin."
+          >
+            {netProfitMargin != null ? (
+              <>
+                <p className="text-xl font-bold text-[#404E3F]">{netProfitMargin.toFixed(1)}%</p>
+                <div className="w-full h-2 bg-[#E5E0D9] rounded-full mt-2">
+                  <div
+                    className="h-full rounded-full transition-all"
+                    style={{
+                      width: `${Math.min(Math.max(netProfitMargin, 0), 100)}%`,
+                      backgroundColor: netProfitMargin >= 15 ? "#4BC232" : netProfitMargin >= 5 ? "#d97706" : "#ef4444",
+                    }}
+                  />
+                </div>
+                <p className="text-xs text-[#404E3F]/60 mt-1">
+                  {netProfitMargin >= 15 ? "Strong margins" : netProfitMargin >= 5 ? "Average margins" : "Thin margins"}
+                </p>
+              </>
+            ) : (
+              <p className="text-sm text-[#404E3F]/40">N/A</p>
+            )}
+          </QuickMetric>
+
+          {/* EPS Growth */}
+          <QuickMetric
+            label="EPS Growth"
+            info="Earnings Per Share Growth — how much the per-share profit grew or shrank compared to last year. Positive means the company is earning more per share, negative means it earned less."
+          >
+            {epsGrowth != null ? (
+              <>
+                <div className="flex items-center justify-center gap-1.5">
+                  {epsGrowth >= 0 ? (
+                    <TrendingUp className="h-5 w-5 text-[#4BC232]" />
+                  ) : (
+                    <TrendingDown className="h-5 w-5 text-red-500" />
+                  )}
+                  <p className={`text-xl font-bold ${epsGrowth >= 0 ? "text-[#4BC232]" : "text-red-500"}`}>
+                    {epsGrowth >= 0 ? "+" : ""}{epsGrowth.toFixed(1)}%
+                  </p>
+                </div>
+                <p className="text-xs text-[#404E3F]/60 mt-1">
+                  {epsGrowth > 10 ? "Growing well" : epsGrowth >= 0 ? "Slow growth" : "Declining"}
+                </p>
+              </>
+            ) : (
+              <p className="text-sm text-[#404E3F]/40">N/A</p>
+            )}
+          </QuickMetric>
+        </div>
 
         {/* Buyer vs Seller Strength */}
         <div className="p-4 rounded-xl bg-[#F3F1E5]">
@@ -147,5 +239,39 @@ export function TradingInfo({ price }: TradingInfoProps) {
         )}
       </CardContent>
     </Card>
+  );
+}
+
+function QuickMetric({
+  label,
+  info,
+  children,
+}: {
+  label: string;
+  info: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="p-4 rounded-xl bg-[#F8F3EA] text-center">
+      <div className="flex items-center justify-center gap-1.5 mb-2">
+        <p className="text-xs font-semibold text-[#404E3F]/60 uppercase tracking-wide">
+          {label}
+        </p>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button type="button" className="inline-flex cursor-help">
+              <Info className="h-3.5 w-3.5 text-[#2B5288]/50" />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent
+            side="top"
+            className="max-w-xs bg-[#404E3F] text-white text-sm"
+          >
+            {info}
+          </TooltipContent>
+        </Tooltip>
+      </div>
+      {children}
+    </div>
   );
 }

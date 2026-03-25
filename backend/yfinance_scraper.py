@@ -197,3 +197,26 @@ async def fetch_price_history(symbol: str) -> list[PricePoint]:
     except Exception:
         logger.exception("Failed to fetch price history for %s", symbol)
         return []
+
+
+def _fetch_book_value_sync(symbol: str) -> float | None:
+    """Fetch book value per share from Yahoo Finance."""
+    import yfinance as yf
+
+    ticker = yf.Ticker(f"{symbol}.KA")
+    info = ticker.info or {}
+    return _safe(info.get("bookValue"))
+
+
+async def fetch_book_value(symbol: str) -> float | None:
+    """Fetch book value per share for a PSX stock."""
+    import asyncio
+
+    try:
+        loop = asyncio.get_event_loop()
+        result = await loop.run_in_executor(_executor, _fetch_book_value_sync, symbol)
+        logger.info("Book value for %s: %s", symbol, result)
+        return result
+    except Exception:
+        logger.exception("Failed to fetch book value for %s", symbol)
+        return None
