@@ -6,10 +6,12 @@ Provides an API to scrape and analyze stocks listed on the Pakistan Stock Exchan
 
 import asyncio
 import logging
+import signal
 import time
 
 from fastapi import FastAPI, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import JSONResponse
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
@@ -30,7 +32,7 @@ from models import (
 from scraper import ScraperError, fetch_all_stocks, scrape_company, scrape_stock_list
 from yfinance_scraper import fetch_all_yahoo_data
 
-# ── Logging ─────────────────────────────────────────────────────────────────
+# ── Logging (structured, no PII) ──────────────────────────────────────────
 
 logging.basicConfig(
     level=logging.DEBUG if settings.debug else logging.INFO,
@@ -48,20 +50,72 @@ app = FastAPI(
     title=settings.app_name,
     description="Scrapes and analyzes PSX-listed stocks for simple, human-readable insights.",
     version="1.0.0",
+    docs_url=None if not settings.debug else "/docs",
+    redoc_url=None if not settings.debug else "/redoc",
+    openapi_url=None if not settings.debug else "/openapi.json",
 )
 
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
-# ── CORS ────────────────────────────────────────────────────────────────────
+# ── Security Middleware ────────────────────────────────────────────────────
 
+# Trusted hosts — block requests with spoofed Host headers
+app.add_middleware(
+    TrustedHostMiddleware,
+    allowed_hosts=[
+        "api.psxstocksanalyzer.com",
+        "localhost",
+        "127.0.0.1",
+        "0.0.0.0",
+        "*.railway.internal",
+    ],
+)
+
+# CORS — strict whitelist, only allowed methods
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.allowed_origins,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Content-Type", "Accept"],
 )
+
+
+# ── Security Headers ──────────────────────────────────────────────────────
+
+@app.middleware("http")
+async def security_middleware(request: Request, call_next):
+    # Block oversized request bodies (max 10KB — our payloads are tiny)
+    if request.method == "POST":
+        content_length = request.headers.get("content-length")
+        if content_length and int(content_length) > 10_240:
+            return JSONResponse(status_code=413, content={"detail": "Request too large"})
+
+    response = await call_next(request)
+
+    # Security headers
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+    response.headers["Cache-Control"] = "no-store" if request.url.path.startswith("/api/analyze") else "public, max-age=300"
+    return response
+
+
+# ── Graceful Shutdown ─────────────────────────────────────────────────────
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    logger.info("Shutting down gracefully...")
+
+
+def _handle_sigterm(*args):
+    raise SystemExit(0)
+
+
+signal.signal(signal.SIGTERM, _handle_sigterm)
 
 # ── Stock List Cache (per index) ───────────────────────────────────────────
 
@@ -99,7 +153,9 @@ async def _get_shariah_symbols() -> set[str]:
 
 
 @app.get("/api/stocks", response_model=StockListResponse)
+@limiter.limit("30/minute")
 async def list_stocks(
+    request: Request,
     index: str = Query("KSE100", description="PSX index: KSE100, KSE30, or ALL"),
 ):
     """Return the stock list for a specific PSX index, or all equities."""

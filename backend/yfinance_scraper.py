@@ -125,10 +125,24 @@ class YahooData:
 _yahoo_cache: dict[str, tuple[YahooData, float]] = {}
 _YAHOO_CACHE_TTL = 6 * 3600
 
+# Global lock to prevent multiple concurrent Yahoo requests from different users
+import threading
+_yahoo_lock = threading.Lock()
+_last_yahoo_call: float = 0.0
+_MIN_CALL_GAP = 3.0  # minimum seconds between Yahoo calls
+
 
 def _fetch_all_yahoo_data_sync(symbol: str) -> YahooData:
     """Fetch all Yahoo Finance data using a SINGLE ticker object to avoid rate limits."""
     import time
+
+    # Global rate limiter — wait if another request was made recently
+    global _last_yahoo_call
+    with _yahoo_lock:
+        elapsed = time.time() - _last_yahoo_call
+        if elapsed < _MIN_CALL_GAP:
+            time.sleep(_MIN_CALL_GAP - elapsed)
+        _last_yahoo_call = time.time()
     import yfinance as yf
 
     statements = None
@@ -190,9 +204,9 @@ def _fetch_all_yahoo_data_sync(symbol: str) -> YahooData:
         except Exception:
             logger.warning("Yahoo Finance attempt %d failed for %s", attempt + 1, symbol)
 
-        # Wait before retry (2s, 4s)
+        # Wait before retry (5s, 10s)
         if attempt < 2:
-            time.sleep(2 * (attempt + 1))
+            time.sleep(5 * (attempt + 1))
 
     return YahooData(
         statements=statements,
