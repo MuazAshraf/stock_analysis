@@ -5,20 +5,20 @@
 
   <!-- Homepage / Main Application -->
   <url>
-    <loc>https://stock-analysis-two-psi.vercel.app/</loc>
+    <loc>https://psxstocksanalyzer.com/</loc>
     <lastmod>2025-03-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <xhtml:link
       rel="alternate"
       hreflang="en-PK"
-      href="https://stock-analysis-two-psi.vercel.app/" />
+      href="https://psxstocksanalyzer.com/" />
     <xhtml:link
       rel="alternate"
       hreflang="en"
-      href="https://stock-analysis-two-psi.vercel.app/" />
+      href="https://psxstocksanalyzer.com/" />
     <image:image>
-      <image:loc>https://stock-analysis-two-psi.vercel.app/og-image.png</image:loc>
+      <image:loc>https://psxstocksanalyzer.com/og-img.png</image:loc>
       <image:title>PSX Stock Analyzer - Free Pakistan Stock Exchange Analysis Tool</image:title>
       <image:caption>Free PSX stock analysis for Pakistani investors. Understand KSE 100 stocks in plain English.</image:caption>
     </image:image>

@@ -14,8 +14,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// Change this when you buy a custom domain
-const BASE_URL = "https://stock-analysis-two-psi.vercel.app";
+const BASE_URL = "https://psxstocksanalyzer.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
@@ -102,7 +101,7 @@ export const metadata: Metadata = {
       "Analyze any PSX / KSE 100 stock in plain English. Get P/E ratio, dividend history, Shariah compliance badge, financials & plain-language verdict — completely free.",
     images: [
       {
-        url: `${BASE_URL}/og-image.png`,
+        url: `${BASE_URL}/og-img.png`,
         width: 1200,
         height: 630,
         alt: "PSX Stock Analyzer — Free Pakistan Stock Exchange analysis tool for beginners",
@@ -120,7 +119,7 @@ export const metadata: Metadata = {
       "Analyze any PSX / KSE 100 stock in plain English. P/E ratio, dividends, Shariah compliance & more — no finance degree needed.",
     images: [
       {
-        url: `${BASE_URL}/og-image.png`,
+        url: `${BASE_URL}/og-img.png`,
         alt: "PSX Stock Analyzer — Free Pakistan Stock Exchange analysis tool for beginners",
       },
     ],
@@ -178,7 +177,7 @@ const webApplicationSchema = {
     "52-week price range",
     "Risk level assessment",
   ],
-  screenshot: `${BASE_URL}/og-image.png`,
+  screenshot: `${BASE_URL}/og-img.png`,
   creator: {
     "@type": "Organization",
     name: "PSX Stock Analyzer",

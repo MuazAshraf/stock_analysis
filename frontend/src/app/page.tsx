@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description:
     "Free PSX stock analysis tool for Pakistani investors. Analyze any KSE 100 company in plain English — P/E ratio, dividends, Shariah compliance, financials & more. No finance degree needed.",
   alternates: {
-    canonical: "https://stock-analysis-two-psi.vercel.app/",
+    canonical: "https://psxstocksanalyzer.com/",
   },
 };
 
