@@ -449,6 +449,7 @@ export function Dashboard() {
             <Link href="/privacy" className="text-xs font-medium text-[#404E3F]/50 hover:text-[#4BC232] transition-colors">Privacy Policy</Link>
             <Link href="/terms" className="text-xs font-medium text-[#404E3F]/50 hover:text-[#4BC232] transition-colors">Terms of Service</Link>
             <Link href="/about" className="text-xs font-medium text-[#404E3F]/50 hover:text-[#4BC232] transition-colors">About</Link>
+            <Link href="/faq" className="text-xs font-medium text-[#404E3F]/50 hover:text-[#4BC232] transition-colors">FAQ</Link>
             <Link href="/contact" className="text-xs font-medium text-[#404E3F]/50 hover:text-[#4BC232] transition-colors">Contact</Link>
           </div>
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 pt-3">

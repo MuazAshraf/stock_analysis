@@ -27,8 +27,10 @@ export default function TermsPage() {
           </div>
 
           <Section title="Acceptance of Terms">
-            By accessing and using PSX Stock Analyzer (psxstocksanalyzer.com), you agree to be bound
-            by these Terms of Service. If you do not agree, please do not use the website.
+            PSX Stock Analyzer is a free stock analysis tool for the Pakistan Stock Exchange (PSX) that
+            explains stocks in plain English for beginner Pakistani investors. By accessing and using
+            PSX Stock Analyzer (psxstocksanalyzer.com), you agree to be bound by these Terms of Service.
+            If you do not agree, please do not use the website.
           </Section>
 
           <Section title="Not Financial Advice">
@@ -124,6 +126,7 @@ function Footer() {
           <Link href="/privacy" className="text-xs text-[#2B5288] hover:underline">Privacy Policy</Link>
           <Link href="/terms" className="text-xs text-[#2B5288] hover:underline">Terms of Service</Link>
           <Link href="/about" className="text-xs text-[#2B5288] hover:underline">About</Link>
+          <Link href="/faq" className="text-xs text-[#2B5288] hover:underline">FAQ</Link>
           <Link href="/contact" className="text-xs text-[#2B5288] hover:underline">Contact</Link>
         </div>
       </div>

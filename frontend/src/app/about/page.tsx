@@ -34,7 +34,7 @@ export default function AboutPage() {
           <div>
             <h1 className="text-2xl font-bold text-[#404E3F]">About PSX Stock Analyzer</h1>
             <p className="text-sm text-[#404E3F]/60 mt-2 leading-relaxed">
-              Making Pakistan&apos;s stock market accessible to everyone.
+              PSX Stock Analyzer is a free stock analysis tool for the Pakistan Stock Exchange (PSX) that explains stocks in plain English for beginner Pakistani investors.
             </p>
           </div>
 
@@ -122,6 +122,7 @@ function Footer() {
           <Link href="/privacy" className="text-xs text-[#2B5288] hover:underline">Privacy Policy</Link>
           <Link href="/terms" className="text-xs text-[#2B5288] hover:underline">Terms of Service</Link>
           <Link href="/about" className="text-xs text-[#2B5288] hover:underline">About</Link>
+          <Link href="/faq" className="text-xs text-[#2B5288] hover:underline">FAQ</Link>
           <Link href="/contact" className="text-xs text-[#2B5288] hover:underline">Contact</Link>
         </div>
       </div>

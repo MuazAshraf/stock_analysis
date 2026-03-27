@@ -1,0 +1,34 @@
+# PSX Stock Analyzer
+
+> Free Pakistan Stock Exchange (PSX) analysis tool that explains stocks in plain English for beginner Pakistani investors.
+
+## About
+PSX Stock Analyzer is a free, web-based tool that helps non-finance Pakistani investors understand stocks listed on the Pakistan Stock Exchange (PSX). Users paste a PSX company URL and get a jargon-free analysis covering financials, dividends, valuation, risk, and Shariah compliance — all in plain English. No sign-up, no fees, no financial advice.
+
+## Key Features
+- Analyze any PSX-listed company with a plain English breakdown of P/E ratio, profit margin, EPS growth, and dividend history
+- Compare two PSX stocks head-to-head across 7 key metrics with a clear winner declaration
+- Shariah compliance badge showing KMI All Shares Islamic index status
+- Revenue and profit bar charts with annual and quarterly financial statement data
+- 52-week price range, buyer/seller strength, and circuit breaker info
+- Risk level assessment and plain-language business verdict
+- Educational formulas section explaining Book Value, Dividend Yield, P/E Ratio, and more
+- Roman Urdu toggle for glossary terms
+
+## Data Sources
+- PSX Data Portal (dps.psx.com.pk) — live stock prices, company profiles, trading data, dividends
+- Yahoo Finance — financial statements (Income Statement, Balance Sheet, Cash Flow), price history
+
+## Target Users
+- Beginner Pakistani investors new to the stock market
+- Non-finance professionals who want to understand PSX stocks without jargon
+- Retail investors comparing KSE-100 listed companies
+- Muslims seeking Shariah-compliant investment information on PSX
+
+## Links
+- Homepage: https://psxstocksanalyzer.com
+- About: https://psxstocksanalyzer.com/about
+- FAQ: https://psxstocksanalyzer.com/faq
+- Contact: https://psxstocksanalyzer.com/contact
+- Privacy Policy: https://psxstocksanalyzer.com/privacy
+- Terms of Service: https://psxstocksanalyzer.com/terms

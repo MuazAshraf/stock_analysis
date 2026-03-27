@@ -25,8 +25,7 @@ export default function ContactPage() {
           <div>
             <h1 className="text-2xl font-bold text-[#404E3F]">Contact Us</h1>
             <p className="text-sm text-[#404E3F]/60 mt-2 leading-relaxed">
-              PSX Stock Analyzer is a free, educational stock analysis tool. We are not financial
-              advisors and do not provide investment recommendations.
+              PSX Stock Analyzer is a free stock analysis tool for the Pakistan Stock Exchange (PSX) that explains stocks in plain English for beginner Pakistani investors. We are not financial advisors and do not provide investment recommendations.
             </p>
           </div>
 
@@ -139,6 +138,7 @@ function Footer() {
           <Link href="/privacy" className="text-xs text-[#2B5288] hover:underline">Privacy Policy</Link>
           <Link href="/terms" className="text-xs text-[#2B5288] hover:underline">Terms of Service</Link>
           <Link href="/about" className="text-xs text-[#2B5288] hover:underline">About</Link>
+          <Link href="/faq" className="text-xs text-[#2B5288] hover:underline">FAQ</Link>
           <Link href="/contact" className="text-xs text-[#2B5288] hover:underline">Contact</Link>
         </div>
       </div>

@@ -27,9 +27,10 @@ export default function PrivacyPage() {
           </div>
 
           <Section title="Overview">
-            PSX Stock Analyzer (&quot;we&quot;, &quot;our&quot;, &quot;the tool&quot;) is a free, educational stock analysis
-            tool for the Pakistan Stock Exchange. We are committed to protecting your privacy. This
-            policy explains how we handle information when you use our website at psxstocksanalyzer.com.
+            PSX Stock Analyzer (&quot;we&quot;, &quot;our&quot;, &quot;the tool&quot;) is a free stock analysis tool
+            for the Pakistan Stock Exchange (PSX) that explains stocks in plain English for beginner
+            Pakistani investors. We are committed to protecting your privacy. This policy explains
+            how we handle information when you use our website at psxstocksanalyzer.com.
           </Section>
 
           <Section title="Information We Collect">
@@ -117,6 +118,7 @@ function Footer() {
           <Link href="/privacy" className="text-xs text-[#2B5288] hover:underline">Privacy Policy</Link>
           <Link href="/terms" className="text-xs text-[#2B5288] hover:underline">Terms of Service</Link>
           <Link href="/about" className="text-xs text-[#2B5288] hover:underline">About</Link>
+          <Link href="/faq" className="text-xs text-[#2B5288] hover:underline">FAQ</Link>
           <Link href="/contact" className="text-xs text-[#2B5288] hover:underline">Contact</Link>
         </div>
       </div>

@@ -5,7 +5,7 @@
 
   <url>
     <loc>https://psxstocksanalyzer.com/</loc>
-    <lastmod>2026-03-25</lastmod>
+    <lastmod>2026-03-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en-PK" href="https://psxstocksanalyzer.com/" />
@@ -19,30 +19,37 @@
 
   <url>
     <loc>https://psxstocksanalyzer.com/about</loc>
-    <lastmod>2026-03-25</lastmod>
+    <lastmod>2026-03-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://psxstocksanalyzer.com/privacy</loc>
-    <lastmod>2026-03-25</lastmod>
+    <loc>https://psxstocksanalyzer.com/faq</loc>
+    <lastmod>2026-03-27</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-
-  <url>
-    <loc>https://psxstocksanalyzer.com/terms</loc>
-    <lastmod>2026-03-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://psxstocksanalyzer.com/contact</loc>
-    <lastmod>2026-03-25</lastmod>
+    <lastmod>2026-03-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://psxstocksanalyzer.com/privacy</loc>
+    <lastmod>2026-03-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://psxstocksanalyzer.com/terms</loc>
+    <lastmod>2026-03-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
   </url>
 
 </urlset>
