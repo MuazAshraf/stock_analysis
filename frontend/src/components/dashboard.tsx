@@ -309,6 +309,7 @@ export function Dashboard() {
                         key={faq.q}
                         className="p-4 rounded-xl bg-white border border-[#E5E0D9]"
                         itemScope
+                        itemProp="mainEntity"
                         itemType="https://schema.org/Question"
                       >
                         <h4
@@ -319,6 +320,7 @@ export function Dashboard() {
                         </h4>
                         <div
                           itemScope
+                          itemProp="acceptedAnswer"
                           itemType="https://schema.org/Answer"
                         >
                           <p
