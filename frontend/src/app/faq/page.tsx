@@ -92,14 +92,13 @@ const faqPageSchema = {
 export default function FAQPage() {
   return (
     <div className="min-h-screen bg-[#F8F3EA]">
-      <head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(faqPageSchema),
-          }}
-        />
-      </head>
+      {/* JSON-LD for FAQ page — placed in body (valid per schema.org spec) */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(faqPageSchema),
+        }}
+      />
 
       <header className="bg-white border-b border-[#E5E0D9] py-4">
         <div className="max-w-3xl mx-auto px-4">
