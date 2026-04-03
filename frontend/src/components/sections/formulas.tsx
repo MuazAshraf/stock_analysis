@@ -3,12 +3,12 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calculator, BookOpen, Tag, FileText, Languages } from "lucide-react";
+import { Calculator, BookOpen, Tag, FileText, Languages, UserPlus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatBillions } from "@/lib/format";
 import type { FinancialStatements } from "@/types/stock";
 
-type EducationTab = "glossary" | "formulas" | "symbols" | "statements";
+type EducationTab = "glossary" | "formulas" | "symbols" | "account" | "statements";
 type FreqTab = "annual" | "quarterly";
 type Lang = "en" | "ur";
 
@@ -54,6 +54,75 @@ const MARKET_SYMBOLS = [
   { symbol: "S", en: "Suspended — Trading in this stock has been temporarily halted by the exchange, usually due to non-compliance or pending announcements.", ur: "Suspended — Is stock ki trading exchange ne waqti taur pe rok di hai, aam taur pe non-compliance ya pending announcement ki wajah se." },
   { symbol: "H", en: "Halt — Trading is temporarily paused, often due to a significant pending announcement that could affect the stock price.", ur: "Halt — Trading waqti taur pe ruki hui hai, aksar kisi bari announcement ki wajah se jo stock price pe asar dal sakti hai." },
   { symbol: "Z", en: "Defaulter / Non-Compliant — The company has failed to meet PSX listing requirements (e.g., not filing reports). Trade with extra caution.", ur: "Defaulter — Company ne PSX ki listing requirements poori nahi ki (jaise reports nahi di). Bohat ehtiyaat se trade karein." },
+];
+
+const ACCOUNT_STEPS: { step: number; title: string; en: string; ur: string; tip?: { en: string; ur: string } }[] = [
+  {
+    step: 1,
+    title: "Get Your Basics Ready",
+    en: "Before anything, you need: a valid CNIC (national ID card), a personal bank account in your name, a CNIC-verified SIM card, and an email address. If you are a tax filer (on the FBR Active Taxpayers List), you will pay lower tax on profits and dividends — so it is worth registering as a filer first.",
+    ur: "Sabse pehle ye tayyar rakho: valid CNIC, apne naam ka bank account, CNIC-verified SIM card, aur email address. Agar aap tax filer ho (FBR Active Taxpayers List pe) toh profits aur dividends pe kam tax lagega — toh pehle filer ban jaana behtar hai.",
+    tip: { en: "You can check your filer status on the FBR website (fbr.gov.pk) using your CNIC.", ur: "Apna filer status FBR website (fbr.gov.pk) pe CNIC se check kar sakte ho." },
+  },
+  {
+    step: 2,
+    title: "Choose a Licensed Broker",
+    en: "You cannot buy stocks directly on PSX — you need a licensed broker (called a TREC Holder). Visit psx.com.pk for the official list of brokers. Popular ones include AKD Securities, Topline Securities, Arif Habib, JS Global, and Next Capital. Look for one with a good online trading app, reasonable fees (typically 0.1%–0.5% per trade), and responsive customer support.",
+    ur: "Aap seedha PSX se stocks nahi khareed sakte — aapko licensed broker chahiye (jise TREC Holder kehte hain). psx.com.pk pe brokers ki official list hai. Mashhoor brokers mein AKD Securities, Topline Securities, Arif Habib, JS Global, aur Next Capital hain. Acha online trading app, munasib fees (0.1%–0.5% per trade), aur achi customer support dekho.",
+    tip: { en: "Never give money or documents to an unlicensed person claiming to be a broker. Always verify on the PSX or SECP website.", ur: "Kabhi bhi kisi unlicensed shakhs ko paisa ya documents mat do. Hamesha PSX ya SECP website se verify karo." },
+  },
+  {
+    step: 3,
+    title: "Choose Account Type",
+    en: "You have two main options: a Regular Account (full features, standard KYC paperwork) or a Sahulat Account (simplified, can be opened online with just CNIC — ideal for beginners with small investments). Both hold your shares in CDC (Central Depository Company) so your ownership is protected.",
+    ur: "Do options hain: Regular Account (poori features, standard KYC paperwork) ya Sahulat Account (simple, sirf CNIC se online khul sakta hai — beginners ke liye best). Dono mein aapke shares CDC (Central Depository Company) mein hote hain toh ownership safe hai.",
+    tip: { en: "Sahulat Account is the easiest way to start. You can always upgrade to a regular account later.", ur: "Sahulat Account shuru karne ka sabse aasan tareeqa hai. Baad mein regular account pe upgrade kar sakte ho." },
+  },
+  {
+    step: 4,
+    title: "Submit Documents to Broker",
+    en: "For a regular account, give your broker: CNIC copy (front & back), 2 passport-size photos, bank account details (IBAN), proof of income or a signed declaration, NTN certificate (if available), and a completed KYC (Know Your Customer) form. The broker may do in-person or video verification as required by SECP.",
+    ur: "Regular account ke liye broker ko do: CNIC copy (aagay aur peechay), 2 passport-size photos, bank account details (IBAN), income proof ya signed declaration, NTN certificate (agar hai), aur KYC form. Broker SECP ke mutabiq in-person ya video verification bhi kar sakta hai.",
+  },
+  {
+    step: 5,
+    title: "Broker Sets Up Your Accounts",
+    en: "Behind the scenes, your broker does several things: opens a CDC Sub-Account for your shares, registers you on NCCPL's system and gets you a UIN (Unique Identification Number — your master investor ID linked to your CNIC), and sets up RAST (Remote Access to Sub-accounts by Traders) which allows them to settle your trades.",
+    ur: "Broker peeche se kai kaam karta hai: aapke shares ke liye CDC Sub-Account banata hai, NCCPL ke system pe register karta hai aur aapko UIN (Unique Identification Number — aapki master investor ID jo CNIC se linked hai) dilata hai, aur RAST setup karta hai jo trades settle karne ke kaam aata hai.",
+  },
+  {
+    step: 6,
+    title: "Wait for Confirmations (3–7 Business Days)",
+    en: "It takes a few business days for everything to process. You will receive: a Trading Account ID and login credentials from your broker, a CDC Sub-Account number (where your shares will be held), CDC eServices login credentials (to independently check your holdings), and your UIN from NCCPL.",
+    ur: "Sab process hone mein kuch business days lagte hain. Aapko milega: broker se Trading Account ID aur login credentials, CDC Sub-Account number (jahan aapke shares honge), CDC eServices login (apne holdings khud check karne ke liye), aur NCCPL se UIN.",
+  },
+  {
+    step: 7,
+    title: "Complete NCCPL Verification (IVS)",
+    en: "Download the NCCPL IVS (Investor Verification System) app from the Play Store or App Store. Complete the identity verification process using your CNIC. This links your identity across the trading ecosystem — broker, CDC, and bank — and is mandatory before you can start trading.",
+    ur: "NCCPL IVS (Investor Verification System) app Play Store ya App Store se download karo. CNIC se identity verification complete karo. Ye aapki identity ko broker, CDC, aur bank se link karta hai — aur trading shuru karne se pehle ye zaroori hai.",
+  },
+  {
+    step: 8,
+    title: "Link Your Bank Account",
+    en: "Your broker will provide you with a RAST ID. Link this with your bank account so that money can flow between your bank and your trading account. When you buy shares, money is debited from your bank. When you sell, proceeds go back to your bank.",
+    ur: "Broker aapko RAST ID dega. Ise apne bank account se link karo taake paisa aapke bank aur trading account ke beech aa ja sake. Jab shares khareedoge toh bank se paisa katega. Jab bechoge toh paisa wapas bank mein aayega.",
+  },
+  {
+    step: 9,
+    title: "Deposit Funds & Start Trading",
+    en: "Transfer money to your broker (most brokers accept online bank transfers). Log into your broker's trading app, search for a stock (e.g., type LUCK for Lucky Cement), place a buy order (market or limit), and you are officially an investor! Settlement takes T+2 days — shares appear in your CDC account 2 business days after the trade.",
+    ur: "Broker ko paisa transfer karo (zyada tar brokers online bank transfer accept karte hain). Broker ki trading app mein login karo, stock search karo (jaise LUCK type karo Lucky Cement ke liye), buy order lagao (market ya limit), aur bas — aap officially investor ban gaye! Settlement T+2 din mein hota hai — trade ke 2 business days baad shares CDC account mein aate hain.",
+    tip: { en: "Start small! You can buy as few as 1 share. Learn the process first before investing big amounts.", ur: "Chhota shuru karo! 1 share bhi khareed sakte ho. Pehle process seekho, phir bade amounts invest karo." },
+  },
+];
+
+const KEY_ENTITIES: { name: string; role: { en: string; ur: string } }[] = [
+  { name: "PSX (Pakistan Stock Exchange)", role: { en: "The exchange where all buying and selling happens. Think of it as the marketplace.", ur: "Exchange jahan sab khareed farokht hoti hai. Ise marketplace samjho." } },
+  { name: "Broker (TREC Holder)", role: { en: "Your agent who executes buy/sell orders on PSX on your behalf. You cannot trade without one.", ur: "Aapka agent jo PSX pe aapki taraf se buy/sell orders lagata hai. Iske bina trade nahi kar sakte." } },
+  { name: "CDC (Central Depository Company)", role: { en: "Holds your shares electronically. Like a bank, but for stocks instead of money.", ur: "Aapke shares electronically rakhta hai. Bank jaisa, lekin paise ki jagah stocks ke liye." } },
+  { name: "NCCPL (National Clearing Company)", role: { en: "Clears and settles all trades. Makes sure shares and money move correctly between buyer and seller.", ur: "Tamam trades clear aur settle karta hai. Ye ensure karta hai ke shares aur paisa buyer aur seller ke beech sahi tarah se move ho." } },
+  { name: "SECP (Securities & Exchange Commission)", role: { en: "The government regulator that licenses brokers and protects investors.", ur: "Government regulator jo brokers ko license deta hai aur investors ki hifazat karta hai." } },
 ];
 
 // ── Component ─────────────────────────────────────────────────────────────
@@ -110,6 +179,7 @@ export function Formulas({ statements }: FormulasProps) {
           <TabButton active={activeTab === "glossary"} onClick={() => setActiveTab("glossary")} icon={<BookOpen className="h-4 w-4" />} label="Glossary" />
           <TabButton active={activeTab === "formulas"} onClick={() => setActiveTab("formulas")} icon={<Calculator className="h-4 w-4" />} label="Formulas" />
           <TabButton active={activeTab === "symbols"} onClick={() => setActiveTab("symbols")} icon={<Tag className="h-4 w-4" />} label="Market Symbols" />
+          <TabButton active={activeTab === "account"} onClick={() => setActiveTab("account")} icon={<UserPlus className="h-4 w-4" />} label="Open an Account" />
           {hasStatements && (
             <TabButton active={activeTab === "statements"} onClick={() => setActiveTab("statements")} icon={<FileText className="h-4 w-4" />} label="Financial Statements" />
           )}
@@ -180,6 +250,61 @@ export function Formulas({ statements }: FormulasProps) {
                 </div>
               );
             })}
+          </div>
+        )}
+
+        {/* Account Process tab */}
+        {activeTab === "account" && (
+          <div className="space-y-6">
+            {/* Steps */}
+            <div className="space-y-3">
+              {ACCOUNT_STEPS.map((s) => (
+                <div key={s.step} className="p-4 rounded-xl bg-[#F8F3EA] space-y-2">
+                  <div className="flex items-start gap-3">
+                    <span className="flex-shrink-0 flex items-center justify-center h-7 w-7 rounded-full bg-[#4BC232] text-white text-xs font-bold">
+                      {s.step}
+                    </span>
+                    <div className="space-y-1.5 min-w-0">
+                      <h4 className="text-sm font-bold text-[#404E3F]">{s.title}</h4>
+                      <p className="text-sm text-[#404E3F]/80 leading-relaxed">
+                        {lang === "en" ? s.en : s.ur}
+                      </p>
+                      {s.tip && (
+                        <div className="flex items-start gap-2 mt-2 p-2.5 rounded-lg bg-white border border-[#E5E0D9]">
+                          <span className="text-xs font-semibold text-[#4BC232] flex-shrink-0">
+                            {lang === "en" ? "Tip:" : "Mashwara:"}
+                          </span>
+                          <span className="text-xs text-[#404E3F]/70 leading-relaxed">
+                            {lang === "en" ? s.tip.en : s.tip.ur}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Key entities */}
+            <div className="rounded-xl border border-[#E5E0D9] overflow-hidden">
+              <div className="px-5 py-3 bg-[#2B5288] text-white font-semibold text-sm">
+                {lang === "en" ? "Who Does What?" : "Kaun Kya Karta Hai?"}
+              </div>
+              <div className="divide-y divide-[#E5E0D9]">
+                {KEY_ENTITIES.map((e) => (
+                  <div key={e.name} className="px-5 py-3 flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-4">
+                    <span className="text-sm font-semibold text-[#404E3F] sm:min-w-[220px] flex-shrink-0">{e.name}</span>
+                    <span className="text-sm text-[#404E3F]/70 leading-relaxed">{lang === "en" ? e.role.en : e.role.ur}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <p className="text-xs text-[#404E3F]/40 text-center">
+              {lang === "en"
+                ? "This is a general guide for educational purposes. The exact process may vary by broker. Always verify with your broker and official sources (PSX, CDC, NCCPL, SECP)."
+                : "Ye ek general guide hai sirf seekhne ke liye. Asal process broker ke hisaab se thora different ho sakta hai. Hamesha apne broker aur official sources (PSX, CDC, NCCPL, SECP) se verify karo."}
+            </p>
           </div>
         )}
 
