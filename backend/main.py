@@ -71,6 +71,7 @@ app.add_middleware(
         "127.0.0.1",
         "0.0.0.0",
         "*.railway.internal",
+        "*.up.railway.app",
     ],
 )
 
