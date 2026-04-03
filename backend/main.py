@@ -65,14 +65,7 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 # Trusted hosts — block requests with spoofed Host headers
 app.add_middleware(
     TrustedHostMiddleware,
-    allowed_hosts=[
-        "api.psxstocksanalyzer.com",
-        "localhost",
-        "127.0.0.1",
-        "0.0.0.0",
-        "*.railway.internal",
-        "*.up.railway.app",
-    ],
+    allowed_hosts=["*"],
 )
 
 # CORS — strict whitelist, only allowed methods
