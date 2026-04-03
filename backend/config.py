@@ -13,7 +13,6 @@ class Settings(BaseSettings):
         "http://127.0.0.1:3000",
         "http://127.0.0.1:5173",
         "https://psxstocksanalyzer.com",
-        "https://www.psxstocksanalyzer.com",
         "https://stock-analysis-two-psi.vercel.app",
     ]
     psx_base_url: str = "https://dps.psx.com.pk/company"
