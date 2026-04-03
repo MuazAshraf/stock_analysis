@@ -26,6 +26,8 @@ from models import (
     CompareRequest,
     CompareResponse,
     ErrorResponse,
+    FeedbackRequest,
+    FeedbackResponse,
     HealthResponse,
     StockListResponse,
 )
@@ -323,6 +325,157 @@ async def compare_companies(request: Request, body: CompareRequest):
         stock_b=stock_b,
         comparison=comparison,
     )
+
+
+# ── Feedback ──────────────────────────────────────────────────────────────
+
+CATEGORY_LABELS = {
+    "bug": "Bug Report",
+    "feature": "Feature Request",
+    "improvement": "Improvement",
+    "other": "Other Feedback",
+}
+
+
+CATEGORY_COLORS = {
+    "bug": "#EF4444",
+    "feature": "#3B82F6",
+    "improvement": "#F59E0B",
+    "other": "#6B7280",
+}
+
+
+def _send_feedback_email(name: str, email: str | None, category: str, message: str) -> None:
+    """Send feedback email via SMTP. Runs in thread pool to avoid blocking."""
+    import smtplib
+    import html as html_mod
+    from email.mime.text import MIMEText
+
+    if not settings.mail_username or not settings.mail_password:
+        raise RuntimeError("Mail credentials not configured")
+
+    label = CATEGORY_LABELS.get(category, "Feedback")
+    color = CATEGORY_COLORS.get(category, "#6B7280")
+    subject = f"[PSX Feedback] {label} — from {name}"
+
+    safe_name = html_mod.escape(name)
+    safe_email = html_mod.escape(email) if email else None
+    safe_message = html_mod.escape(message).replace("\n", "<br>")
+
+    body_html = f"""\
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="margin:0;padding:0;background-color:#F8F3EA;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#F8F3EA;padding:32px 16px;">
+    <tr><td align="center">
+      <table width="560" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #E5E0D9;">
+        <!-- Header -->
+        <tr>
+          <td style="background-color:#404E3F;padding:24px 32px;">
+            <table width="100%" cellpadding="0" cellspacing="0">
+              <tr>
+                <td>
+                  <span style="color:#4BC232;font-size:20px;font-weight:700;">PSX</span>
+                  <span style="color:#ffffff;font-size:20px;font-weight:700;"> Stock Analyzer</span>
+                </td>
+                <td align="right">
+                  <span style="background-color:{color};color:#ffffff;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;">{label}</span>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <!-- Sender Info -->
+        <tr>
+          <td style="padding:24px 32px 0 32px;">
+            <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#F8F3EA;border-radius:8px;padding:16px;">
+              <tr>
+                <td style="padding:0 16px;">
+                  <table width="100%" cellpadding="0" cellspacing="0">
+                    <tr>
+                      <td style="padding:8px 0;">
+                        <span style="color:#404E3F;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;opacity:0.5;">From</span><br>
+                        <span style="color:#404E3F;font-size:15px;font-weight:600;">{safe_name}</span>
+                      </td>
+                      <td align="right" style="padding:8px 0;">
+                        <span style="color:#404E3F;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;opacity:0.5;">Email</span><br>
+                        <span style="color:#404E3F;font-size:15px;">{f'<a href="mailto:{safe_email}" style="color:#2B5288;text-decoration:none;">{safe_email}</a>' if safe_email else '<span style="opacity:0.4;">Not provided</span>'}</span>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <!-- Message -->
+        <tr>
+          <td style="padding:24px 32px;">
+            <p style="color:#404E3F;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;opacity:0.5;margin:0 0 8px 0;">Message</p>
+            <div style="color:#404E3F;font-size:14px;line-height:1.7;margin:0;">
+              {safe_message}
+            </div>
+          </td>
+        </tr>
+        <!-- Footer -->
+        <tr>
+          <td style="padding:16px 32px 24px 32px;border-top:1px solid #E5E0D9;">
+            <table width="100%" cellpadding="0" cellspacing="0">
+              <tr>
+                <td>
+                  <span style="color:#404E3F;font-size:11px;opacity:0.4;">Sent from psxstocksanalyzer.com feedback form</span>
+                </td>
+                <td align="right">
+                  <a href="https://psxstocksanalyzer.com" style="color:#4BC232;font-size:11px;font-weight:600;text-decoration:none;">Visit Site</a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>"""
+
+    msg = MIMEText(body_html, "html", "utf-8")
+    msg["Subject"] = subject
+    msg["From"] = settings.mail_default_sender or settings.mail_username
+    msg["To"] = settings.mail_username
+
+    with smtplib.SMTP(settings.mail_server, settings.mail_port) as server:
+        server.starttls()
+        server.login(settings.mail_username, settings.mail_password)
+        server.send_message(msg)
+
+
+@app.post(
+    "/api/feedback",
+    response_model=FeedbackResponse,
+    responses={
+        400: {"model": ErrorResponse, "description": "Invalid feedback"},
+        429: {"description": "Rate limit exceeded"},
+        500: {"model": ErrorResponse, "description": "Failed to send"},
+    },
+)
+@limiter.limit("3/minute")
+async def submit_feedback(request: Request, body: FeedbackRequest):
+    """Submit user feedback via email."""
+    logger.info("Feedback received: category=%s", body.category)
+
+    try:
+        await asyncio.get_event_loop().run_in_executor(
+            None, _send_feedback_email, body.name, body.email, body.category, body.message
+        )
+    except Exception:
+        logger.exception("Failed to send feedback email")
+        return JSONResponse(
+            status_code=500,
+            content={"detail": "Failed to send feedback. Please try again later."},
+        )
+
+    return FeedbackResponse(success=True, message="Thank you! Your feedback has been sent.")
 
 
 # ── Startup ─────────────────────────────────────────────────────────────────

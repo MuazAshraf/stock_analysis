@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { MessageSquare, AlertTriangle } from "lucide-react";
+import { FeedbackForm } from "@/components/feedback-form";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -53,26 +54,7 @@ export default function ContactPage() {
               bug, or want to request a feature, we&apos;d love to hear from you.
             </p>
 
-            {/* Contact form placeholder */}
-            <div className="rounded-xl border border-[#E5E0D9] p-6 bg-[#F8F3EA]">
-              <div className="space-y-4 opacity-50">
-                <div>
-                  <label className="block text-xs font-medium text-[#404E3F] mb-1">Subject</label>
-                  <div className="h-10 rounded-lg border border-[#E5E0D9] bg-white"></div>
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-[#404E3F] mb-1">Message</label>
-                  <div className="h-24 rounded-lg border border-[#E5E0D9] bg-white"></div>
-                </div>
-                <div className="h-10 w-32 rounded-lg bg-[#4BC232]/50"></div>
-              </div>
-              <p className="text-sm font-medium text-[#404E3F] text-center mt-4">
-                Contact form coming soon
-              </p>
-              <p className="text-xs text-[#404E3F]/50 text-center mt-1">
-                In the meantime, you can reach us on our social media channels.
-              </p>
-            </div>
+            <FeedbackForm />
           </div>
 
           {/* What we can help with */}

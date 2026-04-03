@@ -23,6 +23,7 @@ import {
   BarChart3,
   TrendingUp,
   ArrowLeftRight,
+  MessageSquare,
 } from "lucide-react";
 
 type Tab = "analyze" | "compare";
@@ -154,6 +155,13 @@ export function Dashboard() {
               <ArrowLeftRight className="h-4 w-4" />
               Compare Two Stocks
             </button>
+            <Link
+              href="/contact"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all cursor-pointer text-[#404E3F]/50 hover:text-[#404E3F]/80"
+            >
+              <MessageSquare className="h-4 w-4" />
+              Feedback
+            </Link>
           </div>
         </div>
 

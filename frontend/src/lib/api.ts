@@ -1,4 +1,4 @@
-import type { StockData, CompareResponse, StockListItem } from "@/types/stock";
+import type { StockData, CompareResponse, StockListItem, FeedbackResponse } from "@/types/stock";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
@@ -46,6 +46,32 @@ export async function compareStocks(urlA: string, urlB: string): Promise<Compare
       // not JSON, use default
     }
     throw new Error(message);
+  }
+
+  return response.json();
+}
+
+export async function submitFeedback(
+  name: string,
+  email: string | null,
+  category: "bug" | "feature" | "improvement" | "other",
+  message: string
+): Promise<FeedbackResponse> {
+  const response = await fetch(`${API_URL}/api/feedback`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, email: email || null, category, message }),
+  });
+
+  if (!response.ok) {
+    let msg = "Failed to send feedback. Please try again.";
+    try {
+      const err = await response.json();
+      if (err.detail) msg = err.detail;
+    } catch {
+      // not JSON
+    }
+    throw new Error(msg);
   }
 
   return response.json();

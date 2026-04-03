@@ -1,3 +1,5 @@
+from typing import Literal
+
 from pydantic import BaseModel, Field, field_validator
 import re
 
@@ -223,3 +225,40 @@ class CompareResponse(BaseModel):
     stock_a: AnalyzeResponse
     stock_b: AnalyzeResponse
     comparison: ComparisonResult
+
+
+# ── Feedback Models ───────────────────────────────────────────────────────
+
+class FeedbackRequest(BaseModel):
+    name: str = Field(
+        ..., min_length=1, max_length=100, description="Sender name"
+    )
+    email: str | None = Field(
+        None, max_length=200, description="Sender email (optional)"
+    )
+    category: Literal["bug", "feature", "improvement", "other"] = Field(
+        ..., description="Type of feedback"
+    )
+    message: str = Field(
+        ..., min_length=10, max_length=2000, description="Feedback message"
+    )
+
+    @field_validator("name", "message")
+    @classmethod
+    def strip_whitespace(cls, v: str) -> str:
+        return v.strip()
+
+    @field_validator("email")
+    @classmethod
+    def validate_email(cls, v: str | None) -> str | None:
+        if v is None or v.strip() == "":
+            return None
+        v = v.strip()
+        if "@" not in v or "." not in v.split("@")[-1]:
+            raise ValueError("Invalid email address")
+        return v
+
+
+class FeedbackResponse(BaseModel):
+    success: bool
+    message: str

@@ -23,6 +23,11 @@ class Settings(BaseSettings):
         "AppleWebKit/537.36 (KHTML, like Gecko) "
         "Chrome/131.0.0.0 Safari/537.36"
     )
+    mail_server: str = "smtp.gmail.com"
+    mail_port: int = 587
+    mail_username: str = ""
+    mail_password: str = ""
+    mail_default_sender: str = ""
 
     @field_validator("allowed_origins", mode="before")
     @classmethod

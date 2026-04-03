@@ -3,6 +3,11 @@ export interface StockListItem {
   name: string;
 }
 
+export interface FeedbackResponse {
+  success: boolean;
+  message: string;
+}
+
 export interface Company {
   name: string;
   symbol: string;
