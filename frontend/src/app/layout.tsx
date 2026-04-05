@@ -295,12 +295,6 @@ export default function RootLayout({
   return (
     <html lang="en-PK">
       <head>
-        {/* AdSense */}
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2132134425369055"
-          crossOrigin="anonymous"
-        />
         {/* JSON-LD Structured Data — Combined @graph */}
         <script
           type="application/ld+json"
