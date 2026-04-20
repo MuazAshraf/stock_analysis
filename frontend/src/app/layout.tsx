@@ -88,6 +88,12 @@ export const metadata: Metadata = {
       "en-US": BASE_URL,
     },
   },
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "PSX Analyzer",
+  },
   openGraph: {
     type: "website",
     locale: "en_PK",

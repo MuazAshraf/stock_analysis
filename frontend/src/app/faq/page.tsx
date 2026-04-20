@@ -73,6 +73,74 @@ const FAQS: { q: string; a: string }[] = [
     q: "What formulas does the tool explain?",
     a: "The educational formulas section explains: Book Value per Share, Dividend Yield, P/E Ratio (Price-to-Earnings), Earnings Per Share (EPS), Market Capitalization, and Profit Margin — each with the formula and a plain-English explanation of what it means.",
   },
+  {
+    q: "What is the difference between KSE-100 and KSE-30?",
+    a: "The KSE-100 tracks the top 100 companies on PSX by free-float market capitalization and is the main benchmark index. The KSE-30 is a narrower index of the 30 most liquid and large companies — it is price-weighted based on free-float shares and designed for tracking market leaders only. Full methodology is published by PSX (psx.com.pk).",
+  },
+  {
+    q: "What are PSX trading hours?",
+    a: "The Pakistan Stock Exchange is open from 9:30 AM to 3:30 PM Pakistan Standard Time, Monday to Friday. There is a pre-open session before the main trading starts. The market is closed on weekends and on national holidays announced by PSX (psx.com.pk).",
+  },
+  {
+    q: "How much money do I need to start investing in PSX?",
+    a: "There is no fixed minimum. Many brokers accept accounts opened with as little as PKR 1,000–5,000, and shares of some PSX-listed companies trade for less than PKR 50. Start small while you learn, and only invest money you can afford to leave untouched for the long term.",
+  },
+  {
+    q: "Who regulates the Pakistan Stock Exchange?",
+    a: "PSX is regulated by the Securities and Exchange Commission of Pakistan (SECP), which is the statutory regulator for capital markets, corporate sector, and non-bank financial institutions in Pakistan. SECP rules are published at secp.gov.pk.",
+  },
+  {
+    q: "What is a CDC sub-account?",
+    a: "A CDC sub-account is an electronic account that holds your PSX shares in your name at the Central Depository Company (CDC). It is opened by your broker on your behalf. The CDC sub-account keeps your shares safe and separate from the broker's own assets. More info at cdcpakistan.com.",
+  },
+  {
+    q: "What is NCCPL?",
+    a: "NCCPL stands for the National Clearing Company of Pakistan Limited. It is the central clearing and settlement company for PSX trades. When you buy or sell a share, NCCPL makes sure the money goes to the seller and the shares go to the buyer. See nccpl.com.pk for details.",
+  },
+  {
+    q: "Is the Pakistan Stock Exchange safe to invest in?",
+    a: "PSX is a regulated market under SECP, and investor protections include CDC sub-accounts and the NCCPL clearing system. However, share prices can go up or down, and individual stocks can lose value. 'Safe' depends on which company you buy, how much research you do, and how long you hold. Never invest money you cannot afford to lose.",
+  },
+  {
+    q: "What are circuit breakers on PSX?",
+    a: "Circuit breakers are daily price limits that stop a stock from moving too far up or down in a single trading session. When a stock hits the upper or lower circuit, trading in that stock pauses. The limits are designed to prevent extreme volatility. The exact percentage is set and published by PSX.",
+  },
+  {
+    q: "What is a dividend?",
+    a: "A dividend is a portion of a company's profit paid to its shareholders. On PSX, dividends are announced by the company's board and usually paid in cash (per share). Not every company pays a dividend — some reinvest all profits into growth instead.",
+  },
+  {
+    q: "What is Earnings Per Share (EPS)?",
+    a: "EPS is the company's profit after tax divided by the total number of shares outstanding. For example, if a company makes PKR 1 billion profit and has 100 million shares, EPS = PKR 10. Higher EPS means each share is earning more profit for its owner.",
+  },
+  {
+    q: "How do I check a PSX company's annual report?",
+    a: "Every PSX-listed company is required to publish an annual report. You can find them on the company's official website under 'Investor Relations', or on the PSX Data Portal at dps.psx.com.pk under the company's profile. Annual reports contain the audited financial statements, director's report, and detailed financial notes.",
+  },
+  {
+    q: "What is LDCP?",
+    a: "LDCP stands for Last Day Close Price. It is the official closing price of a share on the previous trading day. PSX uses LDCP as the reference for calculating the next day's upper and lower circuit breaker limits.",
+  },
+  {
+    q: "How is capital gains tax calculated on PSX shares?",
+    a: "Capital Gains Tax (CGT) is charged on profits when you sell shares. The rates depend on how long you held the share and are set by the Federal Board of Revenue (FBR) through the annual Federal Budget. NCCPL collects CGT automatically on your behalf. Always check the current year's rates at fbr.gov.pk before filing your taxes.",
+  },
+  {
+    q: "Can non-Pakistanis invest in the Pakistan Stock Exchange?",
+    a: "Yes. Non-residents and foreign investors can invest in PSX by opening a Special Convertible Rupee Account (SCRA) with a local bank, along with a CDC sub-account via a registered broker. The framework is set by the State Bank of Pakistan (sbp.org.pk) and SECP.",
+  },
+  {
+    q: "What is a bonus share?",
+    a: "A bonus share is a free additional share given to existing shareholders in proportion to the shares they already own. For example, a 10% bonus issue means you get 1 free share for every 10 shares you hold. Bonus shares do not add new money to the company — they are a way of distributing accumulated profit in the form of extra shares.",
+  },
+  {
+    q: "What is the difference between bonus shares and right shares?",
+    a: "Bonus shares are free — given to shareholders out of retained earnings. Right shares are new shares offered to existing shareholders at a discounted price, and you have to pay to buy them. Right issues raise fresh capital for the company, while bonus issues do not.",
+  },
+  {
+    q: "Can I lose all my money in the Pakistan Stock Exchange?",
+    a: "Yes. If you invest in a single company and it goes bankrupt or its shares become worthless, you can lose your entire investment in that stock. This risk is reduced by spreading your money across several companies and sectors (called diversification), and by investing only what you can afford to hold for the long term.",
+  },
 ];
 
 // FAQ page schema (page-level, separate from global FAQ in layout.tsx)
