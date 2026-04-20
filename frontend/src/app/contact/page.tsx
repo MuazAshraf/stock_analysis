@@ -13,14 +13,6 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <div className="min-h-screen bg-[#F8F3EA]">
-      <header className="bg-white border-b border-[#E5E0D9] py-4">
-        <div className="max-w-3xl mx-auto px-4">
-          <Link href="/" className="text-lg font-bold text-[#404E3F] hover:text-[#4BC232] transition-colors">
-            PSX Stock Analyzer
-          </Link>
-        </div>
-      </header>
-
       <main className="max-w-3xl mx-auto px-4 py-10">
         <div className="bg-white rounded-xl border border-[#E5E0D9] p-8 space-y-6">
           <div>
@@ -95,7 +87,6 @@ export default function ContactPage() {
         </div>
       </main>
 
-      <Footer />
     </div>
   );
 }
@@ -106,24 +97,5 @@ function HelpItem({ title, desc }: { title: string; desc: string }) {
       <h3 className="text-sm font-semibold text-[#404E3F]">{title}</h3>
       <p className="text-xs text-[#404E3F]/60 mt-0.5">{desc}</p>
     </div>
-  );
-}
-
-function Footer() {
-  return (
-    <footer className="border-t border-[#E5E0D9] mt-16 py-6">
-      <div className="max-w-3xl mx-auto px-4 text-center space-y-2">
-        <p className="text-xs text-[#404E3F]/40">
-          For educational purposes only. Not financial advice.
-        </p>
-        <div className="flex flex-wrap justify-center gap-x-4 gap-y-1">
-          <Link href="/privacy" className="text-xs text-[#2B5288] hover:underline">Privacy Policy</Link>
-          <Link href="/terms" className="text-xs text-[#2B5288] hover:underline">Terms of Service</Link>
-          <Link href="/about" className="text-xs text-[#2B5288] hover:underline">About</Link>
-          <Link href="/faq" className="text-xs text-[#2B5288] hover:underline">FAQ</Link>
-          <Link href="/contact" className="text-xs text-[#2B5288] hover:underline">Contact</Link>
-        </div>
-      </div>
-    </footer>
   );
 }

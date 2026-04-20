@@ -69,25 +69,6 @@ export function Dashboard() {
 
   return (
     <div className="min-h-screen bg-[#F8F3EA]">
-      {/* Header */}
-      <header className="bg-white border-b border-[#E5E0D9] sticky top-0 z-50">
-        <div className="max-w-5xl mx-auto px-4 py-4 flex items-center gap-3">
-          <div className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-lg bg-[#4BC232] flex items-center justify-center">
-              <BarChart3 className="h-5 w-5 text-white" />
-            </div>
-            <div>
-              <h1 className="text-lg font-bold text-[#404E3F] leading-tight">
-                PSX Stock Analyzer
-              </h1>
-              <p className="text-xs text-[#404E3F]/50">
-                Pakistan Stock Exchange - Simple Analysis
-              </p>
-            </div>
-          </div>
-        </div>
-      </header>
-
       <main
         className="max-w-5xl mx-auto px-4 py-8"
         aria-label="PSX Stock Analyzer — Free Pakistan Stock Exchange analysis tool"
@@ -100,7 +81,7 @@ export function Dashboard() {
               <TrendingUp className="h-4 w-4" />
               Free Stock Analysis for Pakistani Investors
             </div>
-            <h2
+            <h1
               className="text-3xl sm:text-4xl font-bold text-[#404E3F] mb-3"
               aria-label={
                 activeTab === "analyze"
@@ -121,7 +102,7 @@ export function Dashboard() {
                   <span className="text-[#4BC232]">Side by Side</span>
                 </>
               )}
-            </h2>
+            </h1>
             <p className="text-[#404E3F]/60 max-w-lg mx-auto mb-8">
               {activeTab === "analyze"
                 ? "New to investing? Pick any Pakistan Stock Exchange (PSX) company and get a clear, jargon-free KSE stock analysis that anyone can understand."
