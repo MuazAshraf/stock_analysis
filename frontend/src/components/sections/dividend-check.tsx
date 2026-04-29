@@ -1,9 +1,10 @@
 "use client";
 
+import { useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { MetricExplainer } from "@/components/metric-explainer";
-import { CircleCheck, CircleX, AlertTriangle } from "lucide-react";
+import { CircleCheck, CircleX, AlertTriangle, Calendar, Sparkles } from "lucide-react";
 import type { Payout } from "@/types/stock";
 
 interface DividendCheckProps {
@@ -11,8 +12,62 @@ interface DividendCheckProps {
   dividendStatus: string;
 }
 
+/**
+ * Parse a PSX book closure string like "03/11/2025  - 05/11/2025" into start/end dates.
+ * Returns null if either date can't be parsed.
+ */
+function parseBookClosure(s: string | null | undefined): { start: Date; end: Date } | null {
+  if (!s) return null;
+  const parts = s.split(/\s*-\s*/);
+  if (parts.length < 2) return null;
+  const parseDmy = (dmy: string): Date | null => {
+    const m = dmy.trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+    if (!m) return null;
+    const [, dd, mm, yyyy] = m;
+    const date = new Date(Number(yyyy), Number(mm) - 1, Number(dd));
+    return isNaN(date.getTime()) ? null : date;
+  };
+  const start = parseDmy(parts[0]);
+  const end = parseDmy(parts[1]);
+  if (!start || !end) return null;
+  return { start, end };
+}
+
+function daysUntil(target: Date): number {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const t = new Date(target);
+  t.setHours(0, 0, 0, 0);
+  return Math.round((t.getTime() - today.getTime()) / 86_400_000);
+}
+
+function fmtDateLong(date: Date): string {
+  return date.toLocaleDateString("en-PK", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
 export function DividendCheck({ payouts, dividendStatus }: DividendCheckProps) {
   const hasDividends = payouts.length > 0;
+
+  const { upcoming, past } = useMemo(() => {
+    const upcomingList: { payout: Payout; start: Date; end: Date }[] = [];
+    const pastList: Payout[] = [];
+
+    for (const p of payouts) {
+      const range = parseBookClosure(p.book_closure);
+      if (range && daysUntil(range.end) >= 0) {
+        upcomingList.push({ payout: p, start: range.start, end: range.end });
+      } else {
+        pastList.push(p);
+      }
+    }
+
+    upcomingList.sort((a, b) => a.end.getTime() - b.end.getTime());
+    return { upcoming: upcomingList, past: pastList };
+  }, [payouts]);
 
   return (
     <Card className="border-[#E5E0D9] bg-white shadow-sm">
@@ -58,8 +113,67 @@ export function DividendCheck({ payouts, dividendStatus }: DividendCheckProps) {
           </div>
         </div>
 
-        {/* Dividend history table */}
-        {hasDividends && (
+        {/* Upcoming dividends — only show if any */}
+        {upcoming.length > 0 && (
+          <div className="rounded-xl border border-[#4BC232]/30 bg-[#4BC232]/5 p-4 space-y-3">
+            <div className="flex items-center gap-2">
+              <Sparkles className="h-5 w-5 text-[#4BC232]" aria-hidden="true" />
+              <h4 className="text-sm font-bold text-[#404E3F]">
+                {upcoming.length === 1 ? "Upcoming Dividend" : `${upcoming.length} Upcoming Dividends`}
+              </h4>
+              <Badge className="bg-[#4BC232] text-white text-[10px] uppercase tracking-wider">
+                Coming Soon
+              </Badge>
+            </div>
+            <div className="space-y-3">
+              {upcoming.map(({ payout, start, end }, idx) => {
+                const daysLeft = daysUntil(end);
+                return (
+                  <div
+                    key={idx}
+                    className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 p-3 rounded-lg bg-white border border-[#E5E0D9]"
+                  >
+                    <div>
+                      <p className="text-sm font-semibold text-[#404E3F]">
+                        {payout.details ?? "—"}
+                      </p>
+                      <p className="text-xs text-[#404E3F]/60 mt-1 flex items-center gap-1.5">
+                        <Calendar className="h-3.5 w-3.5" aria-hidden="true" />
+                        Book Closure: {fmtDateLong(start)} → {fmtDateLong(end)}
+                      </p>
+                    </div>
+                    <div className="text-left sm:text-right">
+                      <p className="text-xs text-[#404E3F]/50">Closes in</p>
+                      <p className="text-sm font-bold text-[#4BC232]">
+                        {daysLeft === 0
+                          ? "Today"
+                          : daysLeft === 1
+                          ? "1 day"
+                          : `${daysLeft} days`}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <p className="text-[11px] text-[#404E3F]/60 leading-relaxed">
+              To receive an upcoming dividend, you must own the stock <strong>before the book closure start date</strong>. Buying after the closure begins means you will not be eligible for that dividend.
+            </p>
+          </div>
+        )}
+
+        {/* No upcoming dividend hint — show only when there are past payouts but nothing upcoming */}
+        {upcoming.length === 0 && past.length > 0 && (
+          <div className="flex items-start gap-3 p-3 rounded-lg bg-[#F8F3EA] border border-[#E5E0D9]">
+            <Calendar className="h-4 w-4 text-[#404E3F]/60 mt-0.5 flex-shrink-0" aria-hidden="true" />
+            <p className="text-xs text-[#404E3F]/70 leading-relaxed">
+              <strong>No upcoming dividend announced yet.</strong> The next dividend will appear here automatically once the company&apos;s board declares it — usually a few weeks before the book closure date.
+            </p>
+          </div>
+        )}
+
+        {/* Past dividend history table */}
+        {past.length > 0 && (
           <div>
             <h4 className="text-sm font-semibold text-[#404E3F] mb-3">
               Dividend History
@@ -80,7 +194,7 @@ export function DividendCheck({ payouts, dividendStatus }: DividendCheckProps) {
                   </tr>
                 </thead>
                 <tbody>
-                  {payouts.map((payout, idx) => (
+                  {past.map((payout, idx) => (
                     <tr
                       key={idx}
                       className="border-t border-[#E5E0D9] hover:bg-[#F8F3EA]/50"
@@ -100,7 +214,7 @@ export function DividendCheck({ payouts, dividendStatus }: DividendCheckProps) {
               </table>
             </div>
             <p className="text-xs text-[#404E3F]/50 mt-2 text-center">
-              Showing all {payouts.length} records from PSX Data Portal
+              Showing {past.length} past payout{past.length === 1 ? "" : "s"} from PSX Data Portal
             </p>
             <p className="text-xs text-[#404E3F]/40 mt-1 text-center">
               Tip: &quot;% of face value&quot; means percentage of the share&apos;s
