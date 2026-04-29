@@ -132,6 +132,18 @@ _last_yahoo_call: float = 0.0
 _MIN_CALL_GAP = 3.0  # minimum seconds between Yahoo calls
 
 
+def _build_session():
+    """Browser-impersonating session via curl_cffi to bypass Yahoo's IP/UA filters.
+
+    Falls back silently if curl_cffi isn't installed.
+    """
+    try:
+        from curl_cffi import requests as curl_requests
+        return curl_requests.Session(impersonate="chrome")
+    except Exception:
+        return None
+
+
 def _fetch_all_yahoo_data_sync(symbol: str) -> YahooData:
     """Fetch all Yahoo Finance data using a SINGLE ticker object to avoid rate limits."""
     import time
@@ -148,10 +160,11 @@ def _fetch_all_yahoo_data_sync(symbol: str) -> YahooData:
     statements = None
     price_history: list[PricePoint] = []
     book_value = None
+    session = _build_session()
 
     for attempt in range(3):
         try:
-            ticker = yf.Ticker(f"{symbol}.KA")
+            ticker = yf.Ticker(f"{symbol}.KA", session=session) if session else yf.Ticker(f"{symbol}.KA")
 
             # 1. Book value + info (lightest call first)
             if book_value is None:
