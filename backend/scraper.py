@@ -19,6 +19,7 @@ from models import (
     IndexPoint,
     PayoutRecord,
     PriceData,
+    PricePoint,
     RatioYear,
     StockListItem,
 )
@@ -524,6 +525,53 @@ async def fetch_payouts(symbol: str) -> list[PayoutRecord]:
         results.append(record)
 
     return results
+
+
+async def fetch_eod_history(symbol: str) -> list[PricePoint]:
+    """Fetch end-of-day price history from the PSX timeseries endpoint.
+
+    Returns daily closing prices in ascending date order. PSX provides ~5 years
+    of history. Returns an empty list on any failure (caller should fall back).
+    """
+    url = f"https://dps.psx.com.pk/timeseries/eod/{symbol.upper()}"
+    logger.info("Fetching EOD history for %s", symbol)
+
+    try:
+        async with httpx.AsyncClient(
+            timeout=settings.request_timeout,
+            follow_redirects=False,
+            headers={"User-Agent": settings.user_agent},
+        ) as client:
+            response = await client.get(url)
+            response.raise_for_status()
+            payload = response.json()
+    except (httpx.HTTPStatusError, httpx.TimeoutException, httpx.RequestError, ValueError) as e:
+        logger.warning("Failed to fetch EOD history for %s: %s", symbol, e)
+        return []
+
+    if not isinstance(payload, dict) or payload.get("status") != 1:
+        logger.warning("Unexpected EOD payload for %s: %s", symbol, payload)
+        return []
+
+    rows = payload.get("data") or []
+    points: list[PricePoint] = []
+    from datetime import datetime, timezone
+
+    # PSX rows are [unix_seconds, close, volume, open], newest first.
+    for row in rows:
+        if not row or len(row) < 2:
+            continue
+        try:
+            ts = int(row[0])
+            close = float(row[1])
+        except (TypeError, ValueError):
+            continue
+        date_str = datetime.fromtimestamp(ts, tz=timezone.utc).strftime("%Y-%m-%d")
+        points.append(PricePoint(date=date_str, close=close))
+
+    # Return in ascending date order so the chart draws left-to-right.
+    points.reverse()
+    return points
 
 
 def _humanize_dividend(raw: str) -> str:

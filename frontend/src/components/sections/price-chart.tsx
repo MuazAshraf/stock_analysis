@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { TrendingUp, TrendingDown } from "lucide-react";
@@ -19,16 +20,32 @@ interface PriceChartProps {
   symbol: string;
 }
 
-export function PriceChart({ data, symbol }: PriceChartProps) {
-  if (data.length < 2) return null;
+type Range = "1Y" | "5Y";
 
-  const first = data[0].close;
-  const last = data[data.length - 1].close;
+const RANGE_DAYS: Record<Range, number> = {
+  "1Y": 365,
+  "5Y": 365 * 5,
+};
+
+export function PriceChart({ data, symbol }: PriceChartProps) {
+  const [range, setRange] = useState<Range>("1Y");
+
+  const filtered = useMemo(() => {
+    if (data.length === 0) return [];
+    const cutoff = Date.now() - RANGE_DAYS[range] * 86_400_000;
+    return data.filter((p) => new Date(p.date).getTime() >= cutoff);
+  }, [data, range]);
+
+  if (data.length < 2) return null;
+  if (filtered.length < 2) return null;
+
+  const first = filtered[0].close;
+  const last = filtered[filtered.length - 1].close;
   const change = last - first;
   const changePct = (change / first) * 100;
   const isUp = change >= 0;
 
-  const chartData = data.map((p) => ({
+  const chartData = filtered.map((p) => ({
     date: p.date,
     label: new Date(p.date).toLocaleDateString("en-PK", {
       month: "short",
@@ -37,23 +54,27 @@ export function PriceChart({ data, symbol }: PriceChartProps) {
     close: p.close,
   }));
 
-  const minPrice = Math.min(...data.map((p) => p.close));
-  const maxPrice = Math.max(...data.map((p) => p.close));
+  const minPrice = Math.min(...filtered.map((p) => p.close));
+  const maxPrice = Math.max(...filtered.map((p) => p.close));
   const padding = (maxPrice - minPrice) * 0.1;
+
+  const rangeLabel = range === "1Y" ? "1 Year" : "5 Years";
+  const changeText = range === "1Y" ? "in 1 year" : "in 5 years";
 
   return (
     <Card className="border-[#E5E0D9] bg-white shadow-sm">
       <CardHeader className="pb-3">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
             <CardTitle className="text-xl font-bold text-[#404E3F] flex items-center gap-2">
               Price History
               <Badge className="bg-[#F8F3EA] text-[#404E3F] text-xs font-normal">
-                1 Year
+                {rangeLabel}
               </Badge>
             </CardTitle>
             <p className="text-sm text-[#404E3F]/60 mt-1">
-              Weekly closing price of {symbol} over the past year
+              Daily closing price of {symbol} over the past{" "}
+              {range === "1Y" ? "year" : "five years"}
             </p>
           </div>
           <div
@@ -73,7 +94,7 @@ export function PriceChart({ data, symbol }: PriceChartProps) {
                 }`}
               >
                 {isUp ? "+" : ""}
-                {changePct.toFixed(1)}% in 1 year
+                {changePct.toFixed(1)}% {changeText}
               </p>
               <p className="text-xs text-[#404E3F]/50">
                 Rs. {first.toFixed(2)} → Rs. {last.toFixed(2)}
@@ -81,7 +102,34 @@ export function PriceChart({ data, symbol }: PriceChartProps) {
             </div>
           </div>
         </div>
+
+        <div
+          className="inline-flex items-center gap-1 mt-3 p-1 rounded-lg bg-[#F8F3EA] w-fit"
+          role="tablist"
+          aria-label="Price history range"
+        >
+          {(Object.keys(RANGE_DAYS) as Range[]).map((r) => {
+            const active = range === r;
+            return (
+              <button
+                key={r}
+                type="button"
+                role="tab"
+                aria-selected={active}
+                onClick={() => setRange(r)}
+                className={`px-3 py-1 text-xs font-semibold rounded-md transition-colors ${
+                  active
+                    ? "bg-white text-[#404E3F] shadow-sm"
+                    : "text-[#404E3F]/60 hover:text-[#404E3F]"
+                }`}
+              >
+                {r === "1Y" ? "1 Year (Daily)" : "5 Years"}
+              </button>
+            );
+          })}
+        </div>
       </CardHeader>
+
       <CardContent>
         <div className="h-[280px] w-full">
           <ResponsiveContainer width="100%" height="100%">
@@ -110,6 +158,7 @@ export function PriceChart({ data, symbol }: PriceChartProps) {
                 tickLine={false}
                 axisLine={{ stroke: "#E5E0D9" }}
                 interval="preserveStartEnd"
+                minTickGap={40}
               />
               <YAxis
                 domain={[minPrice - padding, maxPrice + padding]}
@@ -143,8 +192,8 @@ export function PriceChart({ data, symbol }: PriceChartProps) {
           </ResponsiveContainer>
         </div>
         <p className="text-xs text-[#404E3F]/40 mt-2 text-center">
-          Weekly closing prices from Yahoo Finance. Past performance does not
-          guarantee future results.
+          Daily closing prices from Pakistan Stock Exchange. Past performance does
+          not guarantee future results.
         </p>
       </CardContent>
     </Card>

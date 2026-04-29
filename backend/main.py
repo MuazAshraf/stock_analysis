@@ -31,7 +31,7 @@ from models import (
     HealthResponse,
     StockListResponse,
 )
-from scraper import ScraperError, fetch_all_stocks, scrape_company, scrape_stock_list
+from scraper import ScraperError, fetch_all_stocks, fetch_eod_history, scrape_company, scrape_stock_list
 from yfinance_scraper import fetch_all_yahoo_data
 
 # ── Logging (structured, no PII) ──────────────────────────────────────────
@@ -230,7 +230,10 @@ async def analyze_company(request: Request, body: AnalyzeRequest):
     shariah_set = await _get_shariah_symbols()
     symbol = scraped["company"].symbol.upper()
 
-    # Fetch all Yahoo Finance data in one call (avoids rate limiting)
+    # Price history from PSX directly (5 years daily). Yahoo is unreliable on cloud IPs.
+    price_history = await fetch_eod_history(symbol)
+
+    # Yahoo is still tried for book_value + financial statements (no PSX equivalent yet).
     yahoo = await fetch_all_yahoo_data(symbol)
 
     value_check = calculate_value_check(
@@ -251,7 +254,7 @@ async def analyze_company(request: Request, body: AnalyzeRequest):
         indices=scraped.get("indices", []),
         is_shariah=symbol in shariah_set,
         statements=yahoo.statements,
-        price_history=yahoo.price_history,
+        price_history=price_history,
         book_value=yahoo.book_value,
         value_check=value_check,
     )
