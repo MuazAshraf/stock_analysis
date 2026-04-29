@@ -101,6 +101,17 @@ class AnalysisResult(BaseModel):
     summary_points: list[str] = Field(..., description="4-6 plain English summary points")
 
 
+class ValueCheck(BaseModel):
+    """Intrinsic value (Graham Number) and margin of safety."""
+    intrinsic_value: float | None = Field(None, description="Graham Number per share, in PKR")
+    current_price: float | None = Field(None, description="Latest market price per share")
+    margin_of_safety: float | None = Field(None, description="Margin of safety as a fraction (0.40 = 40%)")
+    verdict: str = Field(..., description="undervalued | fair | overvalued | not_applicable")
+    explanation: str = Field(..., description="Plain English explanation")
+    eps_used: float | None = None
+    book_value_used: float | None = None
+
+
 # ── Financial Statement Models ─────────────────────────────────────────────
 
 
@@ -164,6 +175,7 @@ class AnalyzeResponse(BaseModel):
     statements: FinancialStatements | None = Field(default=None, description="Detailed financial statements from Yahoo Finance")
     price_history: list[PricePoint] = Field(default_factory=list, description="1-year weekly closing prices")
     book_value: float | None = Field(default=None, description="Book value per share from Yahoo Finance")
+    value_check: ValueCheck | None = Field(default=None, description="Intrinsic value (Graham Number) and margin of safety")
 
 
 class StockListItem(BaseModel):

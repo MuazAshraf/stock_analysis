@@ -35,6 +35,12 @@ const ARTICLES = [
     desc: "What makes a stock Shariah-compliant in Pakistan? Understand the KMI-30 index, screening rules, and how to invest Islamically.",
     read: "7 min read",
   },
+  {
+    slug: "intrinsic-value-margin-of-safety",
+    title: "Intrinsic Value & Margin of Safety Explained",
+    desc: "How to estimate what a PSX stock is really worth using the Graham Number, and why margin of safety protects you from being wrong.",
+    read: "7 min read",
+  },
 ];
 
 export default function LearnPage() {

@@ -13,6 +13,7 @@ import { TradingInfo } from "@/components/sections/trading-info";
 import { MoneyTalk } from "@/components/sections/money-talk";
 import { DividendCheck } from "@/components/sections/dividend-check";
 import { FinalVerdict } from "@/components/sections/final-verdict";
+import { ValueCheckSection } from "@/components/sections/value-check";
 import { Formulas } from "@/components/sections/formulas";
 import { MarketTicker } from "@/components/sections/market-ticker";
 import { ComparisonView } from "@/components/sections/comparison-view";
@@ -226,6 +227,7 @@ export function Dashboard() {
                   dividendStatus={data.analysis?.dividend_status || ""}
                 />
                 {data.analysis && <FinalVerdict analysis={data.analysis} />}
+                {data.value_check && <ValueCheckSection data={data.value_check} />}
                 <Formulas statements={data.statements} />
               </div>
             )}

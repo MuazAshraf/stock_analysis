@@ -5,6 +5,8 @@ All verdicts use simple rules comparing financial metrics.
 Summary points are written in plain English for non-finance users.
 """
 
+import math
+
 from models import (
     AnalysisResult,
     CompanyInfo,
@@ -12,7 +14,13 @@ from models import (
     FinancialYear,
     PriceData,
     RatioYear,
+    ValueCheck,
 )
+
+
+# Graham Number constant: 22.5 = max P/E (15) × max P/B (1.5)
+# from Benjamin Graham's "The Intelligent Investor"
+_GRAHAM_CONSTANT = 22.5
 
 
 def _assess_valuation(pe_ratio: float | None) -> str:
@@ -283,6 +291,82 @@ def _generate_summary_points(
 
     # Keep to 4-6 points
     return points[:6]
+
+
+def calculate_value_check(
+    price: PriceData,
+    financials_annual: list[FinancialYear],
+    book_value: float | None,
+) -> ValueCheck:
+    """
+    Calculate intrinsic value using the Graham Number and the margin of safety.
+
+    Graham Number = sqrt(22.5 × EPS × Book Value per Share)
+    Margin of Safety = (Intrinsic Value − Market Price) / Intrinsic Value
+    """
+    eps = next(
+        (f.eps for f in financials_annual if f.eps is not None),
+        None,
+    )
+    current = price.current
+
+    # Need positive EPS, positive book value, and a current price
+    if eps is None or book_value is None or current is None:
+        return ValueCheck(
+            verdict="not_applicable",
+            explanation=(
+                "Not enough data to calculate intrinsic value. We need positive earnings "
+                "per share, book value per share, and a current market price."
+            ),
+            eps_used=eps,
+            book_value_used=book_value,
+            current_price=current,
+        )
+
+    if eps <= 0 or book_value <= 0:
+        return ValueCheck(
+            verdict="not_applicable",
+            explanation=(
+                "The Graham Number only works for profitable companies with positive "
+                "book value. This company does not meet that condition right now."
+            ),
+            eps_used=eps,
+            book_value_used=book_value,
+            current_price=current,
+        )
+
+    intrinsic = math.sqrt(_GRAHAM_CONSTANT * eps * book_value)
+    margin = (intrinsic - current) / intrinsic
+
+    if margin >= 0.30:
+        verdict = "undervalued"
+        explanation = (
+            f"The stock looks undervalued. Its Graham Number is around Rs. {intrinsic:.2f}, "
+            f"but it trades at Rs. {current:.2f} — a margin of safety of {margin * 100:.0f}%."
+        )
+    elif margin >= 0:
+        verdict = "fair"
+        explanation = (
+            f"The stock looks fairly priced. Its Graham Number is around Rs. {intrinsic:.2f} "
+            f"versus a market price of Rs. {current:.2f} — a small {margin * 100:.0f}% buffer."
+        )
+    else:
+        verdict = "overvalued"
+        explanation = (
+            f"The stock looks expensive on this measure. Its Graham Number is around "
+            f"Rs. {intrinsic:.2f} but it trades higher at Rs. {current:.2f}, meaning you "
+            f"would pay {abs(margin) * 100:.0f}% above the calculated fair value."
+        )
+
+    return ValueCheck(
+        intrinsic_value=round(intrinsic, 2),
+        current_price=current,
+        margin_of_safety=round(margin, 4),
+        verdict=verdict,
+        explanation=explanation,
+        eps_used=eps,
+        book_value_used=book_value,
+    )
 
 
 def analyze(

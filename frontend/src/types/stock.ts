@@ -132,6 +132,16 @@ export interface PricePoint {
   close: number;
 }
 
+export interface ValueCheck {
+  intrinsic_value: number | null;
+  current_price: number | null;
+  margin_of_safety: number | null;
+  verdict: "undervalued" | "fair" | "overvalued" | "not_applicable";
+  explanation: string;
+  eps_used: number | null;
+  book_value_used: number | null;
+}
+
 export interface StockData {
   company: Company;
   price: Price;
@@ -146,6 +156,7 @@ export interface StockData {
   statements: FinancialStatements | null;
   price_history: PricePoint[];
   book_value: number | null;
+  value_check: ValueCheck | null;
 }
 
 export interface ComparisonMetric {

@@ -17,7 +17,7 @@ from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from slowapi.util import get_remote_address
 
-from analyzer import analyze
+from analyzer import analyze, calculate_value_check
 from comparator import compare_stocks
 from config import settings
 from models import (
@@ -233,6 +233,12 @@ async def analyze_company(request: Request, body: AnalyzeRequest):
     # Fetch all Yahoo Finance data in one call (avoids rate limiting)
     yahoo = await fetch_all_yahoo_data(symbol)
 
+    value_check = calculate_value_check(
+        price=scraped["price"],
+        financials_annual=scraped["financials_annual"],
+        book_value=yahoo.book_value,
+    )
+
     return AnalyzeResponse(
         company=scraped["company"],
         price=scraped["price"],
@@ -247,6 +253,7 @@ async def analyze_company(request: Request, body: AnalyzeRequest):
         statements=yahoo.statements,
         price_history=yahoo.price_history,
         book_value=yahoo.book_value,
+        value_check=value_check,
     )
 
 
