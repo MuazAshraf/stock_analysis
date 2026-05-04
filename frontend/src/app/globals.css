@@ -120,7 +120,12 @@
   * {
     @apply border-border outline-ring/50;
   }
+  /* Prevent any rogue child element from forcing horizontal scroll on phones.
+     Components that genuinely need horizontal scroll (wide tables) opt in via
+     `overflow-x-auto` on their own wrapper. */
+  html,
   body {
     @apply bg-background text-foreground;
+    overflow-x: hidden;
   }
 }

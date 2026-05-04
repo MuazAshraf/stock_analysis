@@ -43,44 +43,44 @@ export function CompanyOverview({
   return (
     <Card className="border-[#E5E0D9] bg-white shadow-sm">
       <CardHeader className="pb-3">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-          <div>
-            <CardTitle className="text-2xl font-bold text-[#404E3F]">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div className="min-w-0 flex-1">
+            <CardTitle className="text-xl sm:text-2xl font-bold text-[#404E3F] break-words">
               {company.name}
             </CardTitle>
-            <div className="flex items-center gap-2 mt-1">
+            <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
               <Badge
                 variant="secondary"
-                className="bg-[#2B5288] text-white text-xs"
+                className="bg-[#2B5288] text-white text-xs whitespace-nowrap"
               >
                 {company.symbol}
               </Badge>
               <Badge
                 variant="outline"
-                className="border-[#4BC232] text-[#4BC232] text-xs"
+                className="border-[#4BC232] text-[#4BC232] text-xs max-w-full whitespace-normal break-words text-left leading-tight"
               >
                 {company.sector}
               </Badge>
               {isShariah && (
-                <Badge className="bg-emerald-600 text-white text-xs">
+                <Badge className="bg-emerald-600 text-white text-xs whitespace-nowrap">
                   Shariah Compliant
                 </Badge>
               )}
             </div>
           </div>
-          <div className="text-right">
-            <div className="flex items-center gap-2 justify-end">
-              <span className="text-3xl font-bold text-[#404E3F]">
+          <div className="text-left sm:text-right flex-shrink-0">
+            <div className="flex items-center gap-2 sm:justify-end">
+              <span className="text-2xl sm:text-3xl font-bold text-[#404E3F]">
                 Rs. {currentPrice.toFixed(2)}
               </span>
             </div>
-            <div className={`flex items-center gap-1 justify-end ${priceColor}`}>
+            <div className={`flex items-center gap-1 sm:justify-end ${priceColor}`}>
               {isPositive ? (
                 <TrendingUp className="h-4 w-4" />
               ) : (
                 <TrendingDown className="h-4 w-4" />
               )}
-              <span className="font-semibold">
+              <span className="font-semibold text-sm sm:text-base">
                 {isPositive ? "+" : ""}
                 {change.toFixed(2)} ({formatPercent(price.change_percent ?? 0)})
               </span>

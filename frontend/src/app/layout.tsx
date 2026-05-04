@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Providers } from "@/components/providers";
@@ -17,6 +17,13 @@ const geistMono = Geist_Mono({
 });
 
 const BASE_URL = "https://psxstocksanalyzer.com";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: "#4BC232",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),

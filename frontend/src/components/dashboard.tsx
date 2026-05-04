@@ -114,34 +114,37 @@ export function Dashboard() {
 
         {/* Tabs */}
         <div className="flex justify-center mb-6">
-          <div className="inline-flex bg-white rounded-xl border border-[#E5E0D9] p-1">
+          <div className="inline-flex w-full sm:w-auto max-w-full bg-white rounded-xl border border-[#E5E0D9] p-1">
             <button
               onClick={() => handleTabChange("analyze")}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
+              className={`flex flex-1 sm:flex-none items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-5 py-2.5 rounded-lg text-xs sm:text-sm font-semibold whitespace-nowrap transition-all cursor-pointer ${
                 activeTab === "analyze"
                   ? "bg-[#F8F3EA] text-[#404E3F] border-b-2 border-[#4BC232]"
                   : "text-[#404E3F]/50 hover:text-[#404E3F]/80"
               }`}
             >
-              <TrendingUp className="h-4 w-4" />
-              Analyze a Stock
+              <TrendingUp className="h-4 w-4 flex-shrink-0" />
+              <span className="hidden xs:inline sm:hidden">Analyze</span>
+              <span className="hidden sm:inline">Analyze a Stock</span>
+              <span className="xs:hidden">Analyze</span>
             </button>
             <button
               onClick={() => handleTabChange("compare")}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
+              className={`flex flex-1 sm:flex-none items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-5 py-2.5 rounded-lg text-xs sm:text-sm font-semibold whitespace-nowrap transition-all cursor-pointer ${
                 activeTab === "compare"
                   ? "bg-[#F8F3EA] text-[#404E3F] border-b-2 border-[#4BC232]"
                   : "text-[#404E3F]/50 hover:text-[#404E3F]/80"
               }`}
             >
-              <ArrowLeftRight className="h-4 w-4" />
-              Compare Two Stocks
+              <ArrowLeftRight className="h-4 w-4 flex-shrink-0" />
+              <span className="hidden sm:inline">Compare Two Stocks</span>
+              <span className="sm:hidden">Compare</span>
             </button>
             <Link
               href="/contact"
-              className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all cursor-pointer text-[#404E3F]/50 hover:text-[#404E3F]/80"
+              className="flex flex-1 sm:flex-none items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-5 py-2.5 rounded-lg text-xs sm:text-sm font-semibold whitespace-nowrap transition-all cursor-pointer text-[#404E3F]/50 hover:text-[#404E3F]/80"
             >
-              <MessageSquare className="h-4 w-4" />
+              <MessageSquare className="h-4 w-4 flex-shrink-0" />
               Feedback
             </Link>
           </div>
