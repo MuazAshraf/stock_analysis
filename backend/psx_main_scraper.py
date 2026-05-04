@@ -43,9 +43,12 @@ _name_map_lock = asyncio.Lock()
 # ── Helpers ─────────────────────────────────────────────────────────────────
 
 
+# Strip only the corporate-form suffixes — NOT distinguishing tokens like
+# "holdings", "industries", "mills", "group". Removing those collapses real
+# names: "Engro Corporation" and "Engro Holdings" become identical, which then
+# routes the wrong stock's dividends.
 _SUFFIX_RE = re.compile(
-    r"\b(limited|ltd|company|co|corporation|corp|incorporated|inc|"
-    r"holdings|industries|mills|group|the)\b",
+    r"\b(limited|ltd|company|co|corporation|corp|incorporated|inc|the)\b",
     re.IGNORECASE,
 )
 _PAREN_TAIL_RE = re.compile(r"\s*\([^)]*\)\s*$")

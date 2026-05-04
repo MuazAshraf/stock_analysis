@@ -162,18 +162,29 @@ export function CompanyOverview({
               <Building2 className="h-4 w-4 text-[#2B5288] mt-0.5 flex-shrink-0" />
               <div>
                 <MetricExplainer
-                  label="Book Value"
+                  label="Book Value / Share (BVPS)"
                   explanation="If the company sold everything and paid off all debts, this is what each share would be worth. If stock price is below book value, some investors consider it undervalued."
                 />
                 <p className="text-sm font-medium text-[#404E3F]">
                   Rs. {bookValue.toFixed(2)}
                 </p>
-                {price.current != null && (
-                  <p className={`text-xs ${price.current < bookValue ? "text-[#4BC232]" : "text-[#404E3F]/50"}`}>
-                    {price.current < bookValue
-                      ? "Price is below book value"
-                      : "Price is above book value"}
-                  </p>
+                {price.current != null && bookValue > 0 && (
+                  <>
+                    <div className="mt-2 pt-2 border-t border-[#E5E0D9]/60">
+                      <MetricExplainer
+                        label="P/B Ratio"
+                        explanation="Stock price ÷ book value per share. Below 1 means trading below book value (potentially cheap). Above 1 means investors are paying a premium over book value."
+                      />
+                      <p className="text-sm font-medium text-[#404E3F]">
+                        {(price.current / bookValue).toFixed(2)}
+                      </p>
+                      <p className={`text-xs ${price.current < bookValue ? "text-[#4BC232]" : "text-[#404E3F]/50"}`}>
+                        {price.current < bookValue
+                          ? "Price is below book value"
+                          : "Price is above book value"}
+                      </p>
+                    </div>
+                  </>
                 )}
               </div>
             </div>
