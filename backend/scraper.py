@@ -5,6 +5,7 @@ Fetches and parses the company page at https://dps.psx.com.pk/company/{SYMBOL}.
 All data lives on a single server-rendered HTML page.
 """
 
+import asyncio
 import logging
 import re
 
@@ -732,6 +733,44 @@ async def fetch_all_stocks() -> list[StockListItem]:
     return stocks
 
 
+# ── Payout Merging ──────────────────────────────────────────────────────────
+
+
+def _payout_dedup_key(record: PayoutRecord) -> str | None:
+    """Identity key for deduping the same dividend across both PSX sources.
+    Uses the book-closure window since each dividend has a unique one. Returns
+    None when there is no book closure to key on (such records are kept as-is).
+    """
+    if not record.book_closure:
+        return None
+    bc = re.sub(r"\s+", "", record.book_closure)
+    pct = ""
+    if record.details:
+        m = re.match(r"([\d.]+)", record.details)
+        if m:
+            pct = m.group(1)
+    return f"{bc}|{pct}"
+
+
+def _merge_payouts(
+    primary: list[PayoutRecord],
+    secondary: list[PayoutRecord],
+) -> list[PayoutRecord]:
+    """Merge payouts from the live PSX main feed (primary) with the dps.psx.com.pk
+    historical feed (secondary). Dedupe by book closure + dividend %; primary wins.
+    """
+    merged: list[PayoutRecord] = []
+    seen: set[str] = set()
+    for record in primary + secondary:
+        key = _payout_dedup_key(record)
+        if key is not None:
+            if key in seen:
+                continue
+            seen.add(key)
+        merged.append(record)
+    return merged
+
+
 # ── Public API ──────────────────────────────────────────────────────────────
 
 
@@ -777,8 +816,18 @@ async def scrape_company(url: str) -> dict:
     ratios = _parse_ratios(soup)
     indices = _parse_indices(soup)
 
-    # Fetch payouts from the dedicated endpoint (the company page doesn't render them)
-    payouts = await fetch_payouts(symbol)
+    # Fetch payouts from two sources in parallel:
+    #   - dps.psx.com.pk/payouts: per-symbol historical record (lags 1-2 months)
+    #   - www.psx.com.pk/announcement/financial-announcements: live PUCAR feed
+    # The main-site feed catches dividends the data portal hasn't indexed yet.
+    from psx_main_scraper import fetch_recent_payouts as _fetch_main_payouts
+
+    dps_payouts, main_payouts = await asyncio.gather(
+        fetch_payouts(symbol),
+        _fetch_main_payouts(symbol),
+        return_exceptions=False,
+    )
+    payouts = _merge_payouts(main_payouts, dps_payouts)
 
     return {
         "company": company,
