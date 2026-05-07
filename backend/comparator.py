@@ -132,12 +132,17 @@ def _compare_eps_growth(a: AnalyzeResponse, b: AnalyzeResponse) -> ComparisonMet
             winner = "a"
             if growth_b < 0 < growth_a:
                 explanation = f"{name_a}'s per-share earnings are growing while {name_b}'s are shrinking."
+            elif growth_a <= 0 and growth_b <= 0:
+                # both negative — neither is growing, the better one is just shrinking less
+                explanation = f"{name_a}'s per-share earnings are shrinking less than {name_b}'s."
             else:
                 explanation = f"{name_a}'s per-share earnings are growing faster."
         else:
             winner = "b"
             if growth_a < 0 < growth_b:
                 explanation = f"{name_b}'s per-share earnings are growing while {name_a}'s are shrinking."
+            elif growth_a <= 0 and growth_b <= 0:
+                explanation = f"{name_b}'s per-share earnings are shrinking less than {name_a}'s."
             else:
                 explanation = f"{name_b}'s per-share earnings are growing faster."
     elif growth_a is not None:
@@ -221,7 +226,10 @@ def _compare_free_float(a: AnalyzeResponse, b: AnalyzeResponse) -> ComparisonMet
     explanation = "Free float data is not available for both stocks."
 
     if ff_a is not None and ff_b is not None:
-        if abs(ff_a - ff_b) < 2.0:
+        # 1.0 percentage point: same tie threshold as the other percent metrics
+        # so liquidity isn't called a "tie" when the other metrics call a 1.5pp
+        # gap a clear win.
+        if abs(ff_a - ff_b) < 1.0:
             winner = "tie"
             explanation = "Both stocks have similar free float levels."
         elif ff_a > ff_b:
@@ -341,9 +349,17 @@ def _generate_verdict(
     name_a: str,
     name_b: str,
 ) -> str:
-    """Generate a 2-3 sentence plain English verdict."""
+    """Generate a 2-3 sentence plain English verdict.
+
+    Counts ties separately so the math always adds up: wins_a + wins_b + ties
+    equals the actual number of metrics compared (whatever it is), instead of
+    hard-coding "out of 7" which becomes inaccurate as soon as we add or
+    remove metrics, or whenever ties happen.
+    """
     a_wins = [m.label for m in metrics if m.winner == "a"]
     b_wins = [m.label for m in metrics if m.winner == "b"]
+    total = len(metrics)
+    ties = total - score_a - score_b
 
     def _summarize_wins(wins: list[str]) -> str:
         if not wins:
@@ -352,20 +368,22 @@ def _generate_verdict(
             return wins[0].lower()
         return ", ".join(w.lower() for w in wins[:-1]) + " and " + wins[-1].lower()
 
+    tied_suffix = f" ({ties} tied)" if ties > 0 else ""
+
     if score_a > score_b:
-        lead = f"{name_a} comes out ahead overall, winning {score_a} out of 7 metrics."
+        lead = f"{name_a} comes out ahead overall, winning {score_a} out of {total} metrics{tied_suffix}."
         if b_wins:
             detail = f"However, {name_b} is stronger in {_summarize_wins(b_wins)}."
         else:
             detail = f"{name_b} did not lead in any metric."
     elif score_b > score_a:
-        lead = f"{name_b} comes out ahead overall, winning {score_b} out of 7 metrics."
+        lead = f"{name_b} comes out ahead overall, winning {score_b} out of {total} metrics{tied_suffix}."
         if a_wins:
             detail = f"However, {name_a} is stronger in {_summarize_wins(a_wins)}."
         else:
             detail = f"{name_a} did not lead in any metric."
     else:
-        lead = f"Both stocks are evenly matched, each winning {score_a} metric(s)."
+        lead = f"Both stocks are evenly matched, each winning {score_a} of {total} metrics{tied_suffix}."
         detail = "The best choice depends on what matters most to you as an investor."
 
     return f"{lead} {detail}"

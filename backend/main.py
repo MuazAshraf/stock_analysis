@@ -17,7 +17,14 @@ from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from slowapi.util import get_remote_address
 
-from analyzer import analyze, calculate_value_check
+from analyzer import (
+    analyze,
+    calculate_dividend_yield,
+    calculate_payout_ratio,
+    calculate_price_cagr,
+    calculate_roe,
+    calculate_value_check,
+)
 from comparator import compare_stocks
 from config import settings
 from models import (
@@ -29,6 +36,7 @@ from models import (
     FeedbackRequest,
     FeedbackResponse,
     HealthResponse,
+    InvestorMetrics,
     StockListResponse,
 )
 from scraper import ScraperError, fetch_all_stocks, fetch_eod_history, scrape_company, scrape_stock_list
@@ -242,6 +250,27 @@ async def analyze_company(request: Request, body: AnalyzeRequest):
         book_value=yahoo.book_value,
     )
 
+    cagr_target_years = 5
+    cagr_pct = calculate_price_cagr(price_history, years=cagr_target_years)
+    investor_metrics = InvestorMetrics(
+        dividend_yield_pct=calculate_dividend_yield(
+            payouts=scraped["payouts"],
+            current_price=scraped["price"].current,
+            symbol=symbol,
+        ),
+        payout_ratio_pct=calculate_payout_ratio(
+            payouts=scraped["payouts"],
+            financials_annual=scraped["financials_annual"],
+            symbol=symbol,
+        ),
+        roe_pct=calculate_roe(
+            financials_annual=scraped["financials_annual"],
+            book_value_per_share=yahoo.book_value,
+        ),
+        price_cagr_pct=cagr_pct,
+        price_cagr_years=cagr_target_years if cagr_pct is not None else None,
+    )
+
     return AnalyzeResponse(
         company=scraped["company"],
         price=scraped["price"],
@@ -257,6 +286,7 @@ async def analyze_company(request: Request, body: AnalyzeRequest):
         price_history=price_history,
         book_value=yahoo.book_value,
         value_check=value_check,
+        investor_metrics=investor_metrics,
     )
 
 
@@ -295,8 +325,21 @@ async def compare_companies(request: Request, body: CompareRequest):
 
     shariah_set = await _get_shariah_symbols()
 
-    # Analyze each stock individually
-    def _build_response(scraped: dict) -> AnalyzeResponse:
+    # Investor Parameters (Dividend Yield, Payout Ratio, ROE, Price CAGR)
+    # need price_history (PSX EOD) and book_value (yfinance). Fetch both for
+    # both stocks in parallel — same deps the single-stock /api/analyze uses.
+    sym_a = scraped_a["company"].symbol.upper()
+    sym_b = scraped_b["company"].symbol.upper()
+    price_history_a, price_history_b, yahoo_a, yahoo_b = await asyncio.gather(
+        fetch_eod_history(sym_a),
+        fetch_eod_history(sym_b),
+        fetch_all_yahoo_data(sym_a),
+        fetch_all_yahoo_data(sym_b),
+    )
+
+    cagr_target_years = 5
+
+    def _build_response(scraped: dict, price_history, yahoo) -> AnalyzeResponse:
         analysis = analyze(
             company=scraped["company"],
             price=scraped["price"],
@@ -306,6 +349,27 @@ async def compare_companies(request: Request, body: CompareRequest):
             payouts=scraped["payouts"],
         )
         symbol = scraped["company"].symbol.upper()
+
+        cagr_pct = calculate_price_cagr(price_history, years=cagr_target_years)
+        investor_metrics = InvestorMetrics(
+            dividend_yield_pct=calculate_dividend_yield(
+                payouts=scraped["payouts"],
+                current_price=scraped["price"].current,
+                symbol=symbol,
+            ),
+            payout_ratio_pct=calculate_payout_ratio(
+                payouts=scraped["payouts"],
+                financials_annual=scraped["financials_annual"],
+                symbol=symbol,
+            ),
+            roe_pct=calculate_roe(
+                financials_annual=scraped["financials_annual"],
+                book_value_per_share=yahoo.book_value,
+            ),
+            price_cagr_pct=cagr_pct,
+            price_cagr_years=cagr_target_years if cagr_pct is not None else None,
+        )
+
         return AnalyzeResponse(
             company=scraped["company"],
             price=scraped["price"],
@@ -317,10 +381,13 @@ async def compare_companies(request: Request, body: CompareRequest):
             analysis=analysis,
             indices=scraped.get("indices", []),
             is_shariah=symbol in shariah_set,
+            price_history=price_history,
+            book_value=yahoo.book_value,
+            investor_metrics=investor_metrics,
         )
 
-    stock_a = _build_response(scraped_a)
-    stock_b = _build_response(scraped_b)
+    stock_a = _build_response(scraped_a, price_history_a, yahoo_a)
+    stock_b = _build_response(scraped_b, price_history_b, yahoo_b)
 
     comparison = compare_stocks(stock_a, stock_b)
 

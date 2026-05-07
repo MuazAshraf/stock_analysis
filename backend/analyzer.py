@@ -5,22 +5,232 @@ All verdicts use simple rules comparing financial metrics.
 Summary points are written in plain English for non-finance users.
 """
 
+import json
+import logging
 import math
+import re
+from datetime import datetime, timedelta
+from pathlib import Path
 
 from models import (
     AnalysisResult,
     CompanyInfo,
     EquityData,
     FinancialYear,
+    PayoutRecord,
     PriceData,
     RatioYear,
     ValueCheck,
 )
 
 
+_logger = logging.getLogger(__name__)
+
+
 # Graham Number constant: 22.5 = max P/E (15) × max P/B (1.5)
 # from Benjamin Graham's "The Intelligent Investor"
 _GRAHAM_CONSTANT = 22.5
+
+
+# ── Face value lookup ──────────────────────────────────────────────────────
+# PSX dividend announcements quote "% of face value" so we need each stock's
+# face value to convert to PKR. The bulk of values come from the PSX-published
+# face-value PDF, extracted by `scripts/extract_face_values.py` into
+# `face_values.json` (~540 listed equities).
+#
+# `_FACE_VALUE_OVERRIDES` covers symbols where the PDF is stale or missing —
+# typically because PSX hasn't reissued the PDF since a stock split or merger.
+# Override always wins over the JSON; JSON wins over the Rs. 10 default.
+
+_FACE_VALUE_OVERRIDES: dict[str, float] = {
+    "SYS": 2.0,        # 1:5 split in 2024; PSX PDF still shows pre-split Rs. 10
+    "ENGROH": 10.0,    # New entity from Dec 2024 Engro Corp / Dawood Hercules merger
+}
+_DEFAULT_FACE_VALUE_PKR = 10.0
+_FACE_VALUES_JSON = Path(__file__).resolve().parent / "face_values.json"
+
+
+def _load_face_values_from_json() -> dict[str, float]:
+    """Load symbol → face value from the PSX-published JSON. Empty dict on any
+    failure — caller falls back to overrides + Rs. 10 default."""
+    try:
+        raw = json.loads(_FACE_VALUES_JSON.read_text(encoding="utf-8"))
+    except (FileNotFoundError, json.JSONDecodeError, OSError) as e:
+        _logger.warning("Could not load face_values.json: %s", e)
+        return {}
+    out: dict[str, float] = {}
+    for symbol, entry in raw.items():
+        try:
+            fv = float(entry["face_value"]) if isinstance(entry, dict) else float(entry)
+        except (KeyError, TypeError, ValueError):
+            continue
+        out[symbol.upper()] = fv
+    return out
+
+
+_FACE_VALUE_TABLE: dict[str, float] = _load_face_values_from_json()
+_logger.info("Loaded %d face values from JSON", len(_FACE_VALUE_TABLE))
+
+
+def face_value_for(symbol: str) -> float:
+    """Face value (par value) per share in PKR. Lookup order:
+    overrides → JSON table → Rs. 10 default."""
+    sym = symbol.strip().upper()
+    if sym in _FACE_VALUE_OVERRIDES:
+        return _FACE_VALUE_OVERRIDES[sym]
+    return _FACE_VALUE_TABLE.get(sym, _DEFAULT_FACE_VALUE_PKR)
+
+
+# ── Investor metrics: trailing-12mo payout ratio + ROE ─────────────────────
+
+
+_PERCENT_RE = re.compile(r"([\d.]+)\s*%")
+_PAYOUT_DATE_RE = re.compile(r"^(\w+)\s+(\d{1,2}),?\s+(\d{4})")
+
+
+def _parse_payout_date(date_str: str | None) -> datetime | None:
+    """Parse 'April 7, 2026 3:57 PM' or 'Apr 7, 2026' → datetime."""
+    if not date_str:
+        return None
+    m = _PAYOUT_DATE_RE.match(date_str.strip())
+    if not m:
+        return None
+    for fmt in ("%B %d %Y", "%b %d %Y"):
+        try:
+            return datetime.strptime(f"{m.group(1)} {m.group(2)} {m.group(3)}", fmt)
+        except ValueError:
+            continue
+    return None
+
+
+def _trailing_cash_dividend_pct(payouts: list[PayoutRecord]) -> float | None:
+    """Sum of cash-dividend percentages declared in the last 12 months.
+    Skips bonus shares (B) and rights issues (R). Returns None when no
+    parseable cash dividend is found in the window."""
+    if not payouts:
+        return None
+    cutoff = datetime.now() - timedelta(days=365)
+    total = 0.0
+    found = False
+    for p in payouts:
+        details = (p.details or "").upper()
+        if "CASH DIVIDEND" not in details and "(D)" not in details:
+            continue
+        when = _parse_payout_date(p.date)
+        if when is None or when < cutoff:
+            continue
+        m = _PERCENT_RE.search(p.details or "")
+        if not m:
+            continue
+        try:
+            total += float(m.group(1))
+            found = True
+        except ValueError:
+            continue
+    return total if found else None
+
+
+def calculate_payout_ratio(
+    payouts: list[PayoutRecord],
+    financials_annual: list[FinancialYear],
+    symbol: str,
+) -> float | None:
+    """Payout Ratio = (DPS / EPS) × 100.
+        DPS (PKR) = (sum of trailing-12-month cash-dividend %) × Face Value / 100
+    Returns None when EPS or trailing dividends are missing.
+    """
+    eps = next((f.eps for f in financials_annual if f.eps is not None), None)
+    if eps is None or eps <= 0:
+        return None
+    pct_total = _trailing_cash_dividend_pct(payouts)
+    if pct_total is None:
+        return None
+    dps_pkr = (pct_total / 100.0) * face_value_for(symbol)
+    return (dps_pkr / eps) * 100.0
+
+
+def calculate_dividend_yield(
+    payouts: list[PayoutRecord],
+    current_price: float | None,
+    symbol: str,
+) -> float | None:
+    """Trailing 12-month Dividend Yield = (DPS / Current Price) × 100.
+        DPS (PKR) = (sum of trailing-12-month cash-dividend %) × Face Value / 100
+    Returns None when there's no recent cash dividend or no current price.
+    """
+    if current_price is None or current_price <= 0:
+        return None
+    pct_total = _trailing_cash_dividend_pct(payouts)
+    if pct_total is None:
+        return None
+    dps_pkr = (pct_total / 100.0) * face_value_for(symbol)
+    return (dps_pkr / current_price) * 100.0
+
+
+def calculate_roe(
+    financials_annual: list[FinancialYear],
+    book_value_per_share: float | None,
+) -> float | None:
+    """Return on Equity = (EPS / BVPS) × 100. Returns None when book value
+    is unavailable (Yahoo blocked) — caller renders 'N/A'."""
+    if book_value_per_share is None or book_value_per_share <= 0:
+        return None
+    eps = next((f.eps for f in financials_annual if f.eps is not None), None)
+    if eps is None:
+        return None
+    return (eps / book_value_per_share) * 100.0
+
+
+def calculate_price_cagr(price_history, years: int = 5) -> float | None:
+    """Compound Annual Growth Rate of the share price over the requested span.
+
+        CAGR = (Latest Price / Earliest Price) ^ (1 / years_actual) − 1
+
+    Falls back to whatever span PSX EOD gives us (~5 years). Returns the
+    result as a percent, or None when there's less than 1 year of data.
+    """
+    if not price_history or len(price_history) < 2:
+        return None
+
+    sorted_points = sorted(price_history, key=lambda p: p.date)
+    latest = sorted_points[-1]
+    if latest.close is None or latest.close <= 0:
+        return None
+
+    try:
+        latest_dt = datetime.strptime(latest.date, "%Y-%m-%d")
+    except (ValueError, TypeError):
+        return None
+    target_dt = latest_dt - timedelta(days=int(365 * years))
+
+    # Find the data point closest to (but not after) `target_dt`. If we don't
+    # have that much history, fall back to the earliest point we do have.
+    chosen = sorted_points[0]
+    chosen_dt: datetime | None = None
+    for point in sorted_points:
+        try:
+            point_dt = datetime.strptime(point.date, "%Y-%m-%d")
+        except (ValueError, TypeError):
+            continue
+        if point_dt <= target_dt:
+            chosen = point
+            chosen_dt = point_dt
+        else:
+            break
+    if chosen_dt is None:
+        try:
+            chosen_dt = datetime.strptime(chosen.date, "%Y-%m-%d")
+        except (ValueError, TypeError):
+            return None
+
+    if chosen.close is None or chosen.close <= 0:
+        return None
+
+    span_days = (latest_dt - chosen_dt).days
+    if span_days < 365:
+        return None
+    span_years = span_days / 365.25
+    return ((latest.close / chosen.close) ** (1 / span_years) - 1) * 100.0
 
 
 def _assess_valuation(pe_ratio: float | None) -> str:

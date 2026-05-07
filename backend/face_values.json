@@ -1,0 +1,2162 @@
+{
+  "AGTL": {
+    "name": "Al-Ghazi Tractors Limited",
+    "face_value": 5
+  },
+  "ATLH": {
+    "name": "Atlas Honda Limited",
+    "face_value": 10
+  },
+  "DFML": {
+    "name": "Dewan Farooque Motors Limited",
+    "face_value": 10
+  },
+  "GHNL": {
+    "name": "Ghandara Nissan Limited",
+    "face_value": 10
+  },
+  "GHNI": {
+    "name": "Ghandhara Industries Limited",
+    "face_value": 10
+  },
+  "HINO": {
+    "name": "HinoPak Motors Limited",
+    "face_value": 10
+  },
+  "HCAR": {
+    "name": "Honda Atlas Cars (Pakistan) Limited",
+    "face_value": 10
+  },
+  "INDU": {
+    "name": "Indus Motor Company Limited",
+    "face_value": 10
+  },
+  "MTL": {
+    "name": "Millat Tractors Limited",
+    "face_value": 10
+  },
+  "PSMC": {
+    "name": "Pak Suzuki Motor Company Limited",
+    "face_value": 10
+  },
+  "SAZEW": {
+    "name": "Sazgar Engineering Works Limited",
+    "face_value": 10
+  },
+  "AGIL": {
+    "name": "Agriautos Industries Limited",
+    "face_value": 5
+  },
+  "ATBA": {
+    "name": "Atlas Battery Limited",
+    "face_value": 10
+  },
+  "BWHL": {
+    "name": "Baluchistan Wheels Limited",
+    "face_value": 10
+  },
+  "BELA": {
+    "name": "Bela Automotive Limited",
+    "face_value": 10
+  },
+  "DWAE": {
+    "name": "Dewan Automotive Engineering Limited",
+    "face_value": 10
+  },
+  "EXIDE": {
+    "name": "Exide Pakistan Limited",
+    "face_value": 10
+  },
+  "GTYR": {
+    "name": "General Tyre and Rubber Co. of Pakistan Limited",
+    "face_value": 10
+  },
+  "LOADS": {
+    "name": "Loads Limited",
+    "face_value": 10
+  },
+  "PTL": {
+    "name": "Panther Tyres Ltd.",
+    "face_value": 10
+  },
+  "THALL": {
+    "name": "Thal Limited",
+    "face_value": 5
+  },
+  "EMCO": {
+    "name": "Emco Industries Limited",
+    "face_value": 10
+  },
+  "JOPP": {
+    "name": "Johnson and Phillips (Pakistan) Limited",
+    "face_value": 10
+  },
+  "PAEL": {
+    "name": "Pak Elektron Limited",
+    "face_value": 10
+  },
+  "PELPS": {
+    "name": "Pak Elektron(Pref)",
+    "face_value": 10
+  },
+  "PCAL": {
+    "name": "Pakistan Cables Limited",
+    "face_value": 10
+  },
+  "SIEM": {
+    "name": "Siemens Pakistan Engineering Co. Limited",
+    "face_value": 10
+  },
+  "WHALE": {
+    "name": "Waves Home Appliances Limited",
+    "face_value": 10
+  },
+  "WAVES": {
+    "name": "Waves Singer Pakistan Limited",
+    "face_value": 10
+  },
+  "ACPL": {
+    "name": "Attock Cement (Pakistan) Limited",
+    "face_value": 10
+  },
+  "BWCL": {
+    "name": "Bestway Cement Limited",
+    "face_value": 10
+  },
+  "CHCC": {
+    "name": "Cherat Cement Company Limited",
+    "face_value": 10
+  },
+  "DGKC": {
+    "name": "D.G. Khan Cement Company Limited",
+    "face_value": 10
+  },
+  "DBCI": {
+    "name": "Dadabhoy Cement Industries Limited",
+    "face_value": 10
+  },
+  "DNCC": {
+    "name": "Dandot Cement Company Limited",
+    "face_value": 10
+  },
+  "DCL": {
+    "name": "Dewan Cement Limited",
+    "face_value": 10
+  },
+  "FCCL": {
+    "name": "Fauji Cement Company Limited",
+    "face_value": 10
+  },
+  "FECTC": {
+    "name": "Fecto Cement Limited",
+    "face_value": 10
+  },
+  "FLYNG": {
+    "name": "Flying Cement Company Limited",
+    "face_value": 10
+  },
+  "GWLC": {
+    "name": "Gharibwal Cement Limited",
+    "face_value": 10
+  },
+  "JVDCPS": {
+    "name": "Javedan Corporation Limited (Pref Shares)",
+    "face_value": 10
+  },
+  "KOHC": {
+    "name": "Kohat Cement Limited",
+    "face_value": 10
+  },
+  "LUCK": {
+    "name": "Lucky Cement Limited",
+    "face_value": 10
+  },
+  "MLCF": {
+    "name": "Maple Leaf Cement Factory Limited",
+    "face_value": 10
+  },
+  "PIOC": {
+    "name": "Pioneer Cement Limited",
+    "face_value": 10
+  },
+  "POWER": {
+    "name": "Power Cement Limited",
+    "face_value": 10
+  },
+  "POWERPS": {
+    "name": "Power Cement PREF",
+    "face_value": 10
+  },
+  "SMCPL": {
+    "name": "Safe Mix Concrete Limited",
+    "face_value": 10
+  },
+  "THCCL": {
+    "name": "Thatta Cement Company Limited",
+    "face_value": 10
+  },
+  "ZELP": {
+    "name": "Zeal Pak Cement Factory Limited",
+    "face_value": 10
+  },
+  "AGL": {
+    "name": "Agritech Limited",
+    "face_value": 10
+  },
+  "AGLNCPS": {
+    "name": "Agritech Limited Non-voting Class (Pref Shares)",
+    "face_value": 10
+  },
+  "ARPL": {
+    "name": "Archroma Pakistan Limited",
+    "face_value": 10
+  },
+  "BAPL": {
+    "name": "Bawany Air Product Limited",
+    "face_value": 10
+  },
+  "BERG": {
+    "name": "Berger Paints Pakistan Limited",
+    "face_value": 10
+  },
+  "BIFO": {
+    "name": "Biafo Industries Limited",
+    "face_value": 10
+  },
+  "BUXL": {
+    "name": "Buxly Paints Limited",
+    "face_value": 10
+  },
+  "COLG": {
+    "name": "Colgate Palmolive (Pakistan) Limited",
+    "face_value": 10
+  },
+  "DAAG": {
+    "name": "Data Agro Limited",
+    "face_value": 10
+  },
+  "DOL": {
+    "name": "Descon Oxychem Limited",
+    "face_value": 10
+  },
+  "DYNO": {
+    "name": "Dynea Pakistan Limited",
+    "face_value": 5
+  },
+  "EPCLPS": {
+    "name": "Engro Poly(PREF)",
+    "face_value": 10
+  },
+  "EPCL": {
+    "name": "Engro Polymer and Chemicals Limited",
+    "face_value": 10
+  },
+  "GCIL": {
+    "name": "Ghani Chemical Industries Limited",
+    "face_value": 10
+  },
+  "GCILB": {
+    "name": "Ghani Chemical Industries Limited (B)",
+    "face_value": 10
+  },
+  "GGL": {
+    "name": "Ghani Global Holdings Limited",
+    "face_value": 10
+  },
+  "ICL": {
+    "name": "Ittehad Chemical Limited",
+    "face_value": 10
+  },
+  "LPGL": {
+    "name": "Leiner Pak Gelatine Limited",
+    "face_value": 10
+  },
+  "LOTCHEM": {
+    "name": "Lotte Chemical Pakistan Limited",
+    "face_value": 10
+  },
+  "LCI": {
+    "name": "Lucky Core Industries Limited",
+    "face_value": 10
+  },
+  "NICL": {
+    "name": "Nimir Industrial Chemicals Limited",
+    "face_value": 10
+  },
+  "NRSL": {
+    "name": "Nimir Resins Limited",
+    "face_value": 5
+  },
+  "PAKOXY": {
+    "name": "Pakistan Oxygen Limited",
+    "face_value": 10
+  },
+  "PPVC": {
+    "name": "Pakistan PVC Limited",
+    "face_value": 10
+  },
+  "SARC": {
+    "name": "Sardar Chemical Industries Limited",
+    "face_value": 10
+  },
+  "SHCI": {
+    "name": "Shaffi Chemical Industries Limited",
+    "face_value": 10
+  },
+  "SITC": {
+    "name": "Sitara Chemical Industries Limited",
+    "face_value": 10
+  },
+  "SPL": {
+    "name": "Sitara Peroxide Limited",
+    "face_value": 10
+  },
+  "WAHN": {
+    "name": "Wah Noble Chemicals Limited",
+    "face_value": 10
+  },
+  "HGFA": {
+    "name": "HBL Growth Fund",
+    "face_value": 10
+  },
+  "HIFA": {
+    "name": "HBL Investment Fund",
+    "face_value": 10
+  },
+  "INMF": {
+    "name": "Investec Mutual Fund",
+    "face_value": 10
+  },
+  "PUDF": {
+    "name": "Prudential Stocks Fund Limited",
+    "face_value": 10
+  },
+  "TSMF": {
+    "name": "Tri-Star Mutual Fund Limited",
+    "face_value": 10
+  },
+  "ABL": {
+    "name": "Allied Bank Limited",
+    "face_value": 10
+  },
+  "AKBL": {
+    "name": "Askari Bank Limited",
+    "face_value": 10
+  },
+  "BAFL": {
+    "name": "Bank Al-Falah Limited",
+    "face_value": 10
+  },
+  "BAHL": {
+    "name": "Bank Al-Habib Limited",
+    "face_value": 10
+  },
+  "BOK": {
+    "name": "Bank Of Khyber Limited",
+    "face_value": 10
+  },
+  "BOP": {
+    "name": "Bank Of Punjab Limited",
+    "face_value": 10
+  },
+  "BIPL": {
+    "name": "Bankislami Pakistan Limited",
+    "face_value": 10
+  },
+  "FABL": {
+    "name": "Faysal Bank Limited",
+    "face_value": 10
+  },
+  "HBL": {
+    "name": "Habib Bank Limited",
+    "face_value": 10
+  },
+  "HMB": {
+    "name": "Habib Metropolitan Bank Limited",
+    "face_value": 10
+  },
+  "JSBL": {
+    "name": "JS Bank Limited",
+    "face_value": 10
+  },
+  "MCB": {
+    "name": "MCB Bank Limited",
+    "face_value": 10
+  },
+  "MEBL": {
+    "name": "Meezan Bank Limited",
+    "face_value": 10
+  },
+  "NBP": {
+    "name": "National Bank Of Pakistan",
+    "face_value": 10
+  },
+  "SBL": {
+    "name": "Samba Bank Limited",
+    "face_value": 10
+  },
+  "SILK": {
+    "name": "Silkbank Limited",
+    "face_value": 10
+  },
+  "SNBL": {
+    "name": "Soneri Bank Limited",
+    "face_value": 10
+  },
+  "SCBPL": {
+    "name": "Standard Chartered Bank Limited",
+    "face_value": 10
+  },
+  "SMBL": {
+    "name": "Summit Bank Limited",
+    "face_value": 10
+  },
+  "UBL": {
+    "name": "United Bank Limited",
+    "face_value": 10
+  },
+  "AGHA": {
+    "name": "Agha Steel Indunstries Limited",
+    "face_value": 10
+  },
+  "ASL": {
+    "name": "Aisha Steel Mills Limited",
+    "face_value": 10
+  },
+  "ASLPS": {
+    "name": "Aisha Steel Mills Limited (Preference Shares)",
+    "face_value": 10
+  },
+  "ASLCPS": {
+    "name": "Aisha Steel Mills Ltd(Con.Cum.Pref.Share",
+    "face_value": 10
+  },
+  "ASTL": {
+    "name": "Amreli Steels Ltd.",
+    "face_value": 10
+  },
+  "BECO": {
+    "name": "Beco Steel Limited",
+    "face_value": 10
+  },
+  "BCL": {
+    "name": "Bolan Casting Limited",
+    "face_value": 10
+  },
+  "CSAP": {
+    "name": "Crescent Steel & Allied Products Limited",
+    "face_value": 10
+  },
+  "DADX": {
+    "name": "Dadex Eternit Limited",
+    "face_value": 10
+  },
+  "DSL": {
+    "name": "Dost Steels Limited",
+    "face_value": 10
+  },
+  "HSPI": {
+    "name": "Huffaz Seamless Pipe Industries Limited",
+    "face_value": 10
+  },
+  "INIL": {
+    "name": "International Industries Limited",
+    "face_value": 10
+  },
+  "ISL": {
+    "name": "International Steels Limited",
+    "face_value": 10
+  },
+  "ITTEFAQ": {
+    "name": "Ittefaq Iron Industries Limited",
+    "face_value": 10
+  },
+  "KSBP": {
+    "name": "K.S.B. Pumps Co. Limited",
+    "face_value": 10
+  },
+  "MSCL": {
+    "name": "Metropolitan Steel Corporation Limited",
+    "face_value": 10
+  },
+  "MUGHAL": {
+    "name": "Mughal Iron and Steel Industries Limited",
+    "face_value": 10
+  },
+  "PECO": {
+    "name": "Pakistan Engineering Company Limited",
+    "face_value": 10
+  },
+  "AHCL": {
+    "name": "Arif Habib Corporation Limited",
+    "face_value": 10
+  },
+  "ENGRO": {
+    "name": "Engro Corporation Limited",
+    "face_value": 10
+  },
+  "EFERT": {
+    "name": "Engro Fertilizers Limited",
+    "face_value": 10
+  },
+  "FATIMA": {
+    "name": "Fatima Fertilizer Company Limited",
+    "face_value": 10
+  },
+  "FFBL": {
+    "name": "Fauji Fertilizer Bin Qasim Limited",
+    "face_value": 10
+  },
+  "FFC": {
+    "name": "Fauji Fertilizer Company Limited",
+    "face_value": 10
+  },
+  "ASC": {
+    "name": "Al-Shaheer Corporation Limited",
+    "face_value": 10
+  },
+  "PREMA": {
+    "name": "At-Tahur Limited",
+    "face_value": 10
+  },
+  "BNL": {
+    "name": "Bunny's Limited",
+    "face_value": 10
+  },
+  "CLOV": {
+    "name": "Clover Pakistan Limited",
+    "face_value": 10
+  },
+  "FFL": {
+    "name": "Fauji Foods Limited",
+    "face_value": 10
+  },
+  "FCEPL": {
+    "name": "Frieslandcampins Engro Foods Limited",
+    "face_value": 10
+  },
+  "GLPL": {
+    "name": "Gillette Pakistan Limited",
+    "face_value": 10
+  },
+  "GIL": {
+    "name": "Goodluck Industries Limited",
+    "face_value": 10
+  },
+  "ISIL": {
+    "name": "Ismail Industries Limited",
+    "face_value": 10
+  },
+  "MFL": {
+    "name": "Matco Foods Limited",
+    "face_value": 10
+  },
+  "MFFL": {
+    "name": "Mitchells Fruit Farms Limited",
+    "face_value": 10
+  },
+  "MUREB": {
+    "name": "Murree Brewery Company Limited",
+    "face_value": 10
+  },
+  "NATF": {
+    "name": "National Foods Limited",
+    "face_value": 5
+  },
+  "NESTLE": {
+    "name": "Nestle Pakistan Limited",
+    "face_value": 10
+  },
+  "NMFL": {
+    "name": "Nirala MSR Foods Limited",
+    "face_value": 10
+  },
+  "QUICE": {
+    "name": "Quice Food Limited",
+    "face_value": 10
+  },
+  "RMPL": {
+    "name": "Rafhan Maize Products Limited",
+    "face_value": 10
+  },
+  "SHEZ": {
+    "name": "Shezan International Limited",
+    "face_value": 10
+  },
+  "SCL": {
+    "name": "Shield Corporation Limited",
+    "face_value": 10
+  },
+  "TOMCL": {
+    "name": "The Organic Meat Company Limited",
+    "face_value": 10
+  },
+  "TREET": {
+    "name": "Treet Corporation Limited",
+    "face_value": 10
+  },
+  "UPFL": {
+    "name": "Unilever Pakistan Foods Limited",
+    "face_value": 10
+  },
+  "UNITY": {
+    "name": "Unity Foods Limited",
+    "face_value": 10
+  },
+  "ZIL": {
+    "name": "ZIL Limited",
+    "face_value": 10
+  },
+  "BGL": {
+    "name": "Baluchistan Glass Limited",
+    "face_value": 10
+  },
+  "FRCL": {
+    "name": "Frontier Ceramics Limited",
+    "face_value": 10
+  },
+  "GHGL": {
+    "name": "Ghani Glass Limited",
+    "face_value": 10
+  },
+  "GGGL": {
+    "name": "Ghani Global Glass Limited",
+    "face_value": 10
+  },
+  "GVGL": {
+    "name": "Ghani Value Glass Limited",
+    "face_value": 10
+  },
+  "KCL": {
+    "name": "Karam Ceramics Limited",
+    "face_value": 10
+  },
+  "REGAL": {
+    "name": "Regal Ceramics Limited",
+    "face_value": 10
+  },
+  "STCL": {
+    "name": "Shabbir Tiles and Ceramics Limited",
+    "face_value": 5
+  },
+  "TGL": {
+    "name": "Tariq Glass Industries Limited",
+    "face_value": 10
+  },
+  "AICL": {
+    "name": "Adamjee Insurance Company Limited",
+    "face_value": 10
+  },
+  "ALIFE": {
+    "name": "Adamjee Life Assurance Company Limited",
+    "face_value": 10
+  },
+  "ASIC": {
+    "name": "Asia Insurance Company Limited",
+    "face_value": 10
+  },
+  "AGIC": {
+    "name": "Askari General Inusrance Company Limited",
+    "face_value": 10
+  },
+  "ALAC": {
+    "name": "Askari Life Assurance Company Limited",
+    "face_value": 10
+  },
+  "ATIL": {
+    "name": "Atlas Insurance Limited",
+    "face_value": 10
+  },
+  "BIIC": {
+    "name": "Business & Industrial Insurance Company",
+    "face_value": 10
+  },
+  "CENI": {
+    "name": "Century Insurance Company Limited",
+    "face_value": 10
+  },
+  "CSIL": {
+    "name": "Crescent Star Insurance Company Limited",
+    "face_value": 10
+  },
+  "CYAN": {
+    "name": "Cyan Limited",
+    "face_value": 10
+  },
+  "EFUG": {
+    "name": "EFU General Insurance Limited",
+    "face_value": 10
+  },
+  "EFUL": {
+    "name": "EFU Life Assurance Limited",
+    "face_value": 10
+  },
+  "EWIC": {
+    "name": "East West Insurance Company Limited",
+    "face_value": 10
+  },
+  "HICL": {
+    "name": "Habib Insurance Company Limited",
+    "face_value": 5
+  },
+  "IGIHL": {
+    "name": "IGI Holdings Limited",
+    "face_value": 10
+  },
+  "IGIL": {
+    "name": "IGI Life Insurance Company Limited",
+    "face_value": 10
+  },
+  "JGICL": {
+    "name": "Jubilee General Insurance Company Limited",
+    "face_value": 10
+  },
+  "JLICL": {
+    "name": "Jubilee Life Insurance Company Limited",
+    "face_value": 10
+  },
+  "PIL": {
+    "name": "PICIC Insurance Limited",
+    "face_value": 10
+  },
+  "PKGI": {
+    "name": "Pakistan General Insurance Company Limited",
+    "face_value": 10
+  },
+  "PAKRI": {
+    "name": "Pakistan Reinsurance Company Limited",
+    "face_value": 10
+  },
+  "PINL": {
+    "name": "Premier Insurance Limited",
+    "face_value": 5
+  },
+  "PRIC": {
+    "name": "Progressive Insurance Company Limited",
+    "face_value": 10
+  },
+  "RICL": {
+    "name": "Reliance Insurance Company Limited",
+    "face_value": 10
+  },
+  "SHNI": {
+    "name": "Shaheen Insurance Company Limited",
+    "face_value": 10
+  },
+  "SSIC": {
+    "name": "Silver Star Insurance Co. Limited",
+    "face_value": 10
+  },
+  "SICL": {
+    "name": "Standard Insurance Company Limited",
+    "face_value": 10
+  },
+  "TPLI": {
+    "name": "TPL Insurance Limited",
+    "face_value": 10
+  },
+  "UNIC": {
+    "name": "United Insurance Company of Pakistan Limited",
+    "face_value": 10
+  },
+  "UVIC": {
+    "name": "Universal Insurance Company Limited",
+    "face_value": 10
+  },
+  "AKDSL": {
+    "name": "AKD Securities Limited",
+    "face_value": 10
+  },
+  "AMSL": {
+    "name": "Al-Mal Securities & Services Limited",
+    "face_value": 10
+  },
+  "AMBL": {
+    "name": "Apna Microfinance Bank Limited",
+    "face_value": 10
+  },
+  "AHL": {
+    "name": "Arif Habib Limited",
+    "face_value": 10
+  },
+  "CASH": {
+    "name": "Calcorp Limited",
+    "face_value": 10
+  },
+  "DEL": {
+    "name": "Dawood Equities Limited",
+    "face_value": 10
+  },
+  "DLL": {
+    "name": "Dawood Lawrancepur Limited",
+    "face_value": 10
+  },
+  "EFGH": {
+    "name": "EFG Hermes Pakistan Limited",
+    "face_value": 10
+  },
+  "ESBL": {
+    "name": "Escorts Investment Bank Limited",
+    "face_value": 10
+  },
+  "FCEL": {
+    "name": "First Capital Equites Limited",
+    "face_value": 10
+  },
+  "FCSC": {
+    "name": "First Capital Securites Corporation Limited",
+    "face_value": 10
+  },
+  "FCIBL": {
+    "name": "First Credit & Invest Bank Limited",
+    "face_value": 10
+  },
+  "FDIBL": {
+    "name": "First Dawood Investment Bank Limited",
+    "face_value": 10
+  },
+  "FNEL": {
+    "name": "First National Equities Limited",
+    "face_value": 10
+  },
+  "IML": {
+    "name": "Imperial Mills Limited",
+    "face_value": 10
+  },
+  "ICIBL": {
+    "name": "Invest Capital Investment Bank Limited",
+    "face_value": 10
+  },
+  "JSGCL": {
+    "name": "JS Global Capital Limited",
+    "face_value": 10
+  },
+  "JSIL": {
+    "name": "JS Investments Limited",
+    "face_value": 10
+  },
+  "JSCLPSA": {
+    "name": "Jahangir Sidd(PREF)",
+    "face_value": 10
+  },
+  "JSCL": {
+    "name": "Jahangir Siddiqui Company Limited",
+    "face_value": 10
+  },
+  "MCBAH": {
+    "name": "MCB-ARIF Habib Savings & Investments Ltd",
+    "face_value": 10
+  },
+  "NEXT": {
+    "name": "Next Capital Limited",
+    "face_value": 10
+  },
+  "OLPL": {
+    "name": "Orix Leasing Pakistan Limited",
+    "face_value": 10
+  },
+  "PSX": {
+    "name": "Pakistan Stock Exchange Limited",
+    "face_value": 10
+  },
+  "PASL": {
+    "name": "Pervez Ahmed Consultancy Services Limited",
+    "face_value": 10
+  },
+  "PDGH": {
+    "name": "Prudential Discount Guarantee House Limited",
+    "face_value": 10
+  },
+  "PRIB": {
+    "name": "Prudential Investment Bank Limited",
+    "face_value": 10
+  },
+  "SIBL": {
+    "name": "Security Investment Bank Limited",
+    "face_value": 10
+  },
+  "TRIBL": {
+    "name": "Trust Investment Bank Limited",
+    "face_value": 10
+  },
+  "TSBL": {
+    "name": "Trust Securities and Brokerage Limited",
+    "face_value": 10
+  },
+  "CJPL": {
+    "name": "Crescent Jute Proudcts Limited",
+    "face_value": 10
+  },
+  "SUHJ": {
+    "name": "Suhail Jute Mills Limited",
+    "face_value": 10
+  },
+  "ENGL": {
+    "name": "English Leasing Limited",
+    "face_value": 10
+  },
+  "GRYL": {
+    "name": "Grays Leasing Limited",
+    "face_value": 10
+  },
+  "PGLC": {
+    "name": "Pak Gulf Leasing Company Limited",
+    "face_value": 10
+  },
+  "PICL": {
+    "name": "Pakistan Industrial and Commercial Leasing Limited",
+    "face_value": 10
+  },
+  "SLL": {
+    "name": "SME Leasing Limited",
+    "face_value": 10
+  },
+  "SPLC": {
+    "name": "Saudi Pak Leasing Company Limited",
+    "face_value": 10
+  },
+  "SLCL": {
+    "name": "Security Leasing Corporation Limited",
+    "face_value": 10
+  },
+  "SLCPA": {
+    "name": "Security Leasing Corporation Limited - 9.1% Preference Shares",
+    "face_value": 10
+  },
+  "BATA": {
+    "name": "Bata Pakistan Limited",
+    "face_value": 10
+  },
+  "FIL": {
+    "name": "Fateh Industries Limited.",
+    "face_value": 10
+  },
+  "LEUL": {
+    "name": "Leather Up Industries Limited",
+    "face_value": 10
+  },
+  "PAKL": {
+    "name": "Pak Leather Crafts Limited",
+    "face_value": 10
+  },
+  "SGF": {
+    "name": "Service GlobalFootwear Limited",
+    "face_value": 10
+  },
+  "SRVI": {
+    "name": "Service Industries Limited",
+    "face_value": 10
+  },
+  "AKDHL": {
+    "name": "AKD Hospitality Limited",
+    "face_value": 10
+  },
+  "AKGL": {
+    "name": "Al-Khair Gadoon Limited",
+    "face_value": 10
+  },
+  "ARPAK": {
+    "name": "Arpak International Investment Limited",
+    "face_value": 10
+  },
+  "DCTL": {
+    "name": "Dadabhoy Construction Technology Limited",
+    "face_value": 10
+  },
+  "DIIL": {
+    "name": "Diamond Industries Limited",
+    "face_value": 10
+  },
+  "ECOP": {
+    "name": "Ecopack Limited",
+    "face_value": 10
+  },
+  "GOC": {
+    "name": "GOC (Pak) Limited.",
+    "face_value": 10
+  },
+  "GAMON": {
+    "name": "Gammon Pakistan Limited",
+    "face_value": 10
+  },
+  "HADC": {
+    "name": "Haydary Construction Company Limited",
+    "face_value": 5
+  },
+  "MACFL": {
+    "name": "Macpac Films Limited",
+    "face_value": 10
+  },
+  "MWMP": {
+    "name": "Mandviwala Mauser Plastic Industries Limited",
+    "face_value": 10
+  },
+  "META": {
+    "name": "MetaTech Health Limited",
+    "face_value": 10
+  },
+  "OML": {
+    "name": "Olympia Mills Limited",
+    "face_value": 10
+  },
+  "PABC": {
+    "name": "Pakistan Aluminium Beverage Cans Limited",
+    "face_value": 10
+  },
+  "PHDL": {
+    "name": "Pakistan Hotels Developers Limited",
+    "face_value": 10
+  },
+  "PSEL": {
+    "name": "Pakistan Services Limited",
+    "face_value": 10
+  },
+  "SHFA": {
+    "name": "Shifa International Hospitals Limited",
+    "face_value": 10
+  },
+  "STPL": {
+    "name": "Siddiqsons Tin Plate Limited",
+    "face_value": 10
+  },
+  "SPEL": {
+    "name": "Synthetic Products Enterprises Limited",
+    "face_value": 10
+  },
+  "TRIPF": {
+    "name": "Tri-Pack Films Limited",
+    "face_value": 10
+  },
+  "UBDL": {
+    "name": "United Brands Limited",
+    "face_value": 10
+  },
+  "UDPL": {
+    "name": "United Distributors Pakistan Limited",
+    "face_value": 10
+  },
+  "ARM": {
+    "name": "Allied Rental Modarba",
+    "face_value": 10
+  },
+  "AWWAL": {
+    "name": "Awwal Modaraba",
+    "face_value": 10
+  },
+  "BFMOD": {
+    "name": "B.F. Modaraba",
+    "face_value": 10
+  },
+  "BRR": {
+    "name": "B.R.R. Guardian Modaraba",
+    "face_value": 10
+  },
+  "FANM": {
+    "name": "First Al-Noor Modarba",
+    "face_value": 10
+  },
+  "FCONM": {
+    "name": "First Constellation Modaraba",
+    "face_value": 10
+  },
+  "FECM": {
+    "name": "First Elite Capital Modaraba",
+    "face_value": 10
+  },
+  "FEM": {
+    "name": "First Equity Modarba",
+    "face_value": 10
+  },
+  "FFLM": {
+    "name": "First Fidelity Leasing Modaraba",
+    "face_value": 10
+  },
+  "FHAM": {
+    "name": "First Habib Modarba Limited",
+    "face_value": 5
+  },
+  "FIBLM": {
+    "name": "First IBL Modaraba",
+    "face_value": 10
+  },
+  "FIMM": {
+    "name": "First Imrooz Modaraba Limited",
+    "face_value": 10
+  },
+  "FIM": {
+    "name": "First Investec Modaraba",
+    "face_value": 10
+  },
+  "FNBM": {
+    "name": "First National Bank Modarba",
+    "face_value": 10
+  },
+  "PAKMI": {
+    "name": "First Pakistan Modarba",
+    "face_value": 10
+  },
+  "FPRM": {
+    "name": "First Paramount Modaraba",
+    "face_value": 10
+  },
+  "PMI": {
+    "name": "First Prudential Modarba",
+    "face_value": 10
+  },
+  "FPJM": {
+    "name": "First Punjab Modarba",
+    "face_value": 10
+  },
+  "FTMM": {
+    "name": "First Treet Manufacturing Modarba",
+    "face_value": 10
+  },
+  "FTSM": {
+    "name": "First Tri-Star Modarba",
+    "face_value": 10
+  },
+  "FUDLM": {
+    "name": "First UDL Modarba",
+    "face_value": 10
+  },
+  "KASBM": {
+    "name": "KASB Modaraba",
+    "face_value": 10
+  },
+  "MODAM": {
+    "name": "Modaraba Al - Mali",
+    "face_value": 10
+  },
+  "OLPM": {
+    "name": "OLP Modaraba",
+    "face_value": 10
+  },
+  "ORM": {
+    "name": "Orient Rental Mod",
+    "face_value": 10
+  },
+  "PIM": {
+    "name": "Popular Islamic Modaraba",
+    "face_value": 10
+  },
+  "SINDM": {
+    "name": "Sindh Modaraba",
+    "face_value": 10
+  },
+  "TRSM": {
+    "name": "Trust Modarba",
+    "face_value": 10
+  },
+  "UCAPM": {
+    "name": "UNICAP Modarba",
+    "face_value": 10
+  },
+  "MARI": {
+    "name": "Mari Petroleum Company Limited",
+    "face_value": 10
+  },
+  "OGDC": {
+    "name": "Oil and Gas Development Company Limited",
+    "face_value": 10
+  },
+  "POL": {
+    "name": "Pakistan Oilfields Limited",
+    "face_value": 10
+  },
+  "PPL": {
+    "name": "Pakistan Petroleum Limited",
+    "face_value": 10
+  },
+  "APL": {
+    "name": "Attock Petroleum Limited",
+    "face_value": 10
+  },
+  "BPL": {
+    "name": "Burshane LPG (Pakistan) Limited",
+    "face_value": 10
+  },
+  "HASCOL": {
+    "name": "Hascol Petroleum Limited",
+    "face_value": 10
+  },
+  "HTL": {
+    "name": "Hi-Tech Lubricants Limited",
+    "face_value": 10
+  },
+  "OBOY": {
+    "name": "Oilboy Engergy Limited",
+    "face_value": 10
+  },
+  "PSO": {
+    "name": "Pakistan State Oil Company Limited",
+    "face_value": 10
+  },
+  "SHEL": {
+    "name": "Shell Pakistan Limited",
+    "face_value": 10
+  },
+  "SNGP": {
+    "name": "Sui Northern Gas Pipelines Limited",
+    "face_value": 10
+  },
+  "SSGC": {
+    "name": "Sui Southern Gas Company Limited",
+    "face_value": 10
+  },
+  "ABSON": {
+    "name": "Abson Industries Limited",
+    "face_value": 10
+  },
+  "CEPB": {
+    "name": "Century Paper and Board Mills Limited",
+    "face_value": 10
+  },
+  "CPPL": {
+    "name": "Cherat Packaging Limited.",
+    "face_value": 10
+  },
+  "DBSL": {
+    "name": "Dadabhoy Sack Limited",
+    "face_value": 10
+  },
+  "MERIT": {
+    "name": "Merit Packaging Limited",
+    "face_value": 10
+  },
+  "PKGS": {
+    "name": "Packages Limited",
+    "face_value": 10
+  },
+  "GEMPAPL": {
+    "name": "Pak Agro Packaging Limited(GEM)",
+    "face_value": 10
+  },
+  "PPP": {
+    "name": "Pakistan Paper Prouducts Limited",
+    "face_value": 10
+  },
+  "RPL": {
+    "name": "Roshan Packages Limited",
+    "face_value": 10
+  },
+  "SEPL": {
+    "name": "Security Paper Limited",
+    "face_value": 10
+  },
+  "AGP": {
+    "name": "AGP Limited",
+    "face_value": 10
+  },
+  "ABOT": {
+    "name": "Abbot Laboatories (Pakistan) Limited",
+    "face_value": 10
+  },
+  "CPHL": {
+    "name": "Citi Pharma Ltd.",
+    "face_value": 10
+  },
+  "FEROZ": {
+    "name": "Ferozsons Laboratories Limited",
+    "face_value": 10
+  },
+  "GLAXO": {
+    "name": "GlaxoSmithKline (Pakistan) Limited",
+    "face_value": 10
+  },
+  "HALEON": {
+    "name": "Haleon Pakistan Limited",
+    "face_value": 10
+  },
+  "HINOON": {
+    "name": "Highnoon Laboratories Limited",
+    "face_value": 10
+  },
+  "IBLHL": {
+    "name": "IBL HealthCare Limited",
+    "face_value": 10
+  },
+  "MACTER": {
+    "name": "Macter International Limited",
+    "face_value": 10
+  },
+  "OTSU": {
+    "name": "Otsuka Pakistan Limited",
+    "face_value": 10
+  },
+  "SAPL": {
+    "name": "Sanofi-Aventis Pakistan Limited",
+    "face_value": 10
+  },
+  "SEARL": {
+    "name": "The Searle Company Limited",
+    "face_value": 10
+  },
+  "ALTN": {
+    "name": "Altern Energy Limited",
+    "face_value": 10
+  },
+  "EPQL": {
+    "name": "Engro Powergen Qadirpur Limited",
+    "face_value": 10
+  },
+  "HUBC": {
+    "name": "Hub Power Company Limited",
+    "face_value": 10
+  },
+  "KOHE": {
+    "name": "Kohinoor Energy Limited",
+    "face_value": 10
+  },
+  "KOHP": {
+    "name": "Kohinoor Power Company Limited",
+    "face_value": 10
+  },
+  "KAPCO": {
+    "name": "Kot Addu Power Company Limited",
+    "face_value": 10
+  },
+  "LPL": {
+    "name": "Lalpir Power Limited",
+    "face_value": 10
+  },
+  "NCPL": {
+    "name": "Nishat Chunian Power Limited",
+    "face_value": 10
+  },
+  "NPL": {
+    "name": "Nishat Power Limited",
+    "face_value": 10
+  },
+  "PKGP": {
+    "name": "PAKGEN Power Limited",
+    "face_value": 10
+  },
+  "SGPL": {
+    "name": "S.G. Power Limited",
+    "face_value": 10
+  },
+  "SPWL": {
+    "name": "Saif Power Limited",
+    "face_value": 10
+  },
+  "SEL": {
+    "name": "Sitara Energy Limited",
+    "face_value": 10
+  },
+  "TSPL": {
+    "name": "Tri-Star Power Limited",
+    "face_value": 10
+  },
+  "JVDC": {
+    "name": "Javedan Corporation Limited",
+    "face_value": 10
+  },
+  "PACE": {
+    "name": "Pace (Pakistan) Limited",
+    "face_value": 10
+  },
+  "TPLP": {
+    "name": "TPL Properties Limited",
+    "face_value": 10
+  },
+  "DCR": {
+    "name": "Dolmen City Reit",
+    "face_value": 10
+  },
+  "GRR": {
+    "name": "Globe Residency Reit",
+    "face_value": 10
+  },
+  "ATRL": {
+    "name": "Attock Refinery Limited",
+    "face_value": 10
+  },
+  "CNERGY": {
+    "name": "Cnergyico PK Limited",
+    "face_value": 10
+  },
+  "NRL": {
+    "name": "National Refinery Limited",
+    "face_value": 10
+  },
+  "PRL": {
+    "name": "Pakistan Refinery Limited",
+    "face_value": 10
+  },
+  "AGSML": {
+    "name": "Abdullah Shah Ghazi Sugar Mills Limited",
+    "face_value": 10
+  },
+  "ADAMS": {
+    "name": "Adam Sugar Mills Limited",
+    "face_value": 10
+  },
+  "AABS": {
+    "name": "Al-Abbas Sugar Mills Limited",
+    "face_value": 10
+  },
+  "ALNRS": {
+    "name": "Al-Noor Sugar Mills Limited",
+    "face_value": 10
+  },
+  "ANSM": {
+    "name": "Ansari Sugar Mills Limtied",
+    "face_value": 10
+  },
+  "BAFS": {
+    "name": "Baba Farid Sugar Mills Limited",
+    "face_value": 10
+  },
+  "CHAS": {
+    "name": "Chashma Sugar Mills Limited.",
+    "face_value": 10
+  },
+  "DWSM": {
+    "name": "Dewan Sugar Mills Limited",
+    "face_value": 10
+  },
+  "FRSM": {
+    "name": "Faran Sugar Mills Limited",
+    "face_value": 10
+  },
+  "HRPL": {
+    "name": "Habib Rice Product Limited.",
+    "face_value": 5
+  },
+  "HABSM": {
+    "name": "Habib Sugar Mills Limited",
+    "face_value": 5
+  },
+  "HWQS": {
+    "name": "Haseeb Waqas Sugar Mills Limited",
+    "face_value": 10
+  },
+  "JDWS": {
+    "name": "J.D.W. Sugar Mills Limited",
+    "face_value": 10
+  },
+  "JSML": {
+    "name": "Jauharabad Sugar Mills Limited",
+    "face_value": 10
+  },
+  "KPUS": {
+    "name": "Khairpur Sugar Mills Limited",
+    "face_value": 10
+  },
+  "MRNS": {
+    "name": "Mehran Sugar Mills Limited",
+    "face_value": 10
+  },
+  "MIRKS": {
+    "name": "Mirpurkhas Sugar Mills Limited",
+    "face_value": 10
+  },
+  "NONS": {
+    "name": "Noon Sugar Mills Limited",
+    "face_value": 10
+  },
+  "PMRS": {
+    "name": "Premier Sugar Mills and Distillery Company Limited",
+    "face_value": 10
+  },
+  "SKRS": {
+    "name": "Sakrand Sugar Mills Limited",
+    "face_value": 10
+  },
+  "SANSM": {
+    "name": "Sanghar Sugar Mills Limited",
+    "face_value": 10
+  },
+  "SHSML": {
+    "name": "Shahmurad Sugar Mills Limited",
+    "face_value": 10
+  },
+  "SHJS": {
+    "name": "Shahtaj Sugar Mills Limited",
+    "face_value": 10
+  },
+  "SML": {
+    "name": "Shakarganj Limited",
+    "face_value": 10
+  },
+  "SASML": {
+    "name": "Sind Abadgar Sugar Mills Limited",
+    "face_value": 10
+  },
+  "TSML": {
+    "name": "Tandlianwala Sugar Mills Limited",
+    "face_value": 10
+  },
+  "TCORP": {
+    "name": "Tariq Corporation Limited",
+    "face_value": 10
+  },
+  "TCORPCPS": {
+    "name": "Tariq Corporation Limited(Pref)",
+    "face_value": 10
+  },
+  "TICL": {
+    "name": "Thal Industries Corporation Limited",
+    "face_value": 10
+  },
+  "AASM": {
+    "name": "Al-Abid Silk Mills Limited",
+    "face_value": 10
+  },
+  "DSFL": {
+    "name": "Dewan Salman Fibre Limited",
+    "face_value": 10
+  },
+  "GATI": {
+    "name": "Gatron Industries Limited",
+    "face_value": 10
+  },
+  "IBFL": {
+    "name": "Ibrahim Fibre Limited",
+    "face_value": 10
+  },
+  "IMAGE": {
+    "name": "Image Pakistan Limited",
+    "face_value": 10
+  },
+  "NAFL": {
+    "name": "National Fibres Limited",
+    "face_value": 10
+  },
+  "NSRM": {
+    "name": "National Silk and Rayon Mills Limited",
+    "face_value": 10
+  },
+  "PSYL": {
+    "name": "Pakistan Synthetics Limited",
+    "face_value": 10
+  },
+  "RUPL": {
+    "name": "Rupali Polyester Limited",
+    "face_value": 10
+  },
+  "SGABL": {
+    "name": "S.G. Allied Businsses Limited",
+    "face_value": 10
+  },
+  "AIRLINK": {
+    "name": "Air Link Communication Limited",
+    "face_value": 10
+  },
+  "AVN": {
+    "name": "Avanceon Limited",
+    "face_value": 10
+  },
+  "HCL": {
+    "name": "Hallmark Company Limited",
+    "face_value": 10
+  },
+  "HUMNL": {
+    "name": "Hum Network Limited",
+    "face_value": 1
+  },
+  "MDTL": {
+    "name": "Media Times Limited",
+    "face_value": 10
+  },
+  "NETSOL": {
+    "name": "NetSol Technologies Limited",
+    "face_value": 10
+  },
+  "OCTOPUS": {
+    "name": "Octopus Digital Limited",
+    "face_value": 10
+  },
+  "PAKD": {
+    "name": "Pak Datacom Limited",
+    "face_value": 10
+  },
+  "PTC": {
+    "name": "Pakistan Telecommunication Company Limited",
+    "face_value": 10
+  },
+  "GEMSPNL": {
+    "name": "Supernet Limited",
+    "face_value": 10
+  },
+  "SYS": {
+    "name": "Systems Limited",
+    "face_value": 10
+  },
+  "TPL": {
+    "name": "TPL Corp Limited",
+    "face_value": 10
+  },
+  "TPLT": {
+    "name": "TPL Trakker Limited",
+    "face_value": 10
+  },
+  "TRG": {
+    "name": "TRG Pakistan Limited",
+    "face_value": 10
+  },
+  "TELE": {
+    "name": "Telecard Limited",
+    "face_value": 10
+  },
+  "WTL": {
+    "name": "WorldCall Telecom Limited",
+    "face_value": 10
+  },
+  "ANTM": {
+    "name": "AN Textile Mills Limited",
+    "face_value": 10
+  },
+  "AHTM": {
+    "name": "Ahmed Hassan Textile Mills Limited",
+    "face_value": 10
+  },
+  "AEL": {
+    "name": "Arshad Energy Limited",
+    "face_value": 10
+  },
+  "ADMM": {
+    "name": "Artistic Denim Mills Limited",
+    "face_value": 10
+  },
+  "ARUJ": {
+    "name": "Aruj Industries Limited",
+    "face_value": 10
+  },
+  "ANLPS": {
+    "name": "Azgard Nine - 8.95% Convertable Preference Shares",
+    "face_value": 10
+  },
+  "ANL": {
+    "name": "Azgard Nine Limited",
+    "face_value": 10
+  },
+  "ANLNV": {
+    "name": "Azgard Nine Limited (Non Voting Shares)",
+    "face_value": 10
+  },
+  "BHAT": {
+    "name": "Bhanero Textile Mills Limited",
+    "face_value": 10
+  },
+  "BTL": {
+    "name": "Blessed Textile Mills Limited",
+    "face_value": 10
+  },
+  "CHBL": {
+    "name": "Chenab Limited",
+    "face_value": 10
+  },
+  "CLCPS": {
+    "name": "Chenab Limited - Preference Shares",
+    "face_value": 10
+  },
+  "CRTM": {
+    "name": "Crescent Textile Mills Limited",
+    "face_value": 10
+  },
+  "FASM": {
+    "name": "Faisal Spinning Mills Limited",
+    "face_value": 10
+  },
+  "FSWL": {
+    "name": "Fateh Sports Wear Limited",
+    "face_value": 10
+  },
+  "FTHM": {
+    "name": "Fateh Textile Mills Limited",
+    "face_value": 10
+  },
+  "FZCM": {
+    "name": "Fazal Cloth Mills Limited",
+    "face_value": 10
+  },
+  "FML": {
+    "name": "Feroze 1888 Mills Limited",
+    "face_value": 10
+  },
+  "GFIL": {
+    "name": "Ghazi Fabrics International Limited",
+    "face_value": 10
+  },
+  "GATM": {
+    "name": "Gul Ahmed Textile Mills Limited",
+    "face_value": 10
+  },
+  "HAFL": {
+    "name": "Hafiz Limited",
+    "face_value": 10
+  },
+  "HAEL": {
+    "name": "Hala Enterprises Limited",
+    "face_value": 10
+  },
+  "HATM": {
+    "name": "Hamid Textile Mills Limited",
+    "face_value": 10
+  },
+  "HUSI": {
+    "name": "Husein Industries Limited",
+    "face_value": 10
+  },
+  "ILP": {
+    "name": "Interloop Limited",
+    "face_value": 10
+  },
+  "INKL": {
+    "name": "International Knitwear Limited",
+    "face_value": 10
+  },
+  "JUBS": {
+    "name": "Jubilee Spinning and Weaving Mills Limited",
+    "face_value": 10
+  },
+  "KAKL": {
+    "name": "Kaiser Art and Kraft Mills Limited",
+    "face_value": 10
+  },
+  "KHYT": {
+    "name": "Khyber Textile Mills Limited",
+    "face_value": 10
+  },
+  "KOIL": {
+    "name": "Kohinoor Industries Limited",
+    "face_value": 10
+  },
+  "KML": {
+    "name": "Kohinoor Mills Limited",
+    "face_value": 10
+  },
+  "KTML": {
+    "name": "Kohinoor Textile Mills Limited",
+    "face_value": 10
+  },
+  "MSOTPS": {
+    "name": "Masood Tex.(Pref)",
+    "face_value": 10
+  },
+  "MSOT": {
+    "name": "Masood Textile Mills Limited",
+    "face_value": 10
+  },
+  "MEHT": {
+    "name": "Mehmood Textile Mills Limited",
+    "face_value": 10
+  },
+  "MFTM": {
+    "name": "Mohummed Farooq Textile Mills Limited",
+    "face_value": 10
+  },
+  "MUBT": {
+    "name": "Mubarak Textile Mills Limited",
+    "face_value": 10
+  },
+  "NINA": {
+    "name": "Nina Industries Limited",
+    "face_value": 10
+  },
+  "NCL": {
+    "name": "Nishat Chunian Limited",
+    "face_value": 10
+  },
+  "NML": {
+    "name": "Nishat Mills Limited",
+    "face_value": 10
+  },
+  "PASM": {
+    "name": "Paramount Spinning Mills Limited",
+    "face_value": 10
+  },
+  "QUET": {
+    "name": "Quetta Textile Mills Limited",
+    "face_value": 10
+  },
+  "REDCO": {
+    "name": "Redco Textiles Limited",
+    "face_value": 10
+  },
+  "REWM": {
+    "name": "Reliance Weaving Mills Limited",
+    "face_value": 10
+  },
+  "SFAT": {
+    "name": "Safa Textiles Limited",
+    "face_value": 10
+  },
+  "SFL": {
+    "name": "Sapphire Fibers Limited",
+    "face_value": 10
+  },
+  "SAPT": {
+    "name": "Sapphire Textile Mills Limited",
+    "face_value": 10
+  },
+  "SCHT": {
+    "name": "Schon Textiles Limited",
+    "face_value": 10
+  },
+  "STML": {
+    "name": "Shams Textile Mills Limited",
+    "face_value": 10
+  },
+  "SURC": {
+    "name": "Suraj Cotton Mills Limited",
+    "face_value": 10
+  },
+  "TAJT": {
+    "name": "Taj Textile Mills Limited",
+    "face_value": 10
+  },
+  "TOWL": {
+    "name": "Towellers Limited",
+    "face_value": 10
+  },
+  "USMT": {
+    "name": "Usman Textile MIlls Limited",
+    "face_value": 10
+  },
+  "ZAHID": {
+    "name": "Zahidjee Textile Mills Limited",
+    "face_value": 10
+  },
+  "ZHCM": {
+    "name": "Zahur Cotton Mills Limited",
+    "face_value": 10
+  },
+  "AAL": {
+    "name": "Agro Allianz Limited",
+    "face_value": 10
+  },
+  "AATM": {
+    "name": "Ali Asghar Textile Mills Limited",
+    "face_value": 5
+  },
+  "AWTX": {
+    "name": "Allawasaya Textile & Weaving Mills Limited",
+    "face_value": 10
+  },
+  "AMTEX": {
+    "name": "Amtex Limited",
+    "face_value": 10
+  },
+  "ANNT": {
+    "name": "Annoor Textile Mills Limited",
+    "face_value": 5
+  },
+  "APOT": {
+    "name": "Apollo Textile Mills Limited",
+    "face_value": 10
+  },
+  "ARCTM": {
+    "name": "Arctic Textile Mills Limited",
+    "face_value": 10
+  },
+  "ASTM": {
+    "name": "Asim Textile Mills Limited",
+    "face_value": 10
+  },
+  "AZMT": {
+    "name": "Azmat Textile Mills Limited",
+    "face_value": 10
+  },
+  "BILF": {
+    "name": "Bilal Fibres Limited",
+    "face_value": 10
+  },
+  "CWSM": {
+    "name": "Chakwal Spinning Mills Limited",
+    "face_value": 5
+  },
+  "CTM": {
+    "name": "Colony Textile Mills Limited",
+    "face_value": 10
+  },
+  "CCM": {
+    "name": "Crescent Cotton Mills Limited",
+    "face_value": 10
+  },
+  "CFL": {
+    "name": "Crescent Fibres Limited",
+    "face_value": 10
+  },
+  "DMTX": {
+    "name": "D.M. Textile Mills Limited",
+    "face_value": 10
+  },
+  "DSIL": {
+    "name": "D.S. Industires Limited",
+    "face_value": 10
+  },
+  "DSML": {
+    "name": "Dar-es-Salaam Textile Mills Limited",
+    "face_value": 10
+  },
+  "DATM": {
+    "name": "Data Textile Limited",
+    "face_value": 10
+  },
+  "DFSM": {
+    "name": "Dewan Farooque Spinning Mills Limited",
+    "face_value": 10
+  },
+  "DKTM": {
+    "name": "Dewan Khalid Textile Mills Limited",
+    "face_value": 10
+  },
+  "DMTM": {
+    "name": "Dewan Mushtaq Textile Mills Limited",
+    "face_value": 10
+  },
+  "DWTM": {
+    "name": "Dewan Textile Mills Limited",
+    "face_value": 10
+  },
+  "DINT": {
+    "name": "Din Textile Mills Limited",
+    "face_value": 10
+  },
+  "ELCM": {
+    "name": "Elahi Cotton Mills Limited",
+    "face_value": 10
+  },
+  "ELSM": {
+    "name": "Ellcot Spinning Mills Limited",
+    "face_value": 10
+  },
+  "FAEL": {
+    "name": "Fatima Enterprizes Limited",
+    "face_value": 10
+  },
+  "GADT": {
+    "name": "Gadoon Textile Mills Limited",
+    "face_value": 10
+  },
+  "GLOT": {
+    "name": "Globe Textile Mills Limited",
+    "face_value": 10
+  },
+  "GUSM": {
+    "name": "Gulistan Spinning Mills Limited",
+    "face_value": 10
+  },
+  "GUTM": {
+    "name": "Gulistan Textile Mills Limited",
+    "face_value": 10
+  },
+  "GSPM": {
+    "name": "Gulshan Spinning Mills Limited",
+    "face_value": 10
+  },
+  "HMIM": {
+    "name": "Haji Mohammed Ismail Mills Limited",
+    "face_value": 10
+  },
+  "HAJT": {
+    "name": "Hajra Textile Mills Limited",
+    "face_value": 10
+  },
+  "HIRAT": {
+    "name": "Hira Textile Mills Limited",
+    "face_value": 10
+  },
+  "IDSM": {
+    "name": "Ideal Spinning Mills Limited",
+    "face_value": 10
+  },
+  "IDRT": {
+    "name": "Idrees Textile Mills Limited",
+    "face_value": 10
+  },
+  "IDYM": {
+    "name": "Indus Dyeing Manufacturing Company Limited",
+    "face_value": 10
+  },
+  "JATM": {
+    "name": "J.A. Textile Mills Limited",
+    "face_value": 10
+  },
+  "JKSM": {
+    "name": "J.K. Spinning Mills Limited",
+    "face_value": 10
+  },
+  "JDMT": {
+    "name": "Janana-de-Malucho Textile Mills Limited",
+    "face_value": 10
+  },
+  "KSTM": {
+    "name": "Khalid Siraj Textile Mills Limited",
+    "face_value": 10
+  },
+  "KOHTM": {
+    "name": "Kohat Textile Mills Limited",
+    "face_value": 10
+  },
+  "KOSM": {
+    "name": "Kohinoor Spinning Mills Limited",
+    "face_value": 5
+  },
+  "LMSM": {
+    "name": "Land Mark Spinning Industries Limited",
+    "face_value": 10
+  },
+  "MQTM": {
+    "name": "Maqbool Textile Mills Limited",
+    "face_value": 10
+  },
+  "NATM": {
+    "name": "Nadeem Textile Mills Limited",
+    "face_value": 10
+  },
+  "NAGC": {
+    "name": "Nagina Cotton Mills Limited",
+    "face_value": 10
+  },
+  "NCML": {
+    "name": "Nazir Cotton Mills Limited",
+    "face_value": 10
+  },
+  "PRET": {
+    "name": "Premium Textile Mills Limited",
+    "face_value": 10
+  },
+  "RCML": {
+    "name": "Reliance Cotton Spinning Mills Limited",
+    "face_value": 10
+  },
+  "RUBY": {
+    "name": "Ruby Textile Mills Limited",
+    "face_value": 10
+  },
+  "SAIF": {
+    "name": "Saif Textile Mills Limited",
+    "face_value": 10
+  },
+  "SLYT": {
+    "name": "Sally Textile Mills Limited",
+    "face_value": 10
+  },
+  "SANE": {
+    "name": "Salman Noman Enterpries Limited",
+    "face_value": 10
+  },
+  "SNAI": {
+    "name": "Sana Industries Limited",
+    "face_value": 10
+  },
+  "SSML": {
+    "name": "Saritow Spinning Mills Limited",
+    "face_value": 10
+  },
+  "SERT": {
+    "name": "Service Industries Textile Limited",
+    "face_value": 10
+  },
+  "SHDT": {
+    "name": "Shadab Textile Mills Limited",
+    "face_value": 10
+  },
+  "SHCM": {
+    "name": "Shadman Cotton Mills Limited",
+    "face_value": 10
+  },
+  "SZTM": {
+    "name": "Shahzad Textile Mills Limited",
+    "face_value": 10
+  },
+  "SUTM": {
+    "name": "Sunrays Textile Mills Limited",
+    "face_value": 10
+  },
+  "TATM": {
+    "name": "Tata Textile Mills Limited",
+    "face_value": 10
+  },
+  "ASHT": {
+    "name": "Ashfaq Textile Mills Limited",
+    "face_value": 10
+  },
+  "HKKT": {
+    "name": "Hakkim Textile Mills Limited",
+    "face_value": 10
+  },
+  "ICCI": {
+    "name": "ICC Industries Limited",
+    "face_value": 10
+  },
+  "MOHE": {
+    "name": "Mohib Exports Limited",
+    "face_value": 10
+  },
+  "PRWM": {
+    "name": "Prosperity Weaving Mills Limited",
+    "face_value": 10
+  },
+  "SDOT": {
+    "name": "Sadoon Textile Mills Limited",
+    "face_value": 10
+  },
+  "STJT": {
+    "name": "Shahtaj Textile Mills Limited",
+    "face_value": 10
+  },
+  "YOUW": {
+    "name": "Yousuf Weaving Mills Limited",
+    "face_value": 10
+  },
+  "ZTL": {
+    "name": "Zephyr Textile Limited",
+    "face_value": 10
+  },
+  "KHTC": {
+    "name": "Khyber Tobacco Company Limited",
+    "face_value": 10
+  },
+  "PAKT": {
+    "name": "Pakistan Tobacco Company Limited",
+    "face_value": 10
+  },
+  "PMPK": {
+    "name": "Philip Morris (Pakistan) Limited",
+    "face_value": 10
+  },
+  "CLVL": {
+    "name": "Cordoba Logistics & Ventures Limited",
+    "face_value": 10
+  },
+  "PIAA": {
+    "name": "Pakistan International Airlines Corporation",
+    "face_value": 10
+  },
+  "PIAB": {
+    "name": "Pakistan International Airlines Corporation (B Class Shares)",
+    "face_value": 5
+  },
+  "PIBTL": {
+    "name": "Pakistan International Bulk Terminal Limited",
+    "face_value": 10
+  },
+  "PICT": {
+    "name": "Pakistan International Container Terminal Limited",
+    "face_value": 10
+  },
+  "PNSC": {
+    "name": "Pakistan National Shipping Corporation Limited",
+    "face_value": 10
+  },
+  "GEMUNSL": {
+    "name": "Universal Network Systems Limited(GEM)",
+    "face_value": 10
+  },
+  "POML": {
+    "name": "Punjab Oil Mills Limited",
+    "face_value": 10
+  },
+  "SSOM": {
+    "name": "S.S. Oil Mills Limited",
+    "face_value": 10
+  },
+  "SURAJ": {
+    "name": "Suraj Ghee Industries Limited",
+    "face_value": 10
+  }
+}

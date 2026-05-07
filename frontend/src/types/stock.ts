@@ -142,6 +142,14 @@ export interface ValueCheck {
   book_value_used: number | null;
 }
 
+export interface InvestorMetrics {
+  dividend_yield_pct: number | null;
+  payout_ratio_pct: number | null;
+  roe_pct: number | null;
+  price_cagr_pct: number | null;
+  price_cagr_years: number | null;
+}
+
 export interface StockData {
   company: Company;
   price: Price;
@@ -157,6 +165,7 @@ export interface StockData {
   price_history: PricePoint[];
   book_value: number | null;
   value_check: ValueCheck | null;
+  investor_metrics: InvestorMetrics | null;
 }
 
 export interface ComparisonMetric {

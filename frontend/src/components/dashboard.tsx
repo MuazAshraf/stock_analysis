@@ -14,6 +14,7 @@ import { MoneyTalk } from "@/components/sections/money-talk";
 import { DividendCheck } from "@/components/sections/dividend-check";
 import { FinalVerdict } from "@/components/sections/final-verdict";
 import { ValueCheckSection } from "@/components/sections/value-check";
+import { InvestorMetricsSection } from "@/components/sections/investor-metrics";
 import { Formulas } from "@/components/sections/formulas";
 import { MarketTicker } from "@/components/sections/market-ticker";
 import { ComparisonView } from "@/components/sections/comparison-view";
@@ -126,7 +127,6 @@ export function Dashboard() {
               <TrendingUp className="h-4 w-4 flex-shrink-0" />
               <span className="hidden xs:inline sm:hidden">Analyze</span>
               <span className="hidden sm:inline">Analyze a Stock</span>
-              <span className="xs:hidden">Analyze</span>
             </button>
             <button
               onClick={() => handleTabChange("compare")}
@@ -225,6 +225,7 @@ export function Dashboard() {
                   data.financials_annual.length > 0 && (
                     <MoneyTalk financials={data.financials_annual} />
                   )}
+                <InvestorMetricsSection metrics={data.investor_metrics} />
                 <DividendCheck
                   payouts={data.payouts || []}
                   dividendStatus={data.analysis?.dividend_status || ""}

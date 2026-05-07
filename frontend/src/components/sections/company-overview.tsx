@@ -7,11 +7,22 @@ import { formatPKR, formatPercent, formatMarketCap } from "@/lib/format";
 import {
   Building2,
   Globe,
+  Layers,
   User,
   TrendingUp,
   TrendingDown,
   ArrowRight,
 } from "lucide-react";
+
+/** Render a share count as "1.47 billion" / "45.35 million" — easier to read
+ *  than a raw 10-digit number for non-finance users. */
+function formatShareCount(n: number | null | undefined): string {
+  if (n == null || !isFinite(n)) return "—";
+  if (Math.abs(n) >= 1_000_000_000) return `${(n / 1_000_000_000).toFixed(2)} billion`;
+  if (Math.abs(n) >= 1_000_000) return `${(n / 1_000_000).toFixed(2)} million`;
+  if (Math.abs(n) >= 1_000) return `${(n / 1_000).toFixed(0)}K`;
+  return n.toLocaleString();
+}
 import type { Company, Price, Equity } from "@/types/stock";
 
 interface CompanyOverviewProps {
@@ -137,6 +148,23 @@ export function CompanyOverview({
               </p>
             </div>
           </div>
+          {equity.total_shares != null && (
+            <div className="flex items-start gap-2 p-3 rounded-lg bg-[#F3F1E5]">
+              <Layers className="h-4 w-4 text-[#2B5288] mt-0.5 flex-shrink-0" />
+              <div>
+                <MetricExplainer
+                  label="Outstanding Shares"
+                  explanation="The total number of shares the company has issued. Includes shares held by promoters, institutions, and the general public combined. Use Free Float to see how many actually trade on the market."
+                />
+                <p className="text-sm font-medium text-[#404E3F]">
+                  {formatShareCount(equity.total_shares)}
+                </p>
+                <p className="text-[10px] text-[#404E3F]/50 mt-0.5">
+                  ({equity.total_shares.toLocaleString()} shares total)
+                </p>
+              </div>
+            </div>
+          )}
           {company.website && (
             <div className="flex items-start gap-2 p-3 rounded-lg bg-[#F3F1E5]">
               <Globe className="h-4 w-4 text-[#2B5288] mt-0.5 flex-shrink-0" />

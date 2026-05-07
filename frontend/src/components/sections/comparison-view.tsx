@@ -80,10 +80,16 @@ function rateRisk(v: number | string | null): QualityRating {
 }
 
 function rateDividends(v: number | string | null): QualityRating {
-  const s = String(v ?? "").toLowerCase();
-  if (s.includes("consistent") || s.includes("regular"))
+  const s = String(v ?? "").toLowerCase().trim();
+  // Order matters: check 'irregular' BEFORE 'regular' / 'consistent' since
+  // "irregular".includes("regular") is true and would falsely badge an
+  // irregular dividend payer as Consistent.
+  if (s === "irregular" || s.includes("irregular"))
+    return { label: "Irregular", color: "yellow" };
+  if (s === "consistent" || s.includes("consistent"))
     return { label: "Consistent", color: "green" };
-  if (s.includes("irregular")) return { label: "Irregular", color: "yellow" };
+  if (s === "none" || s.includes("none") || s === "")
+    return { label: "No Dividends", color: "red" };
   return { label: "No Dividends", color: "red" };
 }
 
@@ -110,6 +116,29 @@ function rateNumeric(
   return { label: labels[2], color: "red" };
 }
 
+/** Rate a P/E ratio. Negative P/E (loss-making) is always "Loss-Making" red —
+ *  rateNumeric alone would falsely label any negative as "Looks Cheap"
+ *  because n < 15 is true for negatives. */
+function ratePE(v: number | string | null): QualityRating {
+  const n = typeof v === "number" ? v : parseFloat(String(v ?? ""));
+  if (isNaN(n)) return { label: "N/A", color: "yellow" };
+  if (n <= 0) return { label: "Loss-Making", color: "red" };
+  return rateNumeric(v, 15, null, 15, 25, ["Looks Cheap", "Fair Price", "Expensive"]);
+}
+
+/** Rate a percent-where-positive-is-good metric (margin, EPS growth, etc).
+ *  Surface negative values explicitly as the supplied loss label instead of
+ *  the generic "Low" / "Declining" — clearer for non-finance users. */
+function rateWithLossCheck(
+  v: number | string | null,
+  rateFn: (v: number | string | null) => QualityRating,
+  lossLabel: string,
+): QualityRating {
+  const n = typeof v === "number" ? v : parseFloat(String(v ?? ""));
+  if (!isNaN(n) && n < 0) return { label: lossLabel, color: "red" };
+  return rateFn(v);
+}
+
 /* ─────────────────── Per-metric configuration ─────────────── */
 
 const METRIC_CONFIG: MetricConfig[] = [
@@ -119,15 +148,11 @@ const METRIC_CONFIG: MetricConfig[] = [
     beginnerExplanation:
       "How many rupees you pay for every Rs. 1 of profit the company earns.",
     icon: Tag,
-    referenceRange: "Under 15 = cheap  |  15–25 = fair  |  Over 25 = expensive",
+    referenceRange:
+      "Under 15 = cheap  |  15–25 = fair  |  Over 25 = expensive  |  Negative = loss-making",
     explainerTooltip:
-      "P/E Ratio = Share Price ÷ Earnings Per Share. Lower usually means cheaper.",
-    rateValue: (v) =>
-      rateNumeric(v, 15, null, 15, 25, [
-        "Looks Cheap",
-        "Fair Price",
-        "Expensive",
-      ]),
+      "P/E Ratio = Share Price ÷ Earnings Per Share. Lower usually means cheaper. A negative P/E means the company is currently making a loss.",
+    rateValue: ratePE,
   },
   // 1 — Net Profit Margin
   {
@@ -135,11 +160,16 @@ const METRIC_CONFIG: MetricConfig[] = [
     beginnerExplanation:
       "Out of every Rs. 100 in revenue, how much the company keeps as profit.",
     icon: PieChart,
-    referenceRange: "Above 15% = healthy  |  5–15% = average  |  Below 5% = low",
+    referenceRange:
+      "Above 15% = healthy  |  5–15% = average  |  0–5% = low  |  Below 0% = loss-making",
     explainerTooltip:
-      "Net Profit Margin = (Profit After Tax ÷ Revenue) × 100. Higher is better.",
+      "Net Profit Margin = (Profit After Tax ÷ Revenue) × 100. Higher is better. Negative means the company is making a loss on its sales.",
     rateValue: (v) =>
-      rateNumeric(v, null, 15, 5, 15, ["Healthy", "Average", "Low"]),
+      rateWithLossCheck(
+        v,
+        (val) => rateNumeric(val, null, 15, 5, 15, ["Healthy", "Average", "Low"]),
+        "Loss-Making",
+      ),
   },
   // 2 — EPS Growth
   {
@@ -148,15 +178,20 @@ const METRIC_CONFIG: MetricConfig[] = [
       "How fast the company's per-share profit is growing compared to last year.",
     icon: Percent,
     referenceRange:
-      "Above 10% = strong  |  0–10% = stable  |  Below 0% = declining",
+      "Above 10% = strong  |  0–10% = stable  |  Below 0% = shrinking",
     explainerTooltip:
-      "EPS Growth = change in Earnings Per Share year-over-year. Higher is better.",
+      "EPS Growth = change in Earnings Per Share year-over-year. Higher is better. Negative means earnings per share are shrinking compared to last year.",
     rateValue: (v) =>
-      rateNumeric(v, null, 10, 0, 10, [
-        "Strong Growth",
-        "Stable",
-        "Declining",
-      ]),
+      rateWithLossCheck(
+        v,
+        (val) =>
+          rateNumeric(val, null, 10, 0, 10, [
+            "Strong Growth",
+            "Stable",
+            "Declining",
+          ]),
+        "Shrinking",
+      ),
   },
   // 3 — 1-Year Price Change
   {
@@ -427,8 +462,162 @@ export function ComparisonView({ data }: ComparisonViewProps) {
         symB={symB}
       />
 
+      {/* 6 — Investor Parameters: Payout Ratio + ROE */}
+      <InvestorMetricsCompare
+        stockA={stock_a}
+        stockB={stock_b}
+        symA={symA}
+        symB={symB}
+      />
+
       {/* Performance Index removed — it used a different scoring system
          that could contradict the 7-metric comparison winner */}
+    </div>
+  );
+}
+
+/* ─────────────────── Investor Metrics Compare ────────────── */
+
+function InvestorMetricsCompare({
+  stockA,
+  stockB,
+  symA,
+  symB,
+}: {
+  stockA: StockData;
+  stockB: StockData;
+  symA: string;
+  symB: string;
+}) {
+  const a = stockA.investor_metrics;
+  const b = stockB.investor_metrics;
+  if (!a && !b) return null;
+
+  const fmt = (v: number | null | undefined) =>
+    v == null || !isFinite(v) ? "N/A" : `${v.toFixed(1)}%`;
+
+  // Pick a winner. If both sides have data, pick the higher (or lower if
+  // higherWins=false). If only one side has data, that side wins by default
+  // — without this, an unequal pair like "20% vs N/A" would render with
+  // identical (un-highlighted) styling and look like a tie.
+  function pickWinner(
+    av: number | null,
+    bv: number | null,
+    higherWins = true,
+  ): "a" | "b" | null {
+    if (av == null && bv == null) return null;
+    if (av == null) return "b";
+    if (bv == null) return "a";
+    if (av === bv) return null;
+    return higherWins ? (av > bv ? "a" : "b") : (av < bv ? "a" : "b");
+  }
+
+  // Higher ROE / Dividend Yield / CAGR are universally better. Payout Ratio
+  // has no universal "better" — neither low nor high is correct for everyone,
+  // so we don't declare a winner there.
+  const roeA = a?.roe_pct ?? null;
+  const roeB = b?.roe_pct ?? null;
+  const roeWinner = pickWinner(roeA, roeB);
+
+  const dyA = a?.dividend_yield_pct ?? null;
+  const dyB = b?.dividend_yield_pct ?? null;
+  const dyWinner = pickWinner(dyA, dyB);
+
+  const payA = a?.payout_ratio_pct ?? null;
+  const payB = b?.payout_ratio_pct ?? null;
+
+  const cagrA = a?.price_cagr_pct ?? null;
+  const cagrB = b?.price_cagr_pct ?? null;
+  // Use each stock's own years span when available; only fall back to a
+  // shared default if both stocks lack the field.
+  const cagrYearsA = a?.price_cagr_years ?? null;
+  const cagrYearsB = b?.price_cagr_years ?? null;
+  const cagrYearsLabel = cagrYearsA ?? cagrYearsB ?? 5;
+  const cagrWinner = pickWinner(cagrA, cagrB);
+
+  // Per-metric "winner" flags (the side with the higher value, for metrics
+  // where higher is universally better). Payout Ratio has no clear winner —
+  // neither high nor low is universally good — so we leave it un-highlighted.
+  const winners = {
+    dy: dyWinner,
+    roe: roeWinner,
+    cagr: cagrWinner,
+  };
+
+  // Each row is one metric, rendered once per stock column.
+  const metricRows: { key: keyof typeof winners | "payout"; label: string; aValue: number | null; bValue: number | null }[] = [
+    { key: "dy", label: "Dividend Yield", aValue: dyA, bValue: dyB },
+    { key: "payout", label: "Payout Ratio", aValue: payA, bValue: payB },
+    { key: "roe", label: "ROE", aValue: roeA, bValue: roeB },
+    { key: "cagr", label: `${cagrYearsLabel}-Yr Price CAGR`, aValue: cagrA, bValue: cagrB },
+  ];
+
+  const renderTile = (
+    label: string,
+    value: number | null,
+    isWinner: boolean,
+  ) => (
+    <div
+      className={`p-4 rounded-lg border ${
+        isWinner
+          ? "bg-[#4BC232]/10 border-[#4BC232]/40"
+          : "bg-white border-[#E5E0D9]"
+      }`}
+    >
+      <p className="text-xs font-semibold text-[#404E3F]/60 uppercase tracking-wide">
+        {label}
+      </p>
+      <p className="text-2xl font-bold text-[#404E3F] mt-1">{fmt(value)}</p>
+    </div>
+  );
+
+  return (
+    <div className="rounded-2xl border border-[#E5E0D9] bg-white p-5 shadow-sm space-y-4">
+      <div>
+        <h3 className="text-lg font-bold text-[#404E3F]">
+          Investor Parameters
+        </h3>
+        <p className="text-sm text-[#404E3F]/60">
+          Capital efficiency and dividend policy at a glance. Better value highlighted in green where applicable.
+        </p>
+      </div>
+
+      {/* Two stock columns, each with a 2x2 grid of the 4 metrics inside. */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Stock A column */}
+        <div className="p-4 rounded-xl bg-[#F8F3EA] border border-[#E5E0D9]">
+          <div className="mb-3">
+            <p className="text-xs text-[#404E3F]/60">Stock</p>
+            <p className="text-xl font-bold text-[#2B5288]">{symA}</p>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            {metricRows.map((m) =>
+              renderTile(
+                m.label,
+                m.aValue,
+                m.key !== "payout" && winners[m.key as keyof typeof winners] === "a",
+              ),
+            )}
+          </div>
+        </div>
+
+        {/* Stock B column */}
+        <div className="p-4 rounded-xl bg-[#F8F3EA] border border-[#E5E0D9]">
+          <div className="mb-3">
+            <p className="text-xs text-[#404E3F]/60">Stock</p>
+            <p className="text-xl font-bold text-[#2B5288]">{symB}</p>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            {metricRows.map((m) =>
+              renderTile(
+                m.label,
+                m.bValue,
+                m.key !== "payout" && winners[m.key as keyof typeof winners] === "b",
+              ),
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -926,7 +1115,20 @@ function CompareTrendBadge({
   values: (number | null)[];
 }) {
   const nonNull = values.filter((v): v is number => v != null);
-  if (nonNull.length < 2) return null;
+  if (nonNull.length === 0) return null;
+
+  // With only one data point we can't compute a trend — show a neutral
+  // badge so the user knows the stock has data but not enough history,
+  // rather than leaving a confusing empty space next to the other stock's
+  // green/red badge.
+  if (nonNull.length === 1) {
+    return (
+      <Badge className="text-[10px] gap-1 bg-[#F8F3EA] text-[#404E3F]/70 border-[#E5E0D9]">
+        {symbol}: 1 year only
+      </Badge>
+    );
+  }
+
   const isGrowing = nonNull[nonNull.length - 1] > nonNull[0];
   return (
     <Badge

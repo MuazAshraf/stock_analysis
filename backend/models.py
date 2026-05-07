@@ -101,6 +101,16 @@ class AnalysisResult(BaseModel):
     summary_points: list[str] = Field(..., description="4-6 plain English summary points")
 
 
+class InvestorMetrics(BaseModel):
+    """Headline investor-friendly ratios. Each value is None when the inputs
+    are insufficient; the frontend renders 'N/A' rather than fabricating."""
+    dividend_yield_pct: float | None = Field(None, description="Trailing 12-month dividend yield, %")
+    payout_ratio_pct: float | None = Field(None, description="Trailing 12-month payout ratio, %")
+    roe_pct: float | None = Field(None, description="Return on Equity, %")
+    price_cagr_pct: float | None = Field(None, description="Annualised price growth over the available history (~5 years on PSX), %")
+    price_cagr_years: float | None = Field(None, description="Actual number of years used for the CAGR calculation")
+
+
 class ValueCheck(BaseModel):
     """Intrinsic value (Graham Number) and margin of safety."""
     intrinsic_value: float | None = Field(None, description="Graham Number per share, in PKR")
@@ -176,6 +186,7 @@ class AnalyzeResponse(BaseModel):
     price_history: list[PricePoint] = Field(default_factory=list, description="1-year weekly closing prices")
     book_value: float | None = Field(default=None, description="Book value per share from Yahoo Finance")
     value_check: ValueCheck | None = Field(default=None, description="Intrinsic value (Graham Number) and margin of safety")
+    investor_metrics: InvestorMetrics | None = Field(default=None, description="Dividend yield, payout ratio, ROE, price CAGR")
 
 
 class StockListItem(BaseModel):
