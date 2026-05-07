@@ -322,7 +322,11 @@ function alignFinancialData(
 ): TrendDataPoint[] {
   const mapA = new Map(financialsA.map((f) => [f.period, f[field]]));
   const mapB = new Map(financialsB.map((f) => [f.period, f[field]]));
-  const allYears = Array.from(new Set([...mapA.keys(), ...mapB.keys()])).sort();
+  // localeCompare with numeric:true sorts "Q1 2026" before "Q3 2026" and
+  // "2024" before "2025" — robust to whatever period format PSX returns.
+  const allYears = Array.from(new Set([...mapA.keys(), ...mapB.keys()])).sort((a, b) =>
+    a.localeCompare(b, undefined, { numeric: true }),
+  );
   return allYears.map((year) => ({
     year,
     valueA: mapA.get(year) ?? null,
@@ -337,7 +341,11 @@ function alignRatioData(
 ): TrendDataPoint[] {
   const mapA = new Map(ratiosA.map((r) => [r.year, r[field]]));
   const mapB = new Map(ratiosB.map((r) => [r.year, r[field]]));
-  const allYears = Array.from(new Set([...mapA.keys(), ...mapB.keys()])).sort();
+  // localeCompare with numeric:true sorts "Q1 2026" before "Q3 2026" and
+  // "2024" before "2025" — robust to whatever period format PSX returns.
+  const allYears = Array.from(new Set([...mapA.keys(), ...mapB.keys()])).sort((a, b) =>
+    a.localeCompare(b, undefined, { numeric: true }),
+  );
   return allYears.map((year) => ({
     year,
     valueA: mapA.get(year) ?? null,
@@ -421,6 +429,7 @@ export function ComparisonView({ data }: ComparisonViewProps) {
         symB={symB}
         scoreA={comparison.score_a}
         scoreB={comparison.score_b}
+        totalMetrics={comparison.metrics.length}
         verdict={comparison.verdict}
         wonByA={wonByA}
         wonByB={wonByB}
@@ -558,16 +567,18 @@ function InvestorMetricsCompare({
     isWinner: boolean,
   ) => (
     <div
-      className={`p-4 rounded-lg border ${
+      className={`p-4 rounded-lg border min-w-0 ${
         isWinner
           ? "bg-[#4BC232]/10 border-[#4BC232]/40"
           : "bg-white border-[#E5E0D9]"
       }`}
     >
-      <p className="text-xs font-semibold text-[#404E3F]/60 uppercase tracking-wide">
+      <p className="text-xs font-semibold text-[#404E3F]/60 uppercase tracking-wide truncate">
         {label}
       </p>
-      <p className="text-2xl font-bold text-[#404E3F] mt-1">{fmt(value)}</p>
+      <p className="text-xl sm:text-2xl font-bold text-[#404E3F] mt-1 tabular-nums">
+        {fmt(value)}
+      </p>
     </div>
   );
 
@@ -672,6 +683,7 @@ function QuickVerdict({
   symB,
   scoreA,
   scoreB,
+  totalMetrics,
   verdict,
   wonByA,
   wonByB,
@@ -683,6 +695,7 @@ function QuickVerdict({
   symB: string;
   scoreA: number;
   scoreB: number;
+  totalMetrics: number;
   verdict: string;
   wonByA: string[];
   wonByB: string[];
@@ -692,7 +705,8 @@ function QuickVerdict({
 }) {
   const winnerSym = isWinnerA ? symA : isWinnerB ? symB : null;
   const winnerScore = isWinnerA ? scoreA : scoreB;
-  const total = scoreA + scoreB + (7 - scoreA - scoreB); // always 7
+  const ties = totalMetrics - scoreA - scoreB;
+  const tiedSuffix = ties > 0 ? ` (${ties} tied)` : "";
 
   return (
     <Card
@@ -717,7 +731,7 @@ function QuickVerdict({
           >
             {isTie
               ? "It's a Tie!"
-              : `${winnerSym} Wins ${winnerScore} out of ${total} Rounds`}
+              : `${winnerSym} Wins ${winnerScore} out of ${totalMetrics} Rounds${tiedSuffix}`}
           </h2>
         </div>
 
