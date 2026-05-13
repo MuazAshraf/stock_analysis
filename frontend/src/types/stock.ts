@@ -164,6 +164,7 @@ export interface StockData {
   statements: FinancialStatements | null;
   price_history: PricePoint[];
   book_value: number | null;
+  face_value: number | null;
   value_check: ValueCheck | null;
   investor_metrics: InvestorMetrics | null;
 }

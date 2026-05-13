@@ -31,6 +31,7 @@ interface CompanyOverviewProps {
   equity: Equity;
   isShariah?: boolean;
   bookValue?: number | null;
+  faceValue?: number | null;
 }
 
 export function CompanyOverview({
@@ -38,6 +39,7 @@ export function CompanyOverview({
   price,
   equity,
   isShariah = false,
+  faceValue,
   bookValue,
 }: CompanyOverviewProps) {
   const change = price.change ?? 0;
@@ -214,6 +216,23 @@ export function CompanyOverview({
                     </div>
                   </>
                 )}
+              </div>
+            </div>
+          )}
+          {faceValue != null && (
+            <div className="flex items-start gap-2 p-3 rounded-lg bg-[#F3F1E5]">
+              <Building2 className="h-4 w-4 text-[#2B5288] mt-0.5 flex-shrink-0" />
+              <div>
+                <MetricExplainer
+                  label="Face Value (Par Value)"
+                  explanation="The nominal value set when the company first issued shares. PSX states dividends as a % of face value, so this is what % announcements get multiplied by. Most PSX stocks use Rs. 10; some use Rs. 5, 2, or 1."
+                />
+                <p className="text-sm font-medium text-[#404E3F]">
+                  Rs. {faceValue.toFixed(2)}
+                </p>
+                <p className="text-[10px] text-[#404E3F]/50 mt-0.5">
+                  Per share, set at listing
+                </p>
               </div>
             </div>
           )}

@@ -210,6 +210,7 @@ export function Dashboard() {
                   equity={data.equity}
                   isShariah={data.is_shariah}
                   bookValue={data.book_value}
+                  faceValue={data.face_value}
                 />
                 {data.price_history && data.price_history.length > 0 && (
                   <PriceChart

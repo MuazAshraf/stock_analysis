@@ -185,6 +185,7 @@ class AnalyzeResponse(BaseModel):
     statements: FinancialStatements | None = Field(default=None, description="Detailed financial statements from Yahoo Finance")
     price_history: list[PricePoint] = Field(default_factory=list, description="1-year weekly closing prices")
     book_value: float | None = Field(default=None, description="Book value per share from Yahoo Finance")
+    face_value: float | None = Field(default=None, description="Face value (par value) per share in PKR — usually Rs. 10, sometimes Rs. 5, 2, or 1")
     value_check: ValueCheck | None = Field(default=None, description="Intrinsic value (Graham Number) and margin of safety")
     investor_metrics: InvestorMetrics | None = Field(default=None, description="Dividend yield, payout ratio, ROE, price CAGR")
 

@@ -24,6 +24,7 @@ from analyzer import (
     calculate_price_cagr,
     calculate_roe,
     calculate_value_check,
+    face_value_for,
 )
 from comparator import compare_stocks
 from config import settings
@@ -285,6 +286,7 @@ async def analyze_company(request: Request, body: AnalyzeRequest):
         statements=yahoo.statements,
         price_history=price_history,
         book_value=yahoo.book_value,
+        face_value=face_value_for(symbol),
         value_check=value_check,
         investor_metrics=investor_metrics,
     )
@@ -383,6 +385,7 @@ async def compare_companies(request: Request, body: CompareRequest):
             is_shariah=symbol in shariah_set,
             price_history=price_history,
             book_value=yahoo.book_value,
+            face_value=face_value_for(symbol),
             investor_metrics=investor_metrics,
         )
 
