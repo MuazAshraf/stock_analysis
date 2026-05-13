@@ -52,21 +52,41 @@ function fmtDateLong(date: Date): string {
 export function DividendCheck({ payouts, dividendStatus }: DividendCheckProps) {
   const hasDividends = payouts.length > 0;
 
-  const { upcoming, past } = useMemo(() => {
+  const { upcoming, past, recentlyPaid } = useMemo(() => {
     const upcomingList: { payout: Payout; start: Date; end: Date }[] = [];
-    const pastList: Payout[] = [];
+    const pastList: { payout: Payout; start: Date; end: Date }[] = [];
+    const undatedPast: Payout[] = [];
 
     for (const p of payouts) {
       const range = parseBookClosure(p.book_closure);
-      if (range && daysUntil(range.end) >= 0) {
+      if (!range) {
+        undatedPast.push(p);
+        continue;
+      }
+      if (daysUntil(range.end) >= 0) {
         upcomingList.push({ payout: p, start: range.start, end: range.end });
       } else {
-        pastList.push(p);
+        pastList.push({ payout: p, start: range.start, end: range.end });
       }
     }
 
     upcomingList.sort((a, b) => a.end.getTime() - b.end.getTime());
-    return { upcoming: upcomingList, past: pastList };
+    pastList.sort((a, b) => b.end.getTime() - a.end.getTime()); // newest first
+
+    // "Recently paid" = the most recent past payout whose book closure ended
+    // within the last 45 days. Credit usually hits ~10-15 days after BC ends,
+    // so a 45-day window covers the typical "just paid" feeling.
+    const mostRecentPast = pastList[0];
+    const recentlyPaid =
+      mostRecentPast && Math.abs(daysUntil(mostRecentPast.end)) <= 45
+        ? mostRecentPast
+        : null;
+
+    return {
+      upcoming: upcomingList,
+      past: [...pastList.map((p) => p.payout), ...undatedPast],
+      recentlyPaid,
+    };
   }, [payouts]);
 
   return (
@@ -162,8 +182,36 @@ export function DividendCheck({ payouts, dividendStatus }: DividendCheckProps) {
           </div>
         )}
 
-        {/* No upcoming dividend hint — show only when there are past payouts but nothing upcoming */}
-        {upcoming.length === 0 && past.length > 0 && (
+        {/* Recently paid — book closure ended within the last 45 days. Shows a
+            positive "just paid out" badge so users don't see a cold
+            'no upcoming' message right after a successful payout. */}
+        {upcoming.length === 0 && recentlyPaid && (
+          <div className="rounded-xl border border-[#4BC232]/30 bg-[#4BC232]/5 p-4 space-y-2">
+            <div className="flex items-center gap-2">
+              <CircleCheck className="h-5 w-5 text-[#4BC232]" aria-hidden="true" />
+              <h4 className="text-sm font-bold text-[#404E3F]">Recently Paid Dividend</h4>
+              <Badge className="bg-[#4BC232] text-white text-[10px] uppercase tracking-wider">
+                Just Paid
+              </Badge>
+            </div>
+            <p className="text-sm font-semibold text-[#404E3F]">
+              {recentlyPaid.payout.details ?? "—"}
+            </p>
+            <p className="text-xs text-[#404E3F]/70 flex items-center gap-1.5">
+              <Calendar className="h-3.5 w-3.5" aria-hidden="true" />
+              Book closure: {fmtDateLong(recentlyPaid.start)} → {fmtDateLong(recentlyPaid.end)}
+              {" "}
+              ({Math.abs(daysUntil(recentlyPaid.end))} days ago)
+            </p>
+            <p className="text-[11px] text-[#404E3F]/60 leading-relaxed">
+              Cash dividend was paid out to shareholders who held the stock before book closure. The next dividend will appear here once the company&apos;s board declares it.
+            </p>
+          </div>
+        )}
+
+        {/* No-recent-payout fallback — only when there are past payouts but
+            the most recent one isn't recent enough to count as "just paid". */}
+        {upcoming.length === 0 && !recentlyPaid && past.length > 0 && (
           <div className="flex items-start gap-3 p-3 rounded-lg bg-[#F8F3EA] border border-[#E5E0D9]">
             <Calendar className="h-4 w-4 text-[#404E3F]/60 mt-0.5 flex-shrink-0" aria-hidden="true" />
             <p className="text-xs text-[#404E3F]/70 leading-relaxed">
