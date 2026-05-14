@@ -26,9 +26,16 @@ export default function PrivacyPage() {
           </Section>
 
           <Section title="Information We Collect">
-            <strong>We do not collect any personal information.</strong> There are no user accounts,
-            no login, no registration, and no forms that collect your personal data. We do not store
-            your name, email address, phone number, or any other personally identifiable information.
+            We do not have user accounts, login, or registration. If you use the feedback form on
+            our Contact page, we collect the information you choose to submit: your name, optional
+            email address, feedback category, and message. We use this information only to read,
+            respond to, and improve PSX Stock Analyzer.
+          </Section>
+
+          <Section title="Feedback Form">
+            Feedback submissions are sent to us by email. If you provide an email address, we may use
+            it to reply to your feedback or ask for clarification. Please do not include sensitive
+            financial, account, broker, CNIC, banking, or portfolio information in the feedback form.
           </Section>
 
           <Section title="Stock Data">
@@ -64,8 +71,8 @@ export default function PrivacyPage() {
           </Section>
 
           <Section title="Data Security">
-            Since we do not collect or store personal data, there is minimal risk to your privacy.
-            All connections to our website are encrypted via HTTPS.
+            We limit personal information collection to feedback form submissions and do not sell
+            your personal information. All connections to our website are encrypted via HTTPS.
           </Section>
 
           <Section title="Children&apos;s Privacy">
