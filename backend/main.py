@@ -39,6 +39,8 @@ from models import (
     HealthResponse,
     InvestorMetrics,
     StockListResponse,
+    UpcomingDividend,
+    UpcomingDividendsResponse,
 )
 from scraper import ScraperError, fetch_all_stocks, fetch_eod_history, scrape_company, scrape_stock_list
 from yfinance_scraper import fetch_all_yahoo_data
@@ -190,6 +192,20 @@ async def list_stocks(
     _stock_list_cache_time[index] = time.time()
 
     return response
+
+
+@app.get("/api/dividends/upcoming", response_model=UpcomingDividendsResponse)
+@limiter.limit("60/minute")
+async def upcoming_dividends(request: Request):
+    """Calendar of every upcoming dividend across PSX, sorted by book-closure
+    start date ascending. Backed by the same 30-min PSX-main cache the
+    per-symbol /api/analyze flow uses, so this endpoint is essentially free
+    after the first request of the day."""
+    from psx_main_scraper import fetch_upcoming_dividends
+
+    raw = await fetch_upcoming_dividends()
+    items = [UpcomingDividend(**row) for row in raw]
+    return UpcomingDividendsResponse(items=items)
 
 
 @app.get("/api/health", response_model=HealthResponse)

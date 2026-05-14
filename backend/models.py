@@ -190,6 +190,22 @@ class AnalyzeResponse(BaseModel):
     investor_metrics: InvestorMetrics | None = Field(default=None, description="Dividend yield, payout ratio, ROE, price CAGR")
 
 
+class UpcomingDividend(BaseModel):
+    """One row in the upcoming dividends calendar."""
+    symbol: str
+    company_name: str
+    sector: str = ""
+    details: str  # e.g. "100% of face value - Final Cash Dividend"
+    announced_date: str
+    book_closure: str  # raw "04/05/2026  - 11/05/2026"
+    book_closure_start: str  # ISO YYYY-MM-DD for sorting / filtering
+    book_closure_end: str
+
+
+class UpcomingDividendsResponse(BaseModel):
+    items: list[UpcomingDividend]
+
+
 class StockListItem(BaseModel):
     symbol: str
     name: str

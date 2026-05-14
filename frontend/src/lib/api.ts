@@ -1,4 +1,4 @@
-import type { StockData, CompareResponse, StockListItem, FeedbackResponse } from "@/types/stock";
+import type { StockData, CompareResponse, StockListItem, FeedbackResponse, UpcomingDividend } from "@/types/stock";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
@@ -75,4 +75,11 @@ export async function submitFeedback(
   }
 
   return response.json();
+}
+
+export async function getUpcomingDividends(): Promise<UpcomingDividend[]> {
+  const res = await fetch(`${API_URL}/api/dividends/upcoming`);
+  if (!res.ok) throw new Error("Failed to load upcoming dividends");
+  const data = await res.json();
+  return data.items;
 }

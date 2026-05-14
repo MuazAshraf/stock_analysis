@@ -142,6 +142,17 @@ export interface ValueCheck {
   book_value_used: number | null;
 }
 
+export interface UpcomingDividend {
+  symbol: string;
+  company_name: string;
+  sector: string;
+  details: string;
+  announced_date: string;
+  book_closure: string;
+  book_closure_start: string; // ISO YYYY-MM-DD
+  book_closure_end: string;
+}
+
 export interface InvestorMetrics {
   dividend_yield_pct: number | null;
   payout_ratio_pct: number | null;

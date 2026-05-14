@@ -14,7 +14,7 @@ import asyncio
 import logging
 import re
 import time
-from datetime import datetime
+from datetime import date, datetime
 
 import httpx
 from bs4 import BeautifulSoup
@@ -36,6 +36,10 @@ _announcements_cache_time: float = 0.0
 _announcements_lock = asyncio.Lock()
 
 _name_to_symbol: dict[str, str] = {}
+# Companion meta lookup (built at the same time as the name→symbol map) so the
+# /api/dividends/upcoming endpoint can return company name + sector without a
+# second HTTP round-trip for every symbol.
+_symbol_to_meta: dict[str, dict[str, str]] = {}
 _name_map_time: float = 0.0
 _name_map_lock = asyncio.Lock()
 
@@ -121,8 +125,11 @@ def _is_payout_row(dividend_cell: str, book_closure_cell: str) -> bool:
 
 
 async def _refresh_name_map() -> dict[str, str]:
-    """Build the company-name → symbol mapping from the PSX symbols feed."""
-    global _name_to_symbol, _name_map_time
+    """Build the company-name → symbol mapping from the PSX symbols feed.
+    Also populates `_symbol_to_meta` (symbol → {name, sector}) in the same
+    pass so the upcoming-dividends endpoint can hydrate per-row metadata
+    without a second network call."""
+    global _name_to_symbol, _symbol_to_meta, _name_map_time
 
     async with _name_map_lock:
         if _name_to_symbol and (time.time() - _name_map_time) < _NAME_MAP_TTL:
@@ -142,9 +149,11 @@ async def _refresh_name_map() -> dict[str, str]:
             return _name_to_symbol  # serve stale rather than nothing
 
         new_map: dict[str, str] = {}
+        new_meta: dict[str, dict[str, str]] = {}
         for item in data:
             symbol = (item.get("symbol") or "").strip().upper()
             name = (item.get("name") or "").strip()
+            sector = (item.get("sectorName") or "").strip()
             if not symbol or not name:
                 continue
             key = _normalize_name(name)
@@ -152,9 +161,11 @@ async def _refresh_name_map() -> dict[str, str]:
                 continue
             # First entry wins on collision (equities are listed before debt/ETF in PSX feed).
             new_map.setdefault(key, symbol)
+            new_meta.setdefault(symbol, {"name": name, "sector": sector})
 
         if new_map:
             _name_to_symbol = new_map
+            _symbol_to_meta = new_meta
             _name_map_time = time.time()
             logger.info("Built name→symbol map with %d entries", len(new_map))
         return _name_to_symbol
@@ -242,12 +253,9 @@ async def _fetch_and_parse() -> dict[str, list[PayoutRecord]]:
 # ── Public API ─────────────────────────────────────────────────────────────
 
 
-async def fetch_recent_payouts(symbol: str) -> list[PayoutRecord]:
-    """Return recent dividend records for the symbol from the PSX main page.
-
-    Cached in memory for 30 minutes. Returns an empty list on any failure
-    (the caller should fall back to the dps.psx.com.pk /payouts source).
-    """
+async def _ensure_cache_fresh() -> None:
+    """Refresh the PSX-main cache if older than `_CACHE_TTL`. No-op when
+    fresh — both fetch_recent_payouts and fetch_upcoming_dividends use this."""
     global _announcements_cache, _announcements_cache_time
 
     async with _announcements_lock:
@@ -258,4 +266,74 @@ async def fetch_recent_payouts(symbol: str) -> list[PayoutRecord]:
                 _announcements_cache = fresh
                 _announcements_cache_time = time.time()
 
+
+async def fetch_recent_payouts(symbol: str) -> list[PayoutRecord]:
+    """Return recent dividend records for the symbol from the PSX main page.
+
+    Cached in memory for 30 minutes. Returns an empty list on any failure
+    (the caller should fall back to the dps.psx.com.pk /payouts source).
+    """
+    await _ensure_cache_fresh()
     return list(_announcements_cache.get(symbol.upper(), []))
+
+
+# ── Upcoming dividends calendar ────────────────────────────────────────────
+
+
+_BC_PARSE_RE = re.compile(r"(\d{1,2})/(\d{1,2})/(\d{4})")
+
+
+def _parse_book_closure_dates(book_closure: str | None) -> tuple[date, date] | None:
+    """Parse a PSX book-closure string like '04/05/2026  - 11/05/2026' into
+    (start, end) date objects. Returns None when either side fails to parse."""
+    if not book_closure:
+        return None
+    matches = _BC_PARSE_RE.findall(book_closure)
+    if len(matches) < 2:
+        return None
+    try:
+        start = date(int(matches[0][2]), int(matches[0][1]), int(matches[0][0]))
+        end = date(int(matches[1][2]), int(matches[1][1]), int(matches[1][0]))
+    except ValueError:
+        return None
+    return start, end
+
+
+async def fetch_upcoming_dividends() -> list[dict]:
+    """Return every upcoming dividend across all PSX stocks, sorted by book
+    closure start date ascending. Uses the same 30-min cache as the per-symbol
+    payouts lookup, so calling this is essentially free after the first request.
+
+    Each dict has: symbol, company_name, sector, details, announced_date,
+    book_closure, book_closure_start, book_closure_end.
+    """
+    await _ensure_cache_fresh()
+    today = date.today()
+    rows: list[dict] = []
+
+    for symbol, payouts in _announcements_cache.items():
+        meta = _symbol_to_meta.get(symbol, {})
+        for p in payouts:
+            parsed = _parse_book_closure_dates(p.book_closure)
+            if not parsed:
+                continue
+            start, end = parsed
+            # Skip closures that have fully ended; "upcoming" means at least
+            # part of the closure window is still in the future.
+            if end < today:
+                continue
+            rows.append(
+                {
+                    "symbol": symbol,
+                    "company_name": meta.get("name") or symbol,
+                    "sector": meta.get("sector") or "",
+                    "details": p.details or "",
+                    "announced_date": p.date or "",
+                    "book_closure": p.book_closure or "",
+                    "book_closure_start": start.isoformat(),
+                    "book_closure_end": end.isoformat(),
+                }
+            )
+
+    rows.sort(key=lambda r: r["book_closure_start"])
+    return rows
