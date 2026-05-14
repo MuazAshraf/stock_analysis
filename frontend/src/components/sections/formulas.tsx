@@ -144,17 +144,17 @@ export function Formulas({ statements }: FormulasProps) {
       statements.cashflow_annual.length > 0);
 
   return (
-    <Card className="border-[#E5E0D9] bg-white shadow-sm">
+    <Card className="border-brand-border bg-brand-card shadow-sm">
       <CardHeader className="pb-3">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
-            <CardTitle className="text-xl font-bold text-[#404E3F] flex items-center gap-2">
+            <CardTitle className="text-xl font-bold text-brand-fg flex items-center gap-2">
               Learn the Basics
-              <Badge className="bg-[#F8F3EA] text-[#404E3F] text-xs font-normal">
+              <Badge className="bg-brand-bg text-brand-fg text-xs font-normal">
                 Education
               </Badge>
             </CardTitle>
-            <p className="text-sm text-[#404E3F]/60">
+            <p className="text-sm text-brand-fg/60">
               {lang === "en"
                 ? "New to investing? Learn what the numbers mean and how they are calculated."
                 : "Investing mein naye ho? Seekho ke numbers ka kya matlab hai aur kaise calculate hote hain."}
@@ -169,7 +169,7 @@ export function Formulas({ statements }: FormulasProps) {
                 "inline-flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-semibold transition-all cursor-pointer",
                 lang === "ur"
                   ? "bg-[#4BC232] text-white border-[#4BC232]"
-                  : "bg-white text-[#404E3F] border-[#E5E0D9] hover:border-[#4BC232]"
+                  : "bg-brand-card text-brand-fg border-brand-border hover:border-[#4BC232]"
               )}
             >
               <Languages className="h-4 w-4" />
@@ -180,7 +180,7 @@ export function Formulas({ statements }: FormulasProps) {
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Tab toggle */}
-        <div className="flex flex-wrap gap-1 rounded-lg border border-[#E5E0D9] bg-[#F8F3EA] p-1">
+        <div className="flex flex-wrap gap-1 rounded-lg border border-brand-border bg-brand-bg p-1">
           <TabButton active={activeTab === "glossary"} onClick={() => setActiveTab("glossary")} icon={<BookOpen className="h-4 w-4" />} label="Glossary" />
           <TabButton active={activeTab === "formulas"} onClick={() => setActiveTab("formulas")} icon={<Calculator className="h-4 w-4" />} label="Formulas" />
           <TabButton active={activeTab === "symbols"} onClick={() => setActiveTab("symbols")} icon={<Tag className="h-4 w-4" />} label="Market Symbols" />
@@ -194,9 +194,9 @@ export function Formulas({ statements }: FormulasProps) {
         {activeTab === "glossary" && (
           <div className="space-y-3">
             {GLOSSARY.map((g) => (
-              <div key={g.term} className="p-4 rounded-xl bg-[#F8F3EA]">
-                <h4 className="text-sm font-bold text-[#404E3F] mb-1">{g.term}</h4>
-                <p className="text-sm text-[#404E3F]/80 leading-relaxed">
+              <div key={g.term} className="p-4 rounded-xl bg-brand-bg">
+                <h4 className="text-sm font-bold text-brand-fg mb-1">{g.term}</h4>
+                <p className="text-sm text-brand-fg/80 leading-relaxed">
                   {lang === "en" ? g.en : g.ur}
                 </p>
               </div>
@@ -206,25 +206,25 @@ export function Formulas({ statements }: FormulasProps) {
 
         {/* Market Symbols tab */}
         {activeTab === "symbols" && (
-          <div className="overflow-x-auto rounded-lg border border-[#E5E0D9]">
+          <div className="overflow-x-auto rounded-lg border border-brand-border">
             <table className="w-full text-sm">
               <thead>
-                <tr className="bg-[#F3F1E5]">
-                  <th className="text-left p-3 font-semibold text-[#404E3F] w-24">Symbol</th>
-                  <th className="text-left p-3 font-semibold text-[#404E3F]">
+                <tr className="bg-brand-soft">
+                  <th className="text-left p-3 font-semibold text-brand-fg w-24">Symbol</th>
+                  <th className="text-left p-3 font-semibold text-brand-fg">
                     {lang === "en" ? "What It Means" : "Iska Matlab"}
                   </th>
                 </tr>
               </thead>
               <tbody>
                 {MARKET_SYMBOLS.map((s) => (
-                  <tr key={s.symbol} className="border-t border-[#E5E0D9] hover:bg-[#F8F3EA]/50">
+                  <tr key={s.symbol} className="border-t border-brand-border hover:bg-brand-bg/50">
                     <td className="p-3">
                       <span className="inline-flex items-center rounded bg-[#2B5288]/10 px-2 py-0.5 text-xs font-bold text-[#2B5288]">
                         {s.symbol}
                       </span>
                     </td>
-                    <td className="p-3 text-[#404E3F]/80">{lang === "en" ? s.en : s.ur}</td>
+                    <td className="p-3 text-brand-fg/80">{lang === "en" ? s.en : s.ur}</td>
                   </tr>
                 ))}
               </tbody>
@@ -238,15 +238,15 @@ export function Formulas({ statements }: FormulasProps) {
             {FORMULAS.map((f) => {
               const content = lang === "en" ? f.en : f.ur;
               return (
-                <div key={f.title} className="p-4 rounded-xl bg-[#F8F3EA] space-y-2">
-                  <h4 className="text-sm font-bold text-[#404E3F]">{f.title}</h4>
-                  <div className="px-3 py-2 rounded-lg bg-white border border-[#E5E0D9] font-mono text-sm text-[#2B5288]">
+                <div key={f.title} className="p-4 rounded-xl bg-brand-bg space-y-2">
+                  <h4 className="text-sm font-bold text-brand-fg">{f.title}</h4>
+                  <div className="px-3 py-2 rounded-lg bg-brand-card border border-brand-border font-mono text-sm text-[#2B5288]">
                     {f.formula}
                   </div>
-                  <p className="text-sm text-[#404E3F]/80 leading-relaxed">
+                  <p className="text-sm text-brand-fg/80 leading-relaxed">
                     {content.explanation}
                   </p>
-                  <div className="flex items-start gap-2 text-xs text-[#404E3F]/60">
+                  <div className="flex items-start gap-2 text-xs text-brand-fg/60">
                     <span className="font-semibold text-[#4BC232]">
                       {lang === "en" ? "Example:" : "Misaal:"}
                     </span>
@@ -264,22 +264,22 @@ export function Formulas({ statements }: FormulasProps) {
             {/* Steps */}
             <div className="space-y-3">
               {ACCOUNT_STEPS.map((s) => (
-                <div key={s.step} className="p-4 rounded-xl bg-[#F8F3EA] space-y-2">
+                <div key={s.step} className="p-4 rounded-xl bg-brand-bg space-y-2">
                   <div className="flex items-start gap-3">
                     <span className="flex-shrink-0 flex items-center justify-center h-7 w-7 rounded-full bg-[#4BC232] text-white text-xs font-bold">
                       {s.step}
                     </span>
                     <div className="space-y-1.5 min-w-0">
-                      <h4 className="text-sm font-bold text-[#404E3F]">{s.title}</h4>
-                      <p className="text-sm text-[#404E3F]/80 leading-relaxed">
+                      <h4 className="text-sm font-bold text-brand-fg">{s.title}</h4>
+                      <p className="text-sm text-brand-fg/80 leading-relaxed">
                         {lang === "en" ? s.en : s.ur}
                       </p>
                       {s.tip && (
-                        <div className="flex items-start gap-2 mt-2 p-2.5 rounded-lg bg-white border border-[#E5E0D9]">
+                        <div className="flex items-start gap-2 mt-2 p-2.5 rounded-lg bg-brand-card border border-brand-border">
                           <span className="text-xs font-semibold text-[#4BC232] flex-shrink-0">
                             {lang === "en" ? "Tip:" : "Mashwara:"}
                           </span>
-                          <span className="text-xs text-[#404E3F]/70 leading-relaxed">
+                          <span className="text-xs text-brand-fg/70 leading-relaxed">
                             {lang === "en" ? s.tip.en : s.tip.ur}
                           </span>
                         </div>
@@ -291,21 +291,21 @@ export function Formulas({ statements }: FormulasProps) {
             </div>
 
             {/* Key entities */}
-            <div className="rounded-xl border border-[#E5E0D9] overflow-hidden">
+            <div className="rounded-xl border border-brand-border overflow-hidden">
               <div className="px-5 py-3 bg-[#2B5288] text-white font-semibold text-sm">
                 {lang === "en" ? "Who Does What?" : "Kaun Kya Karta Hai?"}
               </div>
-              <div className="divide-y divide-[#E5E0D9]">
+              <div className="divide-y divide-brand-border">
                 {KEY_ENTITIES.map((e) => (
                   <div key={e.name} className="px-5 py-3 flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-4">
-                    <span className="text-sm font-semibold text-[#404E3F] sm:min-w-[220px] flex-shrink-0">{e.name}</span>
-                    <span className="text-sm text-[#404E3F]/70 leading-relaxed">{lang === "en" ? e.role.en : e.role.ur}</span>
+                    <span className="text-sm font-semibold text-brand-fg sm:min-w-[220px] flex-shrink-0">{e.name}</span>
+                    <span className="text-sm text-brand-fg/70 leading-relaxed">{lang === "en" ? e.role.en : e.role.ur}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            <p className="text-xs text-[#404E3F]/40 text-center">
+            <p className="text-xs text-brand-fg/40 text-center">
               {lang === "en"
                 ? "This is a general guide for educational purposes. The exact process may vary by broker. Always verify with your broker and official sources (PSX, CDC, NCCPL, SECP)."
                 : "Ye ek general guide hai sirf seekhne ke liye. Asal process broker ke hisaab se thora different ho sakta hai. Hamesha apne broker aur official sources (PSX, CDC, NCCPL, SECP) se verify karo."}
@@ -331,7 +331,7 @@ function TabButton({ active, onClick, icon, label }: { active: boolean; onClick:
       onClick={onClick}
       className={cn(
         "flex items-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition-all cursor-pointer",
-        active ? "bg-white text-[#404E3F] shadow-sm" : "text-[#404E3F]/50 hover:text-[#404E3F]"
+        active ? "bg-brand-card text-brand-fg shadow-sm" : "text-brand-fg/50 hover:text-brand-fg"
       )}
     >
       {icon}
@@ -348,10 +348,10 @@ function StatementsTab({ statements, freq, onFreqChange }: { statements: Financi
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <p className="text-sm text-[#404E3F]/60">Key highlights from this company&apos;s financial filings.</p>
-        <div className="inline-flex rounded-lg border border-[#E5E0D9] bg-white p-1 gap-1">
-          <button type="button" onClick={() => onFreqChange("annual")} className={cn("px-4 py-1.5 rounded-md text-xs font-semibold transition-all cursor-pointer", freq === "annual" ? "bg-[#4BC232] text-white shadow-sm" : "text-[#404E3F]/50 hover:text-[#404E3F]")}>Annual</button>
-          <button type="button" onClick={() => onFreqChange("quarterly")} className={cn("px-4 py-1.5 rounded-md text-xs font-semibold transition-all cursor-pointer", freq === "quarterly" ? "bg-[#4BC232] text-white shadow-sm" : "text-[#404E3F]/50 hover:text-[#404E3F]")}>Quarterly</button>
+        <p className="text-sm text-brand-fg/60">Key highlights from this company&apos;s financial filings.</p>
+        <div className="inline-flex rounded-lg border border-brand-border bg-brand-card p-1 gap-1">
+          <button type="button" onClick={() => onFreqChange("annual")} className={cn("px-4 py-1.5 rounded-md text-xs font-semibold transition-all cursor-pointer", freq === "annual" ? "bg-[#4BC232] text-white shadow-sm" : "text-brand-fg/50 hover:text-brand-fg")}>Annual</button>
+          <button type="button" onClick={() => onFreqChange("quarterly")} className={cn("px-4 py-1.5 rounded-md text-xs font-semibold transition-all cursor-pointer", freq === "quarterly" ? "bg-[#4BC232] text-white shadow-sm" : "text-brand-fg/50 hover:text-brand-fg")}>Quarterly</button>
         </div>
       </div>
 
@@ -405,7 +405,7 @@ function StatementsTab({ statements, freq, onFreqChange }: { statements: Financi
         </StatementBlock>
       )}
 
-      <p className="text-xs text-[#404E3F]/40 text-center">
+      <p className="text-xs text-brand-fg/40 text-center">
         Data sourced from Yahoo Finance. All amounts in PKR. Numbers may differ slightly from PSX filings due to rounding or data timing.
       </p>
     </div>
@@ -414,7 +414,7 @@ function StatementsTab({ statements, freq, onFreqChange }: { statements: Financi
 
 function StatementBlock({ title, color, children }: { title: string; color: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-xl border border-[#E5E0D9] overflow-hidden">
+    <div className="rounded-xl border border-brand-border overflow-hidden">
       <div className="px-5 py-3 text-white font-semibold" style={{ backgroundColor: color }}>{title}</div>
       {children}
     </div>
@@ -429,18 +429,18 @@ function FullWidthTable({ headers, rows }: { headers: string[]; rows: TableRow[]
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
         <thead>
-          <tr className="bg-[#F8F3EA]">
+          <tr className="bg-brand-bg">
             {headers.map((h, i) => (
-              <th key={i} className={cn("p-4 font-semibold text-[#404E3F] whitespace-nowrap", i === 0 ? "text-left min-w-[180px]" : "text-right min-w-[120px]")}>{h}</th>
+              <th key={i} className={cn("p-4 font-semibold text-brand-fg whitespace-nowrap", i === 0 ? "text-left min-w-[180px]" : "text-right min-w-[120px]")}>{h}</th>
             ))}
           </tr>
         </thead>
         <tbody>
           {visibleRows.map((row) => (
-            <tr key={row.label} className={cn("border-t border-[#E5E0D9]", row.highlight ? "bg-[#F8F3EA]/60" : "hover:bg-[#F8F3EA]/30")}>
-              <td className={cn("p-4 text-[#404E3F] whitespace-nowrap", row.highlight && "font-semibold")}>{row.label}</td>
+            <tr key={row.label} className={cn("border-t border-brand-border", row.highlight ? "bg-brand-bg/60" : "hover:bg-brand-bg/30")}>
+              <td className={cn("p-4 text-brand-fg whitespace-nowrap", row.highlight && "font-semibold")}>{row.label}</td>
               {row.values.map((val, i) => (
-                <td key={i} className={cn("p-4 text-right whitespace-nowrap", row.highlight && "font-semibold", val.startsWith("-") ? "text-red-500" : "text-[#404E3F]")}>{val}</td>
+                <td key={i} className={cn("p-4 text-right whitespace-nowrap", row.highlight && "font-semibold", val.startsWith("-") ? "text-red-500" : "text-brand-fg")}>{val}</td>
               ))}
             </tr>
           ))}

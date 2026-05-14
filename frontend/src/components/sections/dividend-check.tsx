@@ -90,21 +90,21 @@ export function DividendCheck({ payouts, dividendStatus }: DividendCheckProps) {
   }, [payouts]);
 
   return (
-    <Card className="border-[#E5E0D9] bg-white shadow-sm">
+    <Card className="border-brand-border bg-brand-card shadow-sm">
       <CardHeader className="pb-3">
-        <CardTitle className="text-xl font-bold text-[#404E3F] flex items-center gap-2">
+        <CardTitle className="text-xl font-bold text-brand-fg flex items-center gap-2">
           Dividend Check
-          <Badge className="bg-[#F8F3EA] text-[#404E3F] text-xs font-normal">
+          <Badge className="bg-brand-bg text-brand-fg text-xs font-normal">
             Payouts
           </Badge>
         </CardTitle>
-        <p className="text-sm text-[#404E3F]/60">
+        <p className="text-sm text-brand-fg/60">
           Does this company share its profits with shareholders?
         </p>
       </CardHeader>
       <CardContent className="space-y-5">
         {/* Big YES/NO */}
-        <div className="flex items-center justify-center p-6 rounded-xl bg-[#F8F3EA]">
+        <div className="flex items-center justify-center p-6 rounded-xl bg-brand-bg">
           <div className="text-center">
             <MetricExplainer
               label="Pays Dividends?"
@@ -126,7 +126,7 @@ export function DividendCheck({ payouts, dividendStatus }: DividendCheckProps) {
               )}
             </div>
             {dividendStatus && (
-              <p className="text-sm text-[#404E3F]/70 mt-2">
+              <p className="text-sm text-brand-fg/70 mt-2">
                 {dividendStatus}
               </p>
             )}
@@ -138,7 +138,7 @@ export function DividendCheck({ payouts, dividendStatus }: DividendCheckProps) {
           <div className="rounded-xl border border-[#4BC232]/30 bg-[#4BC232]/5 p-4 space-y-3">
             <div className="flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-[#4BC232]" aria-hidden="true" />
-              <h4 className="text-sm font-bold text-[#404E3F]">
+              <h4 className="text-sm font-bold text-brand-fg">
                 {upcoming.length === 1 ? "Upcoming Dividend" : `${upcoming.length} Upcoming Dividends`}
               </h4>
               <Badge className="bg-[#4BC232] text-white text-[10px] uppercase tracking-wider">
@@ -151,19 +151,19 @@ export function DividendCheck({ payouts, dividendStatus }: DividendCheckProps) {
                 return (
                   <div
                     key={idx}
-                    className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 p-3 rounded-lg bg-white border border-[#E5E0D9]"
+                    className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 p-3 rounded-lg bg-brand-card border border-brand-border"
                   >
                     <div>
-                      <p className="text-sm font-semibold text-[#404E3F]">
+                      <p className="text-sm font-semibold text-brand-fg">
                         {payout.details ?? "—"}
                       </p>
-                      <p className="text-xs text-[#404E3F]/60 mt-1 flex items-center gap-1.5">
+                      <p className="text-xs text-brand-fg/60 mt-1 flex items-center gap-1.5">
                         <Calendar className="h-3.5 w-3.5" aria-hidden="true" />
                         Book Closure: {fmtDateLong(start)} → {fmtDateLong(end)}
                       </p>
                     </div>
                     <div className="text-left sm:text-right">
-                      <p className="text-xs text-[#404E3F]/50">Closes in</p>
+                      <p className="text-xs text-brand-fg/50">Closes in</p>
                       <p className="text-sm font-bold text-[#4BC232]">
                         {daysLeft === 0
                           ? "Today"
@@ -176,7 +176,7 @@ export function DividendCheck({ payouts, dividendStatus }: DividendCheckProps) {
                 );
               })}
             </div>
-            <p className="text-[11px] text-[#404E3F]/60 leading-relaxed">
+            <p className="text-[11px] text-brand-fg/60 leading-relaxed">
               To receive an upcoming dividend, you must own the stock <strong>before the book closure start date</strong>. Buying after the closure begins means you will not be eligible for that dividend.
             </p>
           </div>
@@ -189,21 +189,21 @@ export function DividendCheck({ payouts, dividendStatus }: DividendCheckProps) {
           <div className="rounded-xl border border-[#4BC232]/30 bg-[#4BC232]/5 p-4 space-y-2">
             <div className="flex items-center gap-2">
               <CircleCheck className="h-5 w-5 text-[#4BC232]" aria-hidden="true" />
-              <h4 className="text-sm font-bold text-[#404E3F]">Recently Paid Dividend</h4>
+              <h4 className="text-sm font-bold text-brand-fg">Recently Paid Dividend</h4>
               <Badge className="bg-[#4BC232] text-white text-[10px] uppercase tracking-wider">
                 Just Paid
               </Badge>
             </div>
-            <p className="text-sm font-semibold text-[#404E3F]">
+            <p className="text-sm font-semibold text-brand-fg">
               {recentlyPaid.payout.details ?? "—"}
             </p>
-            <p className="text-xs text-[#404E3F]/70 flex items-center gap-1.5">
+            <p className="text-xs text-brand-fg/70 flex items-center gap-1.5">
               <Calendar className="h-3.5 w-3.5" aria-hidden="true" />
               Book closure: {fmtDateLong(recentlyPaid.start)} → {fmtDateLong(recentlyPaid.end)}
               {" "}
               ({Math.abs(daysUntil(recentlyPaid.end))} days ago)
             </p>
-            <p className="text-[11px] text-[#404E3F]/60 leading-relaxed">
+            <p className="text-[11px] text-brand-fg/60 leading-relaxed">
               Cash dividend was paid out to shareholders who held the stock before book closure. The next dividend will appear here once the company&apos;s board declares it.
             </p>
           </div>
@@ -212,9 +212,9 @@ export function DividendCheck({ payouts, dividendStatus }: DividendCheckProps) {
         {/* No-recent-payout fallback — only when there are past payouts but
             the most recent one isn't recent enough to count as "just paid". */}
         {upcoming.length === 0 && !recentlyPaid && past.length > 0 && (
-          <div className="flex items-start gap-3 p-3 rounded-lg bg-[#F8F3EA] border border-[#E5E0D9]">
-            <Calendar className="h-4 w-4 text-[#404E3F]/60 mt-0.5 flex-shrink-0" aria-hidden="true" />
-            <p className="text-xs text-[#404E3F]/70 leading-relaxed">
+          <div className="flex items-start gap-3 p-3 rounded-lg bg-brand-bg border border-brand-border">
+            <Calendar className="h-4 w-4 text-brand-fg/60 mt-0.5 flex-shrink-0" aria-hidden="true" />
+            <p className="text-xs text-brand-fg/70 leading-relaxed">
               <strong>No upcoming dividend announced yet.</strong> The next dividend will appear here automatically once the company&apos;s board declares it — usually a few weeks before the book closure date.
             </p>
           </div>
@@ -223,20 +223,20 @@ export function DividendCheck({ payouts, dividendStatus }: DividendCheckProps) {
         {/* Past dividend history table */}
         {past.length > 0 && (
           <div>
-            <h4 className="text-sm font-semibold text-[#404E3F] mb-3">
+            <h4 className="text-sm font-semibold text-brand-fg mb-3">
               Dividend History
             </h4>
-            <div className="overflow-x-auto rounded-lg border border-[#E5E0D9]">
+            <div className="overflow-x-auto rounded-lg border border-brand-border">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="bg-[#F3F1E5]">
-                    <th className="text-left p-3 font-semibold text-[#404E3F]">
+                  <tr className="bg-brand-soft">
+                    <th className="text-left p-3 font-semibold text-brand-fg">
                       Announcement Date
                     </th>
-                    <th className="text-left p-3 font-semibold text-[#404E3F]">
+                    <th className="text-left p-3 font-semibold text-brand-fg">
                       Dividend
                     </th>
-                    <th className="text-left p-3 font-semibold text-[#404E3F]">
+                    <th className="text-left p-3 font-semibold text-brand-fg">
                       Book Closure
                     </th>
                   </tr>
@@ -245,15 +245,15 @@ export function DividendCheck({ payouts, dividendStatus }: DividendCheckProps) {
                   {past.map((payout, idx) => (
                     <tr
                       key={idx}
-                      className="border-t border-[#E5E0D9] hover:bg-[#F8F3EA]/50"
+                      className="border-t border-brand-border hover:bg-brand-bg/50"
                     >
-                      <td className="p-3 text-[#404E3F]">
+                      <td className="p-3 text-brand-fg">
                         {payout.date ?? "—"}
                       </td>
-                      <td className="p-3 font-medium text-[#404E3F]">
+                      <td className="p-3 font-medium text-brand-fg">
                         {payout.details ?? "—"}
                       </td>
-                      <td className="p-3 text-[#404E3F]/70">
+                      <td className="p-3 text-brand-fg/70">
                         {payout.book_closure ?? "—"}
                       </td>
                     </tr>
@@ -261,10 +261,10 @@ export function DividendCheck({ payouts, dividendStatus }: DividendCheckProps) {
                 </tbody>
               </table>
             </div>
-            <p className="text-xs text-[#404E3F]/50 mt-2 text-center">
+            <p className="text-xs text-brand-fg/50 mt-2 text-center">
               Showing {past.length} past payout{past.length === 1 ? "" : "s"} from PSX Data Portal
             </p>
-            <p className="text-xs text-[#404E3F]/40 mt-1 text-center">
+            <p className="text-xs text-brand-fg/40 mt-1 text-center">
               Tip: &quot;% of face value&quot; means percentage of the share&apos;s
               par value (usually Rs. 10, but can be Rs. 5 or Rs. 1 depending
               on the company). Check the company profile for exact face value.
@@ -273,11 +273,11 @@ export function DividendCheck({ payouts, dividendStatus }: DividendCheckProps) {
         )}
 
         {!hasDividends && (
-          <div className="text-center p-4 rounded-lg bg-[#F3F1E5] space-y-2">
-            <p className="text-sm text-[#404E3F]/70">
+          <div className="text-center p-4 rounded-lg bg-brand-soft space-y-2">
+            <p className="text-sm text-brand-fg/70">
               No dividend records found on the PSX Data Portal for this stock.
             </p>
-            <p className="text-xs text-[#404E3F]/50">
+            <p className="text-xs text-brand-fg/50">
               Note: Some companies DO pay dividends but the PSX portal may not
               list them here. Check the company&apos;s annual report or investor
               relations page to confirm dividend history.

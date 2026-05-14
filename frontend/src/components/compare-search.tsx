@@ -64,7 +64,7 @@ export function CompareSearch({ onCompare, isLoading }: CompareSearchProps) {
           />
         </div>
         <div className="flex items-center justify-center sm:px-1">
-          <ArrowLeftRight className="h-5 w-5 text-[#404E3F]/40" />
+          <ArrowLeftRight className="h-5 w-5 text-brand-fg/40" />
         </div>
         <div className="flex-1">
           <StockCombobox

@@ -159,7 +159,7 @@ const faqPageSchema = {
 
 export default function FAQPage() {
   return (
-    <div className="min-h-screen bg-[#F8F3EA]">
+    <div className="min-h-screen bg-brand-bg">
       {/* JSON-LD for FAQ page — placed in body (valid per schema.org spec) */}
       <script
         type="application/ld+json"
@@ -169,25 +169,25 @@ export default function FAQPage() {
       />
 
       <main className="max-w-3xl mx-auto px-4 py-10">
-        <div className="bg-white rounded-xl border border-[#E5E0D9] p-8 space-y-8">
+        <div className="bg-brand-card rounded-xl border border-brand-border p-8 space-y-8">
           <div>
-            <h1 className="text-2xl font-bold text-[#404E3F]">Frequently Asked Questions</h1>
-            <p className="text-sm text-[#404E3F]/60 mt-2 leading-relaxed">
+            <h1 className="text-2xl font-bold text-brand-fg">Frequently Asked Questions</h1>
+            <p className="text-sm text-brand-fg/60 mt-2 leading-relaxed">
               PSX Stock Analyzer is a free stock analysis tool for the Pakistan Stock Exchange (PSX) that explains stocks in plain English for beginner Pakistani investors. Find answers to common questions below.
             </p>
           </div>
 
           <div className="space-y-6">
             {FAQS.map((faq, i) => (
-              <section key={i} className="border-b border-[#E5E0D9] pb-5 last:border-0 last:pb-0">
-                <h2 className="text-sm font-semibold text-[#404E3F] mb-2">{faq.q}</h2>
-                <p className="text-sm text-[#404E3F]/70 leading-relaxed">{faq.a}</p>
+              <section key={i} className="border-b border-brand-border pb-5 last:border-0 last:pb-0">
+                <h2 className="text-sm font-semibold text-brand-fg mb-2">{faq.q}</h2>
+                <p className="text-sm text-brand-fg/70 leading-relaxed">{faq.a}</p>
               </section>
             ))}
           </div>
 
           <div className="p-4 rounded-xl bg-[#4BC232]/10 border border-[#4BC232]/20">
-            <p className="text-sm text-[#404E3F] text-center leading-relaxed">
+            <p className="text-sm text-brand-fg text-center leading-relaxed">
               Still have questions?{" "}
               <Link href="/contact" className="text-[#2B5288] underline font-medium">Contact us</Link>
               {" "}or start analyzing stocks on the{" "}

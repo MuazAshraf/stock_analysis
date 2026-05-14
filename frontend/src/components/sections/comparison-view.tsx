@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { formatPercent } from "@/lib/format";
 import { formatCompact } from "@/lib/format";
+import { useChartColors } from "@/components/theme-toggle";
 import type {
   CompareResponse,
   ComparisonMetric,
@@ -397,7 +398,7 @@ export function ComparisonView({ data }: ComparisonViewProps) {
   return (
     <div className="space-y-6">
       {/* 1 — Header: Two companies */}
-      <Card className="border-[#E5E0D9] bg-white shadow-sm">
+      <Card className="border-brand-border bg-brand-card shadow-sm">
         <CardContent className="py-6">
           <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto_1fr] gap-4 items-center">
             <StockHeaderSide
@@ -408,7 +409,7 @@ export function ComparisonView({ data }: ComparisonViewProps) {
               changePct={changePctA}
             />
             <div className="flex items-center justify-center">
-              <div className="w-12 h-12 rounded-full bg-[#404E3F] text-white flex items-center justify-center font-bold text-sm">
+              <div className="w-12 h-12 rounded-full bg-brand-fg text-white flex items-center justify-center font-bold text-sm">
                 VS
               </div>
             </div>
@@ -570,25 +571,25 @@ function InvestorMetricsCompare({
       className={`p-4 rounded-lg border min-w-0 ${
         isWinner
           ? "bg-[#4BC232]/10 border-[#4BC232]/40"
-          : "bg-white border-[#E5E0D9]"
+          : "bg-brand-card border-brand-border"
       }`}
     >
-      <p className="text-xs font-semibold text-[#404E3F]/60 uppercase tracking-wide truncate">
+      <p className="text-xs font-semibold text-brand-fg/60 uppercase tracking-wide truncate">
         {label}
       </p>
-      <p className="text-xl sm:text-2xl font-bold text-[#404E3F] mt-1 tabular-nums">
+      <p className="text-xl sm:text-2xl font-bold text-brand-fg mt-1 tabular-nums">
         {fmt(value)}
       </p>
     </div>
   );
 
   return (
-    <div className="rounded-2xl border border-[#E5E0D9] bg-white p-5 shadow-sm space-y-4">
+    <div className="rounded-2xl border border-brand-border bg-brand-card p-5 shadow-sm space-y-4">
       <div>
-        <h3 className="text-lg font-bold text-[#404E3F]">
+        <h3 className="text-lg font-bold text-brand-fg">
           Investor Parameters
         </h3>
-        <p className="text-sm text-[#404E3F]/60">
+        <p className="text-sm text-brand-fg/60">
           Capital efficiency and dividend policy at a glance. Better value highlighted in green where applicable.
         </p>
       </div>
@@ -596,9 +597,9 @@ function InvestorMetricsCompare({
       {/* Two stock columns, each with a 2x2 grid of the 4 metrics inside. */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Stock A column */}
-        <div className="p-4 rounded-xl bg-[#F8F3EA] border border-[#E5E0D9]">
+        <div className="p-4 rounded-xl bg-brand-bg border border-brand-border">
           <div className="mb-3">
-            <p className="text-xs text-[#404E3F]/60">Stock</p>
+            <p className="text-xs text-brand-fg/60">Stock</p>
             <p className="text-xl font-bold text-[#2B5288]">{symA}</p>
           </div>
           <div className="grid grid-cols-2 gap-3">
@@ -613,9 +614,9 @@ function InvestorMetricsCompare({
         </div>
 
         {/* Stock B column */}
-        <div className="p-4 rounded-xl bg-[#F8F3EA] border border-[#E5E0D9]">
+        <div className="p-4 rounded-xl bg-brand-bg border border-brand-border">
           <div className="mb-3">
-            <p className="text-xs text-[#404E3F]/60">Stock</p>
+            <p className="text-xs text-brand-fg/60">Stock</p>
             <p className="text-xl font-bold text-[#2B5288]">{symB}</p>
           </div>
           <div className="grid grid-cols-2 gap-3">
@@ -653,8 +654,8 @@ function StockHeaderSide({
       <div className="flex items-center justify-center gap-2 mb-1">
         <Badge className="bg-[#2B5288] text-white text-xs">{symbol}</Badge>
       </div>
-      <h3 className="text-lg font-bold text-[#404E3F]">{name}</h3>
-      <p className="text-2xl font-bold text-[#404E3F] mt-1">
+      <h3 className="text-lg font-bold text-brand-fg">{name}</h3>
+      <p className="text-2xl font-bold text-brand-fg mt-1">
         Rs. {price.toFixed(2)}
       </p>
       <div
@@ -737,7 +738,7 @@ function QuickVerdict({
 
         {/* Backend verdict */}
         {verdict && (
-          <p className="text-sm text-[#404E3F]/80 leading-relaxed text-center max-w-2xl mx-auto mb-4">
+          <p className="text-sm text-brand-fg/80 leading-relaxed text-center max-w-2xl mx-auto mb-4">
             {verdict}
           </p>
         )}
@@ -745,21 +746,21 @@ function QuickVerdict({
         {/* What each stock won */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-2xl mx-auto">
           {wonByA.length > 0 && (
-            <div className="bg-white/60 rounded-lg p-3 border border-[#E5E0D9]">
-              <p className="text-xs font-semibold text-[#404E3F]/60 mb-1">
+            <div className="bg-brand-card/60 rounded-lg p-3 border border-brand-border">
+              <p className="text-xs font-semibold text-brand-fg/60 mb-1">
                 {symA} won:
               </p>
-              <p className="text-sm text-[#404E3F] font-medium">
+              <p className="text-sm text-brand-fg font-medium">
                 {wonByA.join(", ")}
               </p>
             </div>
           )}
           {wonByB.length > 0 && (
-            <div className="bg-white/60 rounded-lg p-3 border border-[#E5E0D9]">
-              <p className="text-xs font-semibold text-[#404E3F]/60 mb-1">
+            <div className="bg-brand-card/60 rounded-lg p-3 border border-brand-border">
+              <p className="text-xs font-semibold text-brand-fg/60 mb-1">
                 {symB} won:
               </p>
-              <p className="text-sm text-[#404E3F] font-medium">
+              <p className="text-sm text-brand-fg font-medium">
                 {wonByB.join(", ")}
               </p>
             </div>
@@ -801,11 +802,11 @@ function VisualScoreboard({
   const pctB = (scoreB / total) * 100;
 
   return (
-    <Card className="border-[#E5E0D9] bg-white shadow-sm overflow-hidden">
+    <Card className="border-brand-border bg-brand-card shadow-sm overflow-hidden">
       <CardContent className="py-6">
         <div className="flex items-center justify-center gap-2 mb-5">
-          <Trophy className="h-5 w-5 text-[#404E3F]" />
-          <h3 className="text-lg font-bold text-[#404E3F]">Scoreboard</h3>
+          <Trophy className="h-5 w-5 text-brand-fg" />
+          <h3 className="text-lg font-bold text-brand-fg">Scoreboard</h3>
         </div>
 
         {/* Score boxes */}
@@ -815,7 +816,7 @@ function VisualScoreboard({
             score={scoreA}
             isWinner={isWinnerA}
           />
-          <div className="text-2xl font-bold text-[#404E3F]/30">-</div>
+          <div className="text-2xl font-bold text-brand-fg/30">-</div>
           <ScoreBox
             symbol={symB}
             score={scoreB}
@@ -825,7 +826,7 @@ function VisualScoreboard({
 
         {/* Tug of war bar */}
         <div className="mt-5 max-w-md mx-auto">
-          <div className="flex h-3 rounded-full overflow-hidden border border-[#E5E0D9]">
+          <div className="flex h-3 rounded-full overflow-hidden border border-brand-border">
             {pctA > 0 && (
               <div
                 className="bg-[#4BC232] transition-all duration-500"
@@ -845,7 +846,7 @@ function VisualScoreboard({
               />
             )}
           </div>
-          <div className="flex justify-between text-xs text-[#404E3F]/50 mt-1.5">
+          <div className="flex justify-between text-xs text-brand-fg/50 mt-1.5">
             <span className="font-medium text-[#4BC232]">{symA}</span>
             {ties > 0 && (
               <span className="font-medium text-amber-500">
@@ -890,18 +891,18 @@ function ScoreBox({
       className={`text-center p-4 rounded-xl ${
         isWinner
           ? "bg-[#4BC232]/10 border-2 border-[#4BC232]"
-          : "bg-[#F3F1E5]"
+          : "bg-brand-soft"
       }`}
     >
-      <p className="text-xs font-medium text-[#404E3F]/60 mb-1">{symbol}</p>
+      <p className="text-xs font-medium text-brand-fg/60 mb-1">{symbol}</p>
       <p
         className={`text-4xl font-bold ${
-          isWinner ? "text-[#4BC232]" : "text-[#404E3F]"
+          isWinner ? "text-[#4BC232]" : "text-brand-fg"
         }`}
       >
         {score}
       </p>
-      <p className="text-[10px] text-[#404E3F]/40 mt-0.5">Rounds Won</p>
+      <p className="text-[10px] text-brand-fg/40 mt-0.5">Rounds Won</p>
       {isWinner && (
         <Badge className="mt-2 bg-[#4BC232] text-white text-xs">Winner</Badge>
       )}
@@ -928,7 +929,7 @@ function RoundsWonList({
         {rounds.map((r) => (
           <li
             key={r}
-            className="text-xs text-[#404E3F]/70 flex items-center gap-1 justify-center sm:justify-start"
+            className="text-xs text-brand-fg/70 flex items-center gap-1 justify-center sm:justify-start"
           >
             <CheckCircle2 className={`h-3 w-3 ${color} shrink-0`} />
             {r}
@@ -956,12 +957,12 @@ function CategorySection({
   return (
     <div>
       <div className="flex items-center gap-2.5 mb-3">
-        <div className="w-9 h-9 rounded-lg bg-[#404E3F] text-white flex items-center justify-center">
+        <div className="w-9 h-9 rounded-lg bg-brand-fg text-white flex items-center justify-center">
           <Icon className="h-5 w-5" />
         </div>
         <div>
-          <h3 className="text-base font-bold text-[#404E3F]">{group.title}</h3>
-          <p className="text-xs text-[#404E3F]/50">{group.subtitle}</p>
+          <h3 className="text-base font-bold text-brand-fg">{group.title}</h3>
+          <p className="text-xs text-brand-fg/50">{group.subtitle}</p>
         </div>
       </div>
       <div className="space-y-4">
@@ -1005,7 +1006,7 @@ function EnhancedMetricCard({
   const colorsB = qualityColors[ratingB.color];
 
   return (
-    <Card className="border-[#E5E0D9] bg-white shadow-sm">
+    <Card className="border-brand-border bg-brand-card shadow-sm">
       <CardContent className="py-5 px-5">
         {/* Title row */}
         <div className="flex items-start gap-2 mb-1">
@@ -1019,7 +1020,7 @@ function EnhancedMetricCard({
         </div>
 
         {/* Beginner explanation */}
-        <p className="text-xs text-[#404E3F]/60 mb-4 ml-7">
+        <p className="text-xs text-brand-fg/60 mb-4 ml-7">
           {config.beginnerExplanation}
         </p>
 
@@ -1033,7 +1034,7 @@ function EnhancedMetricCard({
             colors={colorsA}
           />
           <div className="flex items-center">
-            <span className="text-xs font-semibold text-[#404E3F]/30">vs</span>
+            <span className="text-xs font-semibold text-brand-fg/30">vs</span>
           </div>
           <ValueBox
             symbol={symB}
@@ -1045,22 +1046,22 @@ function EnhancedMetricCard({
         </div>
 
         {/* Reference range */}
-        <div className="mt-3 px-3 py-2 rounded-md bg-[#F8F3EA]/60 border border-[#E5E0D9]/50">
-          <p className="text-[11px] text-[#404E3F]/50 text-center">
+        <div className="mt-3 px-3 py-2 rounded-md bg-brand-bg/60 border border-brand-border/50">
+          <p className="text-[11px] text-brand-fg/50 text-center">
             {config.referenceRange}
           </p>
         </div>
 
         {/* What this means */}
         {metric.explanation && (
-          <div className="mt-3 p-3 rounded-lg bg-[#F8F3EA] border border-[#E5E0D9]/50">
+          <div className="mt-3 p-3 rounded-lg bg-brand-bg border border-brand-border/50">
             <div className="flex items-start gap-2">
               <Lightbulb className="h-4 w-4 text-amber-500 mt-0.5 shrink-0" />
               <div>
-                <p className="text-xs font-semibold text-[#404E3F] mb-0.5">
+                <p className="text-xs font-semibold text-brand-fg mb-0.5">
                   What this means
                 </p>
-                <p className="text-xs text-[#404E3F]/70 leading-relaxed">
+                <p className="text-xs text-brand-fg/70 leading-relaxed">
                   {metric.explanation}
                 </p>
               </div>
@@ -1092,17 +1093,17 @@ function ValueBox({
       className={`text-center p-3 rounded-lg border ${
         isWinner
           ? "bg-[#4BC232]/10 border-[#4BC232]/40"
-          : "bg-[#F3F1E5] border-transparent"
+          : "bg-brand-soft border-transparent"
       }`}
     >
-      <p className="text-xs font-medium text-[#404E3F]/60 mb-1">{symbol}</p>
+      <p className="text-xs font-medium text-brand-fg/60 mb-1">{symbol}</p>
       <div className="flex items-center justify-center gap-1.5">
         {isWinner && (
           <CheckCircle2 className="h-4 w-4 text-[#4BC232] shrink-0" />
         )}
         <span
           className={`text-lg font-bold ${
-            isWinner ? "text-[#4BC232]" : "text-[#404E3F]"
+            isWinner ? "text-[#4BC232]" : "text-brand-fg"
           }`}
         >
           {display}
@@ -1137,7 +1138,7 @@ function CompareTrendBadge({
   // green/red badge.
   if (nonNull.length === 1) {
     return (
-      <Badge className="text-[10px] gap-1 bg-[#F8F3EA] text-[#404E3F]/70 border-[#E5E0D9]">
+      <Badge className="text-[10px] gap-1 bg-brand-bg text-brand-fg/70 border-brand-border">
         {symbol}: 1 year only
       </Badge>
     );
@@ -1179,6 +1180,7 @@ function ComparisonTrendChart({
   formatValue?: (v: number) => string;
   unit?: string;
 }) {
+  const c = useChartColors();
   if (data.length === 0) return null;
 
   const tooltipFmt = formatValue ?? ((v: number) => v.toLocaleString("en-PK"));
@@ -1201,16 +1203,16 @@ function ComparisonTrendChart({
       <div className="h-52">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#E5E0D9" />
+            <CartesianGrid strokeDasharray="3 3" stroke={c.border} />
             <XAxis
               dataKey="year"
-              tick={{ fill: "#404E3F", fontSize: 12 }}
+              tick={{ fill: c.fg, fontSize: 12 }}
             />
             <YAxis
               tickFormatter={(v) =>
                 formatValue ? formatValue(v) : formatCompact(v)
               }
-              tick={{ fill: "#404E3F", fontSize: 12 }}
+              tick={{ fill: c.fg, fontSize: 12 }}
               width={60}
             />
             <RechartsTooltip
@@ -1219,8 +1221,8 @@ function ComparisonTrendChart({
                 name,
               ]}
               contentStyle={{
-                backgroundColor: "#F8F3EA",
-                border: "1px solid #E5E0D9",
+                backgroundColor: c.bg,
+                border: `1px solid ${c.border}`,
                 borderRadius: "8px",
               }}
             />
@@ -1291,23 +1293,23 @@ function FinancialTrendsSection({
   return (
     <div>
       <div className="flex items-center gap-2.5 mb-3">
-        <div className="w-9 h-9 rounded-lg bg-[#404E3F] text-white flex items-center justify-center">
+        <div className="w-9 h-9 rounded-lg bg-brand-fg text-white flex items-center justify-center">
           <BarChart3 className="h-5 w-5" />
         </div>
         <div>
-          <h3 className="text-base font-bold text-[#404E3F]">
+          <h3 className="text-base font-bold text-brand-fg">
             4-Year Financial Trends
           </h3>
-          <p className="text-xs text-[#404E3F]/50">
+          <p className="text-xs text-brand-fg/50">
             Side-by-side historical performance comparison
           </p>
         </div>
       </div>
 
-      <Card className="border-[#E5E0D9] bg-white shadow-sm">
+      <Card className="border-brand-border bg-brand-card shadow-sm">
         <CardContent className="py-5 px-5 space-y-6">
           {/* Color legend */}
-          <div className="flex items-center gap-4 text-xs text-[#404E3F]/70 p-2 rounded-md bg-[#F8F3EA]/60 border border-[#E5E0D9]/50">
+          <div className="flex items-center gap-4 text-xs text-brand-fg/70 p-2 rounded-md bg-brand-bg/60 border border-brand-border/50">
             <span className="flex items-center gap-1.5">
               <span
                 className="inline-block w-3 h-3 rounded-sm"
@@ -1462,6 +1464,7 @@ function AreaTrendsSection({
   symA: string;
   symB: string;
 }) {
+  const c = useChartColors();
   const hasFinancials =
     stockA.financials_annual.length > 0 || stockB.financials_annual.length > 0;
   const hasRatios = stockA.ratios.length > 0 || stockB.ratios.length > 0;
@@ -1522,19 +1525,19 @@ function AreaTrendsSection({
     dataLabels: { enabled: false },
     xaxis: {
       categories: composite.map((d) => d.year),
-      labels: { style: { colors: "#404E3F", fontSize: "12px" } },
-      axisBorder: { color: "#E5E0D9" },
-      axisTicks: { color: "#E5E0D9" },
+      labels: { style: { colors: c.fg, fontSize: "12px" } },
+      axisBorder: { color: c.border },
+      axisTicks: { color: c.border },
     },
     yaxis: {
       min: 0,
       max: 100,
       labels: {
-        style: { colors: "#404E3F", fontSize: "12px" },
+        style: { colors: c.fg, fontSize: "12px" },
         formatter: (v) => `${Math.round(v)}`,
       },
     },
-    grid: { borderColor: "#E5E0D9", strokeDashArray: 3 },
+    grid: { borderColor: c.border, strokeDashArray: 3 },
     tooltip: {
       y: { formatter: (v) => `${Math.round(v)} / 100` },
       theme: "light",
@@ -1545,13 +1548,13 @@ function AreaTrendsSection({
       yaxis: [
         {
           y: 50,
-          borderColor: "#E5E0D9",
+          borderColor: c.border,
           strokeDashArray: 6,
           label: {
             text: "Average (50)",
             position: "front",
             style: {
-              color: "#404E3F",
+              color: c.fg,
               background: "transparent",
               fontSize: "10px",
             },
@@ -1564,24 +1567,24 @@ function AreaTrendsSection({
   return (
     <div>
       <div className="flex items-center gap-2.5 mb-3">
-        <div className="w-9 h-9 rounded-lg bg-[#404E3F] text-white flex items-center justify-center">
+        <div className="w-9 h-9 rounded-lg bg-brand-fg text-white flex items-center justify-center">
           <TrendingUp className="h-5 w-5" />
         </div>
         <div>
-          <h3 className="text-base font-bold text-[#404E3F]">
+          <h3 className="text-base font-bold text-brand-fg">
             Overall Performance Index
           </h3>
-          <p className="text-xs text-[#404E3F]/50">
+          <p className="text-xs text-brand-fg/50">
             Combined score (0–100) from income, profit, EPS, margin &amp; growth
           </p>
         </div>
       </div>
 
-      <Card className="border-[#E5E0D9] bg-white shadow-sm">
+      <Card className="border-brand-border bg-brand-card shadow-sm">
         <CardContent className="py-5 px-5 space-y-4">
           {/* Color legend + leader badge */}
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center gap-4 text-xs text-[#404E3F]/70 p-2 rounded-md bg-[#F8F3EA]/60 border border-[#E5E0D9]/50">
+            <div className="flex items-center gap-4 text-xs text-brand-fg/70 p-2 rounded-md bg-brand-bg/60 border border-brand-border/50">
               <span className="flex items-center gap-1.5">
                 <span
                   className="inline-block w-3 h-3 rounded-sm"
@@ -1621,19 +1624,19 @@ function AreaTrendsSection({
               className={`text-center p-3 rounded-lg border ${
                 latestA >= latestB
                   ? "bg-[#4BC232]/10 border-[#4BC232]/40"
-                  : "bg-[#F3F1E5] border-transparent"
+                  : "bg-brand-soft border-transparent"
               }`}
             >
-              <p className="text-xs font-medium text-[#404E3F]/60 mb-0.5">
+              <p className="text-xs font-medium text-brand-fg/60 mb-0.5">
                 {symA} Latest Score
               </p>
               <p
                 className={`text-2xl font-bold ${
-                  latestA >= latestB ? "text-[#4BC232]" : "text-[#404E3F]"
+                  latestA >= latestB ? "text-[#4BC232]" : "text-brand-fg"
                 }`}
               >
                 {latestA}
-                <span className="text-sm font-normal text-[#404E3F]/40">
+                <span className="text-sm font-normal text-brand-fg/40">
                   /100
                 </span>
               </p>
@@ -1642,19 +1645,19 @@ function AreaTrendsSection({
               className={`text-center p-3 rounded-lg border ${
                 latestB >= latestA
                   ? "bg-[#2B5288]/10 border-[#2B5288]/40"
-                  : "bg-[#F3F1E5] border-transparent"
+                  : "bg-brand-soft border-transparent"
               }`}
             >
-              <p className="text-xs font-medium text-[#404E3F]/60 mb-0.5">
+              <p className="text-xs font-medium text-brand-fg/60 mb-0.5">
                 {symB} Latest Score
               </p>
               <p
                 className={`text-2xl font-bold ${
-                  latestB >= latestA ? "text-[#2B5288]" : "text-[#404E3F]"
+                  latestB >= latestA ? "text-[#2B5288]" : "text-brand-fg"
                 }`}
               >
                 {latestB}
-                <span className="text-sm font-normal text-[#404E3F]/40">
+                <span className="text-sm font-normal text-brand-fg/40">
                   /100
                 </span>
               </p>
@@ -1662,10 +1665,10 @@ function AreaTrendsSection({
           </div>
 
           {/* Explainer */}
-          <div className="p-3 rounded-lg bg-[#F8F3EA] border border-[#E5E0D9]/50">
+          <div className="p-3 rounded-lg bg-brand-bg border border-brand-border/50">
             <div className="flex items-start gap-2">
               <Lightbulb className="h-4 w-4 text-amber-500 mt-0.5 shrink-0" />
-              <p className="text-xs text-[#404E3F]/70 leading-relaxed">
+              <p className="text-xs text-brand-fg/70 leading-relaxed">
                 This index normalises each financial metric (income, profit,
                 EPS, margin, growth) to a 0–100 scale, then averages them.
                 The stock with the higher area is performing better overall.

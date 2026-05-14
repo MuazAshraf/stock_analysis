@@ -20,7 +20,7 @@ export function MetricExplainer({
 }: MetricExplainerProps) {
   return (
     <span className="inline-flex items-center gap-1">
-      <span className="font-semibold text-[#404E3F]">
+      <span className="font-semibold text-brand-fg">
         {fullForm ? `${label} (${fullForm})` : label}
       </span>
       <Tooltip>
@@ -31,7 +31,10 @@ export function MetricExplainer({
         </TooltipTrigger>
         <TooltipContent
           side="top"
-          className="max-w-xs bg-[#404E3F] text-white text-sm"
+          // Tooltips should stay dark in BOTH modes (always dark bg + white
+          // text). Using bg-brand-fg made the bg flip to cream in dark mode
+          // → invisible white text on cream. zinc-900 is fixed dark.
+          className="max-w-xs bg-zinc-900 text-white text-sm"
         >
           {explanation}
         </TooltipContent>

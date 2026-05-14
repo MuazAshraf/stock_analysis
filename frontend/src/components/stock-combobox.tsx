@@ -48,10 +48,10 @@ export function StockCombobox({
           role="combobox"
           aria-expanded={open}
           disabled={disabled || isLoading}
-          className="w-full h-12 justify-between text-base font-normal border-[#E5E0D9] bg-white hover:bg-white focus-visible:ring-[#4BC232] focus-visible:border-[#4BC232] cursor-pointer"
+          className="w-full h-12 justify-between text-base font-normal border-brand-border bg-brand-card hover:bg-brand-card focus-visible:ring-[#4BC232] focus-visible:border-[#4BC232] cursor-pointer"
         >
           {isLoading ? (
-            <span className="flex items-center gap-2 text-[#404E3F]/50">
+            <span className="flex items-center gap-2 text-brand-fg/50">
               <Loader2 className="h-4 w-4 animate-spin" />
               Loading stocks...
             </span>
@@ -60,12 +60,12 @@ export function StockCombobox({
               <span className="inline-flex items-center rounded bg-[#4BC232]/10 px-2 py-0.5 text-xs font-semibold text-[#4BC232]">
                 {selected.symbol}
               </span>
-              <span className="truncate text-[#404E3F]/70">
+              <span className="truncate text-brand-fg/70">
                 {selected.name}
               </span>
             </span>
           ) : (
-            <span className="text-[#404E3F]/50">{placeholder}</span>
+            <span className="text-brand-fg/50">{placeholder}</span>
           )}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -99,10 +99,10 @@ export function StockCombobox({
                       value === stock.symbol ? "opacity-100" : "opacity-0"
                     )}
                   />
-                  <span className="font-semibold text-[#404E3F] mr-2">
+                  <span className="font-semibold text-brand-fg mr-2">
                     {stock.symbol}
                   </span>
-                  <span className="truncate text-[#404E3F]/60">
+                  <span className="truncate text-brand-fg/60">
                     {stock.name}
                   </span>
                 </CommandItem>

@@ -45,6 +45,15 @@
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
+
+  /* Brand-specific surface tokens. Light values match the original cream
+     palette; dark values are warm-toned to keep the same character. Brand
+     accent greens/blues and semantic red/amber stay the same in both modes. */
+  --color-brand-bg: var(--brand-bg);
+  --color-brand-card: var(--brand-card);
+  --color-brand-soft: var(--brand-soft);
+  --color-brand-fg: var(--brand-fg);
+  --color-brand-border: var(--brand-border);
 }
 
 :root {
@@ -80,6 +89,13 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* Brand surface palette (light) — preserves the original cream theme. */
+  --brand-bg: #F8F3EA;        /* page background */
+  --brand-card: #FFFFFF;      /* card background */
+  --brand-soft: #F3F1E5;      /* slightly warmer card / pill background */
+  --brand-fg: #404E3F;        /* body / heading text */
+  --brand-border: #E5E0D9;    /* default borders */
 }
 
 .dark {
@@ -114,6 +130,14 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+
+  /* Brand surface palette (dark) — warm dark slate so the cream → dark
+     swap doesn't feel cold. Forest-green text inverts to warm cream. */
+  --brand-bg: #1A1714;        /* page background */
+  --brand-card: #252220;      /* card background */
+  --brand-soft: #2A2622;      /* softer card / pill background */
+  --brand-fg: #F8F3EA;        /* body / heading text (was the cream bg in light) */
+  --brand-border: #3D3833;    /* default borders */
 }
 
 @layer base {
@@ -125,7 +149,7 @@
      `overflow-x-auto` on their own wrapper. */
   html,
   body {
-    @apply bg-background text-foreground;
+    @apply bg-brand-bg text-brand-fg;
     overflow-x: hidden;
   }
 }

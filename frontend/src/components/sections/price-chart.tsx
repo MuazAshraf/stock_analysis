@@ -13,6 +13,7 @@ import {
   Tooltip,
   CartesianGrid,
 } from "recharts";
+import { useChartColors } from "@/components/theme-toggle";
 import type { PricePoint } from "@/types/stock";
 
 interface PriceChartProps {
@@ -28,6 +29,7 @@ const RANGE_DAYS: Record<Range, number> = {
 };
 
 export function PriceChart({ data, symbol }: PriceChartProps) {
+  const c = useChartColors();
   const [range, setRange] = useState<Range>("1Y");
 
   const filtered = useMemo(() => {
@@ -62,17 +64,17 @@ export function PriceChart({ data, symbol }: PriceChartProps) {
   const changeText = range === "1Y" ? "in 1 year" : "in 5 years";
 
   return (
-    <Card className="border-[#E5E0D9] bg-white shadow-sm">
+    <Card className="border-brand-border bg-brand-card shadow-sm">
       <CardHeader className="pb-3">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
-            <CardTitle className="text-xl font-bold text-[#404E3F] flex items-center gap-2">
+            <CardTitle className="text-xl font-bold text-brand-fg flex items-center gap-2">
               Price History
-              <Badge className="bg-[#F8F3EA] text-[#404E3F] text-xs font-normal">
+              <Badge className="bg-brand-bg text-brand-fg text-xs font-normal">
                 {rangeLabel}
               </Badge>
             </CardTitle>
-            <p className="text-sm text-[#404E3F]/60 mt-1">
+            <p className="text-sm text-brand-fg/60 mt-1">
               Daily closing price of {symbol} over the past{" "}
               {range === "1Y" ? "year" : "five years"}
             </p>
@@ -96,7 +98,7 @@ export function PriceChart({ data, symbol }: PriceChartProps) {
                 {isUp ? "+" : ""}
                 {changePct.toFixed(1)}% {changeText}
               </p>
-              <p className="text-xs text-[#404E3F]/50">
+              <p className="text-xs text-brand-fg/50">
                 Rs. {first.toFixed(2)} → Rs. {last.toFixed(2)}
               </p>
             </div>
@@ -104,7 +106,7 @@ export function PriceChart({ data, symbol }: PriceChartProps) {
         </div>
 
         <div
-          className="inline-flex items-center gap-1 mt-3 p-1 rounded-lg bg-[#F8F3EA] w-fit"
+          className="inline-flex items-center gap-1 mt-3 p-1 rounded-lg bg-brand-bg w-fit"
           role="tablist"
           aria-label="Price history range"
         >
@@ -119,8 +121,8 @@ export function PriceChart({ data, symbol }: PriceChartProps) {
                 onClick={() => setRange(r)}
                 className={`px-3 py-1 text-xs font-semibold rounded-md transition-colors ${
                   active
-                    ? "bg-white text-[#404E3F] shadow-sm"
-                    : "text-[#404E3F]/60 hover:text-[#404E3F]"
+                    ? "bg-brand-card text-brand-fg shadow-sm"
+                    : "text-brand-fg/60 hover:text-brand-fg"
                 }`}
               >
                 {r === "1Y" ? "1 Year (Daily)" : "5 Years"}
@@ -151,18 +153,18 @@ export function PriceChart({ data, symbol }: PriceChartProps) {
                   />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#E5E0D9" />
+              <CartesianGrid strokeDasharray="3 3" stroke={c.border} />
               <XAxis
                 dataKey="label"
-                tick={{ fontSize: 11, fill: "#404E3F80" }}
+                tick={{ fontSize: 11, fill: `${c.fg}80` }}
                 tickLine={false}
-                axisLine={{ stroke: "#E5E0D9" }}
+                axisLine={{ stroke: c.border }}
                 interval="preserveStartEnd"
                 minTickGap={40}
               />
               <YAxis
                 domain={[minPrice - padding, maxPrice + padding]}
-                tick={{ fontSize: 11, fill: "#404E3F80" }}
+                tick={{ fontSize: 11, fill: `${c.fg}80` }}
                 tickLine={false}
                 axisLine={false}
                 tickFormatter={(v: number) => `Rs.${v.toFixed(0)}`}
@@ -170,10 +172,11 @@ export function PriceChart({ data, symbol }: PriceChartProps) {
               />
               <Tooltip
                 contentStyle={{
-                  background: "white",
-                  border: "1px solid #E5E0D9",
+                  background: c.card,
+                  border: `1px solid ${c.border}`,
                   borderRadius: "8px",
                   fontSize: "12px",
+                  color: c.fg,
                 }}
                 formatter={(value: number | undefined) => [
                   value != null ? `Rs. ${value.toFixed(2)}` : "—",
@@ -191,7 +194,7 @@ export function PriceChart({ data, symbol }: PriceChartProps) {
             </AreaChart>
           </ResponsiveContainer>
         </div>
-        <p className="text-xs text-[#404E3F]/40 mt-2 text-center">
+        <p className="text-xs text-brand-fg/40 mt-2 text-center">
           Daily closing prices from Pakistan Stock Exchange. Past performance does
           not guarantee future results.
         </p>

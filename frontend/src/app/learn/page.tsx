@@ -45,14 +45,14 @@ const ARTICLES = [
 
 export default function LearnPage() {
   return (
-    <div className="min-h-screen bg-[#F8F3EA]">
+    <div className="min-h-screen bg-brand-bg">
       <main className="max-w-3xl mx-auto px-4 py-10">
-        <div className="bg-white rounded-xl border border-[#E5E0D9] p-8 space-y-8">
+        <div className="bg-brand-card rounded-xl border border-brand-border p-8 space-y-8">
           <div className="flex items-start gap-3">
             <BookOpen className="h-6 w-6 text-[#4BC232] mt-1 flex-shrink-0" aria-hidden="true" />
             <div>
-              <h1 className="text-2xl font-bold text-[#404E3F]">Learn PSX Investing</h1>
-              <p className="text-sm text-[#404E3F]/60 mt-2 leading-relaxed">
+              <h1 className="text-2xl font-bold text-brand-fg">Learn PSX Investing</h1>
+              <p className="text-sm text-brand-fg/60 mt-2 leading-relaxed">
                 Free, beginner-friendly guides on investing in the Pakistan Stock Exchange. No finance degree needed — everything explained in plain, simple English.
               </p>
             </div>
@@ -63,13 +63,13 @@ export default function LearnPage() {
               <Link
                 key={a.slug}
                 href={`/learn/${a.slug}`}
-                className="block p-5 rounded-xl bg-[#F8F3EA] hover:bg-[#4BC232]/10 transition-colors border border-transparent hover:border-[#4BC232]/30"
+                className="block p-5 rounded-xl bg-brand-bg hover:bg-[#4BC232]/10 transition-colors border border-transparent hover:border-[#4BC232]/30"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
-                    <h2 className="text-base font-semibold text-[#404E3F]">{a.title}</h2>
-                    <p className="text-sm text-[#404E3F]/70 mt-1 leading-relaxed">{a.desc}</p>
-                    <p className="text-xs text-[#404E3F]/50 mt-2">{a.read}</p>
+                    <h2 className="text-base font-semibold text-brand-fg">{a.title}</h2>
+                    <p className="text-sm text-brand-fg/70 mt-1 leading-relaxed">{a.desc}</p>
+                    <p className="text-xs text-brand-fg/50 mt-2">{a.read}</p>
                   </div>
                   <ArrowRight className="h-5 w-5 text-[#4BC232] mt-1 flex-shrink-0" aria-hidden="true" />
                 </div>
@@ -78,7 +78,7 @@ export default function LearnPage() {
           </div>
 
           <div className="p-4 rounded-xl bg-[#4BC232]/10 border border-[#4BC232]/20">
-            <p className="text-sm text-[#404E3F] text-center leading-relaxed">
+            <p className="text-sm text-brand-fg text-center leading-relaxed">
               Ready to analyze a stock?{" "}
               <Link href="/" className="text-[#2B5288] underline font-medium">
                 Start here

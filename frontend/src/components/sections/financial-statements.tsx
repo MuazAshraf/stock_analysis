@@ -34,30 +34,30 @@ export function FinancialStatementsSection({
   if (!hasData) return null;
 
   return (
-    <Card className="border-[#E5E0D9] bg-white shadow-sm">
+    <Card className="border-brand-border bg-brand-card shadow-sm">
       <CardHeader className="pb-3">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
-            <CardTitle className="text-xl font-bold text-[#404E3F] flex items-center gap-2">
+            <CardTitle className="text-xl font-bold text-brand-fg flex items-center gap-2">
               <FileText className="h-5 w-5 text-[#2B5288]" />
               Financial Statements
-              <Badge className="bg-[#F8F3EA] text-[#404E3F] text-xs font-normal">
+              <Badge className="bg-brand-bg text-brand-fg text-xs font-normal">
                 Yahoo Finance
               </Badge>
             </CardTitle>
-            <p className="text-sm text-[#404E3F]/60 mt-1">
+            <p className="text-sm text-brand-fg/60 mt-1">
               Key highlights from the 3 core financial statements.
             </p>
           </div>
-          <div className="inline-flex rounded-lg border border-[#E5E0D9] bg-[#F8F3EA] p-1 gap-1">
+          <div className="inline-flex rounded-lg border border-brand-border bg-brand-bg p-1 gap-1">
             <button
               type="button"
               onClick={() => setFreq("annual")}
               className={cn(
                 "px-4 py-2 rounded-md text-sm font-semibold transition-all cursor-pointer",
                 freq === "annual"
-                  ? "bg-white text-[#404E3F] shadow-sm"
-                  : "text-[#404E3F]/50 hover:text-[#404E3F]"
+                  ? "bg-brand-card text-brand-fg shadow-sm"
+                  : "text-brand-fg/50 hover:text-brand-fg"
               )}
             >
               Annual
@@ -68,8 +68,8 @@ export function FinancialStatementsSection({
               className={cn(
                 "px-4 py-2 rounded-md text-sm font-semibold transition-all cursor-pointer",
                 freq === "quarterly"
-                  ? "bg-white text-[#404E3F] shadow-sm"
-                  : "text-[#404E3F]/50 hover:text-[#404E3F]"
+                  ? "bg-brand-card text-brand-fg shadow-sm"
+                  : "text-brand-fg/50 hover:text-brand-fg"
               )}
             >
               Quarterly
@@ -128,7 +128,7 @@ export function FinancialStatementsSection({
           )}
         </div>
 
-        <p className="text-xs text-[#404E3F]/40 mt-4 text-center">
+        <p className="text-xs text-brand-fg/40 mt-4 text-center">
           Data sourced from Yahoo Finance. All amounts in PKR. Numbers may
           differ slightly from PSX filings due to rounding or data timing.
         </p>
@@ -147,14 +147,14 @@ function StatementCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded-xl border border-[#E5E0D9] overflow-hidden">
+    <div className="rounded-xl border border-brand-border overflow-hidden">
       <div
         className="px-4 py-2.5 text-white text-sm font-semibold"
         style={{ backgroundColor: color }}
       >
         {title}
       </div>
-      <div className="bg-white">{children}</div>
+      <div className="bg-brand-card">{children}</div>
     </div>
   );
 }
@@ -176,14 +176,14 @@ function StatementTable({
     <div className="overflow-x-auto">
       <table className="w-full text-xs">
         <thead>
-          <tr className="bg-[#F8F3EA]">
-            <th className="text-left p-2.5 font-semibold text-[#404E3F] whitespace-nowrap">
+          <tr className="bg-brand-bg">
+            <th className="text-left p-2.5 font-semibold text-brand-fg whitespace-nowrap">
               Item
             </th>
             {periods.map((p) => (
               <th
                 key={p}
-                className="text-right p-2.5 font-semibold text-[#404E3F] whitespace-nowrap"
+                className="text-right p-2.5 font-semibold text-brand-fg whitespace-nowrap"
               >
                 {p}
               </th>
@@ -195,11 +195,11 @@ function StatementTable({
             <tr
               key={row.label}
               className={cn(
-                "border-t border-[#E5E0D9]",
-                row.highlight && "bg-[#F8F3EA]/60 font-semibold"
+                "border-t border-brand-border",
+                row.highlight && "bg-brand-bg/60 font-semibold"
               )}
             >
-              <td className="p-2.5 text-[#404E3F] whitespace-nowrap">
+              <td className="p-2.5 text-brand-fg whitespace-nowrap">
                 {row.label}
               </td>
               {row.values.map((val, i) => (
@@ -209,7 +209,7 @@ function StatementTable({
                     "p-2.5 text-right whitespace-nowrap",
                     val.startsWith("-")
                       ? "text-red-500"
-                      : "text-[#404E3F]"
+                      : "text-brand-fg"
                   )}
                 >
                   {val}

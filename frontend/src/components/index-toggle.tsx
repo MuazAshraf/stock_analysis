@@ -18,7 +18,7 @@ const OPTIONS: { value: PsxIndex; label: string }[] = [
 
 export function IndexToggle({ value, onChange, disabled }: IndexToggleProps) {
   return (
-    <div className="inline-flex rounded-lg border border-[#E5E0D9] bg-white p-1 gap-1">
+    <div className="inline-flex rounded-lg border border-brand-border bg-brand-card p-1 gap-1">
       {OPTIONS.map((opt) => (
         <button
           key={opt.value}
@@ -29,7 +29,7 @@ export function IndexToggle({ value, onChange, disabled }: IndexToggleProps) {
             "px-4 py-2 rounded-md text-sm font-semibold transition-all cursor-pointer disabled:cursor-not-allowed disabled:opacity-50",
             value === opt.value
               ? "bg-[#4BC232] text-white shadow-sm"
-              : "text-[#404E3F]/60 hover:text-[#404E3F] hover:bg-[#F8F3EA]"
+              : "text-brand-fg/60 hover:text-brand-fg hover:bg-brand-bg"
           )}
         >
           {opt.label}

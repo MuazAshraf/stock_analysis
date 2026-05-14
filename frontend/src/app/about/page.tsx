@@ -20,24 +20,24 @@ const FEATURES = [
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-[#F8F3EA]">
+    <div className="min-h-screen bg-brand-bg">
       <main className="max-w-3xl mx-auto px-4 py-10">
-        <div className="bg-white rounded-xl border border-[#E5E0D9] p-8 space-y-8">
+        <div className="bg-brand-card rounded-xl border border-brand-border p-8 space-y-8">
           <div>
-            <h1 className="text-2xl font-bold text-[#404E3F]">About PSX Stock Analyzer</h1>
-            <p className="text-sm text-[#404E3F]/60 mt-2 leading-relaxed">
+            <h1 className="text-2xl font-bold text-brand-fg">About PSX Stock Analyzer</h1>
+            <p className="text-sm text-brand-fg/60 mt-2 leading-relaxed">
               PSX Stock Analyzer is a free stock analysis tool for the Pakistan Stock Exchange (PSX) that explains stocks in plain English for beginner Pakistani investors.
             </p>
           </div>
 
           <div className="space-y-4">
-            <h2 className="text-base font-semibold text-[#404E3F]">Our Mission</h2>
-            <p className="text-sm text-[#404E3F]/70 leading-relaxed">
+            <h2 className="text-base font-semibold text-brand-fg">Our Mission</h2>
+            <p className="text-sm text-brand-fg/70 leading-relaxed">
               PSX Stock Analyzer is a free tool built for Pakistani investors who find stock analysis
               intimidating. We believe everyone deserves to understand where their money is going —
               without needing a finance degree.
             </p>
-            <p className="text-sm text-[#404E3F]/70 leading-relaxed">
+            <p className="text-sm text-brand-fg/70 leading-relaxed">
               We translate complex financial jargon into plain, simple English that anyone can
               understand. Whether you&apos;re looking at your first stock or comparing two companies,
               our tool gives you clear, honest analysis with no hidden agenda.
@@ -45,14 +45,14 @@ export default function AboutPage() {
           </div>
 
           <div className="space-y-4">
-            <h2 className="text-base font-semibold text-[#404E3F]">What We Offer</h2>
+            <h2 className="text-base font-semibold text-brand-fg">What We Offer</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {FEATURES.map((f) => (
-                <div key={f.title} className="flex items-start gap-3 p-4 rounded-xl bg-[#F8F3EA]">
+                <div key={f.title} className="flex items-start gap-3 p-4 rounded-xl bg-brand-bg">
                   <f.icon className="h-5 w-5 text-[#4BC232] mt-0.5 flex-shrink-0" />
                   <div>
-                    <h3 className="text-sm font-semibold text-[#404E3F]">{f.title}</h3>
-                    <p className="text-xs text-[#404E3F]/60 mt-0.5 leading-relaxed">{f.desc}</p>
+                    <h3 className="text-sm font-semibold text-brand-fg">{f.title}</h3>
+                    <p className="text-xs text-brand-fg/60 mt-0.5 leading-relaxed">{f.desc}</p>
                   </div>
                 </div>
               ))}
@@ -60,16 +60,16 @@ export default function AboutPage() {
           </div>
 
           <div className="space-y-4">
-            <h2 className="text-base font-semibold text-[#404E3F]">Where Our Data Comes From</h2>
+            <h2 className="text-base font-semibold text-brand-fg">Where Our Data Comes From</h2>
             <div className="space-y-2">
-              <div className="p-3 rounded-lg bg-[#F8F3EA]">
-                <p className="text-sm text-[#404E3F]">
+              <div className="p-3 rounded-lg bg-brand-bg">
+                <p className="text-sm text-brand-fg">
                   <strong>PSX Data Portal</strong> (dps.psx.com.pk) — Live stock prices, company profiles,
                   trading data, dividend history, and index constituents.
                 </p>
               </div>
-              <div className="p-3 rounded-lg bg-[#F8F3EA]">
-                <p className="text-sm text-[#404E3F]">
+              <div className="p-3 rounded-lg bg-brand-bg">
+                <p className="text-sm text-brand-fg">
                   <strong>Yahoo Finance</strong> — Financial statements (Income Statement, Balance Sheet,
                   Cash Flow), price history charts, and book value data.
                 </p>
@@ -78,14 +78,14 @@ export default function AboutPage() {
           </div>
 
           <div className="p-4 rounded-xl bg-[#4BC232]/10 border border-[#4BC232]/20">
-            <p className="text-sm text-[#404E3F] text-center leading-relaxed">
+            <p className="text-sm text-brand-fg text-center leading-relaxed">
               Built with passion for making Pakistan&apos;s stock market accessible to everyone.
               <br />
               <span className="text-[#4BC232] font-semibold">100% free. No sign-up. No hidden fees.</span>
             </p>
           </div>
 
-          <div className="text-sm text-[#404E3F]/50 text-center">
+          <div className="text-sm text-brand-fg/50 text-center">
             <p>
               PSX Stock Analyzer is an educational tool only. We do not provide financial advice.
               <br />

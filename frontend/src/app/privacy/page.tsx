@@ -10,12 +10,12 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen bg-[#F8F3EA]">
+    <div className="min-h-screen bg-brand-bg">
       <main className="max-w-3xl mx-auto px-4 py-10">
-        <div className="bg-white rounded-xl border border-[#E5E0D9] p-8 space-y-6">
+        <div className="bg-brand-card rounded-xl border border-brand-border p-8 space-y-6">
           <div>
-            <h1 className="text-2xl font-bold text-[#404E3F]">Privacy Policy</h1>
-            <p className="text-sm text-[#404E3F]/50 mt-1">Last updated: March 2026</p>
+            <h1 className="text-2xl font-bold text-brand-fg">Privacy Policy</h1>
+            <p className="text-sm text-brand-fg/50 mt-1">Last updated: March 2026</p>
           </div>
 
           <Section title="Overview">
@@ -92,8 +92,8 @@ export default function PrivacyPage() {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div>
-      <h2 className="text-base font-semibold text-[#404E3F] mb-2">{title}</h2>
-      <p className="text-sm text-[#404E3F]/70 leading-relaxed">{children}</p>
+      <h2 className="text-base font-semibold text-brand-fg mb-2">{title}</h2>
+      <p className="text-sm text-brand-fg/70 leading-relaxed">{children}</p>
     </div>
   );
 }

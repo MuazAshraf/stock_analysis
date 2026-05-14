@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { MetricExplainer } from "@/components/metric-explainer";
 import { formatCompact } from "@/lib/format";
 import { TrendingUp, TrendingDown } from "lucide-react";
+import { useChartColors } from "@/components/theme-toggle";
 import type { FinancialYear } from "@/types/stock";
 import {
   BarChart,
@@ -26,6 +27,7 @@ const CHART_BLUE = "#2B5288";
 const CHART_ACCENT = "#9ECCFA";
 
 export function MoneyTalk({ financials }: MoneyTalkProps) {
+  const c = useChartColors();
   const sorted = [...financials].sort((a, b) =>
     a.period.localeCompare(b.period)
   );
@@ -58,15 +60,15 @@ export function MoneyTalk({ financials }: MoneyTalkProps) {
   }));
 
   return (
-    <Card className="border-[#E5E0D9] bg-white shadow-sm">
+    <Card className="border-brand-border bg-brand-card shadow-sm">
       <CardHeader className="pb-3">
-        <CardTitle className="text-xl font-bold text-[#404E3F] flex items-center gap-2">
+        <CardTitle className="text-xl font-bold text-brand-fg flex items-center gap-2">
           Money Talk
-          <Badge className="bg-[#F8F3EA] text-[#404E3F] text-xs font-normal">
+          <Badge className="bg-brand-bg text-brand-fg text-xs font-normal">
             Financial Performance
           </Badge>
         </CardTitle>
-        <p className="text-sm text-[#404E3F]/60">
+        <p className="text-sm text-brand-fg/60">
           How much money is this company making, and is it growing?
         </p>
       </CardHeader>
@@ -83,14 +85,14 @@ export function MoneyTalk({ financials }: MoneyTalkProps) {
           <div className="h-52">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={incomeData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E5E0D9" />
+                <CartesianGrid strokeDasharray="3 3" stroke={c.border} />
                 <XAxis
                   dataKey="year"
-                  tick={{ fill: "#404E3F", fontSize: 12 }}
+                  tick={{ fill: c.fg, fontSize: 12 }}
                 />
                 <YAxis
                   tickFormatter={(v) => formatCompact(v)}
-                  tick={{ fill: "#404E3F", fontSize: 12 }}
+                  tick={{ fill: c.fg, fontSize: 12 }}
                   width={60}
                 />
                 <RechartsTooltip
@@ -99,8 +101,8 @@ export function MoneyTalk({ financials }: MoneyTalkProps) {
                     revenueLabel,
                   ]}
                   contentStyle={{
-                    backgroundColor: "#F8F3EA",
-                    border: "1px solid #E5E0D9",
+                    backgroundColor: c.bg,
+                    border: `1px solid ${c.border}`,
                     borderRadius: "8px",
                   }}
                 />
@@ -133,14 +135,14 @@ export function MoneyTalk({ financials }: MoneyTalkProps) {
           <div className="h-52">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={profitData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E5E0D9" />
+                <CartesianGrid strokeDasharray="3 3" stroke={c.border} />
                 <XAxis
                   dataKey="year"
-                  tick={{ fill: "#404E3F", fontSize: 12 }}
+                  tick={{ fill: c.fg, fontSize: 12 }}
                 />
                 <YAxis
                   tickFormatter={(v) => formatCompact(v)}
-                  tick={{ fill: "#404E3F", fontSize: 12 }}
+                  tick={{ fill: c.fg, fontSize: 12 }}
                   width={60}
                 />
                 <RechartsTooltip
@@ -149,8 +151,8 @@ export function MoneyTalk({ financials }: MoneyTalkProps) {
                     "Profit After Tax",
                   ]}
                   contentStyle={{
-                    backgroundColor: "#F8F3EA",
-                    border: "1px solid #E5E0D9",
+                    backgroundColor: c.bg,
+                    border: `1px solid ${c.border}`,
                     borderRadius: "8px",
                   }}
                 />
@@ -179,13 +181,13 @@ export function MoneyTalk({ financials }: MoneyTalkProps) {
           <div className="h-52">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={epsData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E5E0D9" />
+                <CartesianGrid strokeDasharray="3 3" stroke={c.border} />
                 <XAxis
                   dataKey="year"
-                  tick={{ fill: "#404E3F", fontSize: 12 }}
+                  tick={{ fill: c.fg, fontSize: 12 }}
                 />
                 <YAxis
-                  tick={{ fill: "#404E3F", fontSize: 12 }}
+                  tick={{ fill: c.fg, fontSize: 12 }}
                   width={50}
                 />
                 <RechartsTooltip
@@ -194,8 +196,8 @@ export function MoneyTalk({ financials }: MoneyTalkProps) {
                     "EPS",
                   ]}
                   contentStyle={{
-                    backgroundColor: "#F8F3EA",
-                    border: "1px solid #E5E0D9",
+                    backgroundColor: c.bg,
+                    border: `1px solid ${c.border}`,
                     borderRadius: "8px",
                   }}
                 />

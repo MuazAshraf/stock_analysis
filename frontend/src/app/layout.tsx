@@ -309,7 +309,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en-PK">
+    <html lang="en-PK" suppressHydrationWarning>
       <head>
         {/* JSON-LD Structured Data — Combined @graph */}
         <script

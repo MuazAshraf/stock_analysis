@@ -47,8 +47,8 @@ export function FeedbackForm() {
     return (
       <div className="rounded-xl border border-[#4BC232]/30 bg-[#4BC232]/5 p-8 text-center space-y-3">
         <CheckCircle2 className="h-10 w-10 text-[#4BC232] mx-auto" />
-        <p className="text-sm font-semibold text-[#404E3F]">Thank you for your feedback!</p>
-        <p className="text-xs text-[#404E3F]/60">We read every submission and will use it to improve the tool.</p>
+        <p className="text-sm font-semibold text-brand-fg">Thank you for your feedback!</p>
+        <p className="text-xs text-brand-fg/60">We read every submission and will use it to improve the tool.</p>
         <button
           type="button"
           onClick={() => setStatus("idle")}
@@ -61,11 +61,11 @@ export function FeedbackForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="rounded-xl border border-[#E5E0D9] p-6 bg-[#F8F3EA] space-y-4">
+    <form onSubmit={handleSubmit} className="rounded-xl border border-brand-border p-6 bg-brand-bg space-y-4">
       {/* Name & Email */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
-          <label htmlFor="feedback-name" className="block text-xs font-medium text-[#404E3F] mb-1">
+          <label htmlFor="feedback-name" className="block text-xs font-medium text-brand-fg mb-1">
             Name <span className="text-red-400">*</span>
           </label>
           <input
@@ -75,12 +75,12 @@ export function FeedbackForm() {
             onChange={(e) => setName(e.target.value)}
             placeholder="Your name"
             maxLength={100}
-            className="w-full rounded-lg border border-[#E5E0D9] bg-white px-3 py-2.5 text-sm text-[#404E3F] placeholder:text-[#404E3F]/30 focus:outline-none focus:ring-2 focus:ring-[#4BC232]/30 focus:border-[#4BC232]"
+            className="w-full rounded-lg border border-brand-border bg-brand-card px-3 py-2.5 text-sm text-brand-fg placeholder:text-brand-fg/30 focus:outline-none focus:ring-2 focus:ring-[#4BC232]/30 focus:border-[#4BC232]"
           />
         </div>
         <div>
-          <label htmlFor="feedback-email" className="block text-xs font-medium text-[#404E3F] mb-1">
-            Email <span className="text-[#404E3F]/30 font-normal">(optional)</span>
+          <label htmlFor="feedback-email" className="block text-xs font-medium text-brand-fg mb-1">
+            Email <span className="text-brand-fg/30 font-normal">(optional)</span>
           </label>
           <input
             id="feedback-email"
@@ -89,14 +89,14 @@ export function FeedbackForm() {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="your@email.com"
             maxLength={200}
-            className="w-full rounded-lg border border-[#E5E0D9] bg-white px-3 py-2.5 text-sm text-[#404E3F] placeholder:text-[#404E3F]/30 focus:outline-none focus:ring-2 focus:ring-[#4BC232]/30 focus:border-[#4BC232]"
+            className="w-full rounded-lg border border-brand-border bg-brand-card px-3 py-2.5 text-sm text-brand-fg placeholder:text-brand-fg/30 focus:outline-none focus:ring-2 focus:ring-[#4BC232]/30 focus:border-[#4BC232]"
           />
         </div>
       </div>
 
       {/* Category selector */}
       <div>
-        <label className="block text-xs font-medium text-[#404E3F] mb-2">What type of feedback?</label>
+        <label className="block text-xs font-medium text-brand-fg mb-2">What type of feedback?</label>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
           {CATEGORIES.map((c) => (
             <button
@@ -106,17 +106,17 @@ export function FeedbackForm() {
               className={cn(
                 "flex flex-col items-center gap-1.5 p-3 rounded-lg border text-center transition-all cursor-pointer",
                 category === c.value
-                  ? "bg-white border-[#4BC232] shadow-sm"
-                  : "bg-white/50 border-[#E5E0D9] hover:border-[#4BC232]/50"
+                  ? "bg-brand-card border-[#4BC232] shadow-sm"
+                  : "bg-brand-card/50 border-brand-border hover:border-[#4BC232]/50"
               )}
             >
-              <span className={cn("transition-colors", category === c.value ? "text-[#4BC232]" : "text-[#404E3F]/40")}>
+              <span className={cn("transition-colors", category === c.value ? "text-[#4BC232]" : "text-brand-fg/40")}>
                 {c.icon}
               </span>
-              <span className={cn("text-xs font-semibold", category === c.value ? "text-[#404E3F]" : "text-[#404E3F]/60")}>
+              <span className={cn("text-xs font-semibold", category === c.value ? "text-brand-fg" : "text-brand-fg/60")}>
                 {c.label}
               </span>
-              <span className="text-[10px] text-[#404E3F]/40 leading-tight">{c.desc}</span>
+              <span className="text-[10px] text-brand-fg/40 leading-tight">{c.desc}</span>
             </button>
           ))}
         </div>
@@ -124,7 +124,7 @@ export function FeedbackForm() {
 
       {/* Message */}
       <div>
-        <label htmlFor="feedback-msg" className="block text-xs font-medium text-[#404E3F] mb-1">
+        <label htmlFor="feedback-msg" className="block text-xs font-medium text-brand-fg mb-1">
           Your message <span className="text-red-400">*</span>
         </label>
         <textarea
@@ -134,13 +134,13 @@ export function FeedbackForm() {
           placeholder="Describe your feedback in detail... (minimum 10 characters)"
           rows={4}
           maxLength={2000}
-          className="w-full rounded-lg border border-[#E5E0D9] bg-white px-3 py-2.5 text-sm text-[#404E3F] placeholder:text-[#404E3F]/30 focus:outline-none focus:ring-2 focus:ring-[#4BC232]/30 focus:border-[#4BC232] resize-none"
+          className="w-full rounded-lg border border-brand-border bg-brand-card px-3 py-2.5 text-sm text-brand-fg placeholder:text-brand-fg/30 focus:outline-none focus:ring-2 focus:ring-[#4BC232]/30 focus:border-[#4BC232] resize-none"
         />
         <div className="flex justify-between mt-1">
-          <span className="text-[10px] text-[#404E3F]/40">
+          <span className="text-[10px] text-brand-fg/40">
             {message.trim().length < 10 && message.length > 0 ? `${10 - message.trim().length} more characters needed` : ""}
           </span>
-          <span className="text-[10px] text-[#404E3F]/40">{message.length}/2000</span>
+          <span className="text-[10px] text-brand-fg/40">{message.length}/2000</span>
         </div>
       </div>
 

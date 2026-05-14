@@ -26,12 +26,12 @@ export function MarketTicker({ indices }: MarketTickerProps) {
         return (
           <div
             key={idx.name}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white border border-[#E5E0D9] shadow-sm"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-brand-card border border-brand-border shadow-sm"
           >
             <span className="text-xs font-semibold text-[#2B5288]">
               {idx.name}
             </span>
-            <span className="text-sm font-bold text-[#404E3F]">
+            <span className="text-sm font-bold text-brand-fg">
               {idx.value?.toLocaleString("en-PK") ?? "N/A"}
             </span>
             {idx.change != null && (
@@ -54,7 +54,7 @@ export function MarketTicker({ indices }: MarketTickerProps) {
           </div>
         );
       })}
-      <div className="flex items-center px-3 py-2 rounded-lg bg-[#F3F1E5] text-[10px] text-[#404E3F]/60">
+      <div className="flex items-center px-3 py-2 rounded-lg bg-brand-soft text-[10px] text-brand-fg/60">
         Today&apos;s market indices — shows overall market direction
       </div>
     </div>

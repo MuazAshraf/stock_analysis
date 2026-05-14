@@ -70,7 +70,7 @@ export function Dashboard() {
     !compareData && !compareMutation.isPending && !compareMutation.isError;
 
   return (
-    <div className="min-h-screen bg-[#F8F3EA]">
+    <div className="min-h-screen bg-brand-bg">
       <main
         className="max-w-5xl mx-auto px-4 py-8"
         aria-label="PSX Stock Analyzer — Free Pakistan Stock Exchange analysis tool"
@@ -84,7 +84,7 @@ export function Dashboard() {
               Free Stock Analysis for Pakistani Investors
             </div>
             <h1
-              className="text-3xl sm:text-4xl font-bold text-[#404E3F] mb-3"
+              className="text-3xl sm:text-4xl font-bold text-brand-fg mb-3"
               aria-label={
                 activeTab === "analyze"
                   ? "Understand Any PSX Stock in Plain English — Free Pakistan Stock Exchange Analysis"
@@ -105,7 +105,7 @@ export function Dashboard() {
                 </>
               )}
             </h1>
-            <p className="text-[#404E3F]/60 max-w-lg mx-auto mb-8">
+            <p className="text-brand-fg/60 max-w-lg mx-auto mb-8">
               {activeTab === "analyze"
                 ? "New to investing? Pick any Pakistan Stock Exchange (PSX) company and get a clear, jargon-free KSE stock analysis that anyone can understand."
                 : "Pick two PSX stocks and see a head-to-head comparison of key financial metrics to help you decide."}
@@ -115,13 +115,13 @@ export function Dashboard() {
 
         {/* Tabs */}
         <div className="flex justify-center mb-6">
-          <div className="inline-flex w-full sm:w-auto max-w-full bg-white rounded-xl border border-[#E5E0D9] p-1">
+          <div className="inline-flex w-full sm:w-auto max-w-full bg-brand-card rounded-xl border border-brand-border p-1">
             <button
               onClick={() => handleTabChange("analyze")}
               className={`flex flex-1 sm:flex-none items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-5 py-2.5 rounded-lg text-xs sm:text-sm font-semibold whitespace-nowrap transition-all cursor-pointer ${
                 activeTab === "analyze"
-                  ? "bg-[#F8F3EA] text-[#404E3F] border-b-2 border-[#4BC232]"
-                  : "text-[#404E3F]/50 hover:text-[#404E3F]/80"
+                  ? "bg-brand-bg text-brand-fg border-b-2 border-[#4BC232]"
+                  : "text-brand-fg/50 hover:text-brand-fg/80"
               }`}
             >
               <TrendingUp className="h-4 w-4 flex-shrink-0" />
@@ -132,8 +132,8 @@ export function Dashboard() {
               onClick={() => handleTabChange("compare")}
               className={`flex flex-1 sm:flex-none items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-5 py-2.5 rounded-lg text-xs sm:text-sm font-semibold whitespace-nowrap transition-all cursor-pointer ${
                 activeTab === "compare"
-                  ? "bg-[#F8F3EA] text-[#404E3F] border-b-2 border-[#4BC232]"
-                  : "text-[#404E3F]/50 hover:text-[#404E3F]/80"
+                  ? "bg-brand-bg text-brand-fg border-b-2 border-[#4BC232]"
+                  : "text-brand-fg/50 hover:text-brand-fg/80"
               }`}
             >
               <ArrowLeftRight className="h-4 w-4 flex-shrink-0" />
@@ -142,7 +142,7 @@ export function Dashboard() {
             </button>
             <Link
               href="/contact"
-              className="flex flex-1 sm:flex-none items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-5 py-2.5 rounded-lg text-xs sm:text-sm font-semibold whitespace-nowrap transition-all cursor-pointer text-[#404E3F]/50 hover:text-[#404E3F]/80"
+              className="flex flex-1 sm:flex-none items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-5 py-2.5 rounded-lg text-xs sm:text-sm font-semibold whitespace-nowrap transition-all cursor-pointer text-brand-fg/50 hover:text-brand-fg/80"
             >
               <MessageSquare className="h-4 w-4 flex-shrink-0" />
               Feedback
@@ -189,7 +189,7 @@ export function Dashboard() {
             {analyzeMutation.isPending && (
               <div className="mb-6">
                 <div className="text-center mb-6">
-                  <p className="text-sm text-[#404E3F]/60">
+                  <p className="text-sm text-brand-fg/60">
                     Scraping data from PSX and analyzing... This may take a
                     moment.
                   </p>
@@ -260,7 +260,7 @@ export function Dashboard() {
 
                 {/* What You Get section */}
                 <div className="max-w-3xl mx-auto">
-                  <h3 className="text-lg font-bold text-[#404E3F] text-center mb-4">
+                  <h3 className="text-lg font-bold text-brand-fg text-center mb-4">
                     What You Get With Every Analysis
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -272,9 +272,9 @@ export function Dashboard() {
                       { title: "Shariah Compliance", desc: "Instant badge showing whether the stock is in the KMI All Shares Islamic index." },
                       { title: "Final Verdict", desc: "Plain English summary with business verdict, risk level, and actionable insights for beginners." },
                     ].map((item) => (
-                      <div key={item.title} className="p-4 rounded-xl bg-white border border-[#E5E0D9]">
-                        <h4 className="text-sm font-semibold text-[#404E3F] mb-1">{item.title}</h4>
-                        <p className="text-xs text-[#404E3F]/60 leading-relaxed">{item.desc}</p>
+                      <div key={item.title} className="p-4 rounded-xl bg-brand-card border border-brand-border">
+                        <h4 className="text-sm font-semibold text-brand-fg mb-1">{item.title}</h4>
+                        <p className="text-xs text-brand-fg/60 leading-relaxed">{item.desc}</p>
                       </div>
                     ))}
                   </div>
@@ -287,7 +287,7 @@ export function Dashboard() {
                   itemScope
                   itemType="https://schema.org/FAQPage"
                 >
-                  <h3 className="text-lg font-bold text-[#404E3F] text-center mb-4">
+                  <h3 className="text-lg font-bold text-brand-fg text-center mb-4">
                     Frequently Asked Questions
                   </h3>
                   <div className="space-y-3">
@@ -303,13 +303,13 @@ export function Dashboard() {
                     ].map((faq) => (
                       <div
                         key={faq.q}
-                        className="p-4 rounded-xl bg-white border border-[#E5E0D9]"
+                        className="p-4 rounded-xl bg-brand-card border border-brand-border"
                         itemScope
                         itemProp="mainEntity"
                         itemType="https://schema.org/Question"
                       >
                         <h4
-                          className="text-sm font-semibold text-[#404E3F] mb-1"
+                          className="text-sm font-semibold text-brand-fg mb-1"
                           itemProp="name"
                         >
                           {faq.q}
@@ -320,7 +320,7 @@ export function Dashboard() {
                           itemType="https://schema.org/Answer"
                         >
                           <p
-                            className="text-xs text-[#404E3F]/60 leading-relaxed"
+                            className="text-xs text-brand-fg/60 leading-relaxed"
                             itemProp="text"
                           >
                             {faq.a}
@@ -359,7 +359,7 @@ export function Dashboard() {
             {compareMutation.isPending && (
               <div className="mb-6">
                 <div className="text-center mb-6">
-                  <p className="text-sm text-[#404E3F]/60">
+                  <p className="text-sm text-brand-fg/60">
                     Scraping data from PSX and comparing both stocks... This may
                     take a moment.
                   </p>
@@ -395,7 +395,7 @@ export function Dashboard() {
                 </div>
 
                 <div className="max-w-3xl mx-auto">
-                  <h3 className="text-lg font-bold text-[#404E3F] text-center mb-4">
+                  <h3 className="text-lg font-bold text-brand-fg text-center mb-4">
                     How the Comparison Works
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -405,9 +405,9 @@ export function Dashboard() {
                       { title: "Plain English Explanations", desc: "Every metric comparison includes a simple explanation of what the numbers mean and why one stock scored better." },
                       { title: "Same Sector or Different", desc: "Compare stocks within the same sector (e.g., two cement companies) or across sectors to find the best opportunity." },
                     ].map((item) => (
-                      <div key={item.title} className="p-4 rounded-xl bg-white border border-[#E5E0D9]">
-                        <h4 className="text-sm font-semibold text-[#404E3F] mb-1">{item.title}</h4>
-                        <p className="text-xs text-[#404E3F]/60 leading-relaxed">{item.desc}</p>
+                      <div key={item.title} className="p-4 rounded-xl bg-brand-card border border-brand-border">
+                        <h4 className="text-sm font-semibold text-brand-fg mb-1">{item.title}</h4>
+                        <p className="text-xs text-brand-fg/60 leading-relaxed">{item.desc}</p>
                       </div>
                     ))}
                   </div>
@@ -420,16 +420,16 @@ export function Dashboard() {
 
       {/* Footer */}
       <footer
-        className="border-t border-[#E5E0D9] mt-16 py-6"
+        className="border-t border-brand-border mt-16 py-6"
         aria-label="Site footer"
         itemScope
         itemType="https://schema.org/WPFooter"
       >
         <div className="max-w-5xl mx-auto px-4 text-center space-y-2">
-          <p className="text-xs text-[#404E3F]/60 font-medium">
+          <p className="text-xs text-brand-fg/60 font-medium">
             PSX Stock Analyzer &mdash; Free Pakistan Stock Exchange (PSX) &amp; KSE 100 Analysis Tool
           </p>
-          <p className="text-xs text-[#404E3F]/40">
+          <p className="text-xs text-brand-fg/40">
             For educational purposes only. Not financial advice. Always do your
             own research before investing in PSX-listed companies.
           </p>
@@ -437,18 +437,18 @@ export function Dashboard() {
             aria-label="Footer navigation"
             className="flex flex-wrap justify-center gap-x-4 gap-y-1 pt-1"
           >
-            <span className="text-xs text-[#404E3F]/30">PSX Analysis</span>
-            <span className="text-xs text-[#404E3F]/30">KSE 100 Stocks</span>
-            <span className="text-xs text-[#404E3F]/30">Shariah Compliant Stocks</span>
-            <span className="text-xs text-[#404E3F]/30">Dividend Stocks Pakistan</span>
-            <span className="text-xs text-[#404E3F]/30">Pakistan Stock Market</span>
+            <span className="text-xs text-brand-fg/30">PSX Analysis</span>
+            <span className="text-xs text-brand-fg/30">KSE 100 Stocks</span>
+            <span className="text-xs text-brand-fg/30">Shariah Compliant Stocks</span>
+            <span className="text-xs text-brand-fg/30">Dividend Stocks Pakistan</span>
+            <span className="text-xs text-brand-fg/30">Pakistan Stock Market</span>
           </nav>
           <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 pt-2">
-            <Link href="/privacy" className="text-xs font-medium text-[#404E3F]/50 hover:text-[#4BC232] transition-colors">Privacy Policy</Link>
-            <Link href="/terms" className="text-xs font-medium text-[#404E3F]/50 hover:text-[#4BC232] transition-colors">Terms of Service</Link>
-            <Link href="/about" className="text-xs font-medium text-[#404E3F]/50 hover:text-[#4BC232] transition-colors">About</Link>
-            <Link href="/faq" className="text-xs font-medium text-[#404E3F]/50 hover:text-[#4BC232] transition-colors">FAQ</Link>
-            <Link href="/contact" className="text-xs font-medium text-[#404E3F]/50 hover:text-[#4BC232] transition-colors">Contact</Link>
+            <Link href="/privacy" className="text-xs font-medium text-brand-fg/50 hover:text-[#4BC232] transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="text-xs font-medium text-brand-fg/50 hover:text-[#4BC232] transition-colors">Terms of Service</Link>
+            <Link href="/about" className="text-xs font-medium text-brand-fg/50 hover:text-[#4BC232] transition-colors">About</Link>
+            <Link href="/faq" className="text-xs font-medium text-brand-fg/50 hover:text-[#4BC232] transition-colors">FAQ</Link>
+            <Link href="/contact" className="text-xs font-medium text-brand-fg/50 hover:text-[#4BC232] transition-colors">Contact</Link>
           </div>
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 pt-3">
             <a href="https://dps.psx.com.pk" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-[#2B5288] hover:text-[#4BC232] transition-colors underline underline-offset-2">PSX Data Portal</a>
@@ -472,12 +472,12 @@ function StepCard({
   description: string;
 }) {
   return (
-    <div className="p-4 rounded-xl bg-white border border-[#E5E0D9] text-center">
+    <div className="p-4 rounded-xl bg-brand-card border border-brand-border text-center">
       <div className="w-8 h-8 rounded-full bg-[#4BC232] text-white text-sm font-bold flex items-center justify-center mx-auto mb-2">
         {step}
       </div>
-      <h3 className="text-sm font-semibold text-[#404E3F] mb-1">{title}</h3>
-      <p className="text-xs text-[#404E3F]/60">{description}</p>
+      <h3 className="text-sm font-semibold text-brand-fg mb-1">{title}</h3>
+      <p className="text-xs text-brand-fg/60">{description}</p>
     </div>
   );
 }

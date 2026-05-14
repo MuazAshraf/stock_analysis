@@ -54,11 +54,11 @@ export function CompanyOverview({
     range52 > 0 ? ((currentPrice - w52Low) / range52) * 100 : 50;
 
   return (
-    <Card className="border-[#E5E0D9] bg-white shadow-sm">
+    <Card className="border-brand-border bg-brand-card shadow-sm">
       <CardHeader className="pb-3">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div className="min-w-0 flex-1">
-            <CardTitle className="text-xl sm:text-2xl font-bold text-[#404E3F] break-words">
+            <CardTitle className="text-xl sm:text-2xl font-bold text-brand-fg break-words">
               {company.name}
             </CardTitle>
             <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
@@ -83,7 +83,7 @@ export function CompanyOverview({
           </div>
           <div className="text-left sm:text-right flex-shrink-0">
             <div className="flex items-center gap-2 sm:justify-end">
-              <span className="text-2xl sm:text-3xl font-bold text-[#404E3F]">
+              <span className="text-2xl sm:text-3xl font-bold text-brand-fg">
                 Rs. {currentPrice.toFixed(2)}
               </span>
             </div>
@@ -104,11 +104,11 @@ export function CompanyOverview({
       <CardContent className="space-y-5">
         {/* Description */}
         {company.description && (
-          <div className="bg-[#F8F3EA] rounded-lg p-4">
-            <p className="text-sm font-medium text-[#404E3F] mb-1">
+          <div className="bg-brand-bg rounded-lg p-4">
+            <p className="text-sm font-medium text-brand-fg mb-1">
               What does this company do?
             </p>
-            <p className="text-sm text-[#404E3F]/80 leading-relaxed">
+            <p className="text-sm text-brand-fg/80 leading-relaxed">
               {company.description}
             </p>
           </div>
@@ -117,61 +117,61 @@ export function CompanyOverview({
         {/* Key info grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {company.ceo && (
-            <div className="flex items-start gap-2 p-3 rounded-lg bg-[#F3F1E5]">
+            <div className="flex items-start gap-2 p-3 rounded-lg bg-brand-soft">
               <User className="h-4 w-4 text-[#2B5288] mt-0.5 flex-shrink-0" />
               <div>
-                <p className="text-xs text-[#404E3F]/60">CEO</p>
-                <p className="text-sm font-medium text-[#404E3F]">
+                <p className="text-xs text-brand-fg/60">CEO</p>
+                <p className="text-sm font-medium text-brand-fg">
                   {company.ceo}
                 </p>
               </div>
             </div>
           )}
           {company.chairman && (
-            <div className="flex items-start gap-2 p-3 rounded-lg bg-[#F3F1E5]">
+            <div className="flex items-start gap-2 p-3 rounded-lg bg-brand-soft">
               <User className="h-4 w-4 text-[#2B5288] mt-0.5 flex-shrink-0" />
               <div>
-                <p className="text-xs text-[#404E3F]/60">Chairman</p>
-                <p className="text-sm font-medium text-[#404E3F]">
+                <p className="text-xs text-brand-fg/60">Chairman</p>
+                <p className="text-sm font-medium text-brand-fg">
                   {company.chairman}
                 </p>
               </div>
             </div>
           )}
-          <div className="flex items-start gap-2 p-3 rounded-lg bg-[#F3F1E5]">
+          <div className="flex items-start gap-2 p-3 rounded-lg bg-brand-soft">
             <Building2 className="h-4 w-4 text-[#2B5288] mt-0.5 flex-shrink-0" />
             <div>
               <MetricExplainer
                 label="Market Cap"
                 explanation="Total value of all the company's shares combined. A bigger number means a bigger company."
               />
-              <p className="text-sm font-medium text-[#404E3F]">
+              <p className="text-sm font-medium text-brand-fg">
                 {formatMarketCap(equity.market_cap_thousands)}
               </p>
             </div>
           </div>
           {equity.total_shares != null && (
-            <div className="flex items-start gap-2 p-3 rounded-lg bg-[#F3F1E5]">
+            <div className="flex items-start gap-2 p-3 rounded-lg bg-brand-soft">
               <Layers className="h-4 w-4 text-[#2B5288] mt-0.5 flex-shrink-0" />
               <div>
                 <MetricExplainer
                   label="Outstanding Shares"
                   explanation="The total number of shares the company has issued. Includes shares held by promoters, institutions, and the general public combined. Use Free Float to see how many actually trade on the market."
                 />
-                <p className="text-sm font-medium text-[#404E3F]">
+                <p className="text-sm font-medium text-brand-fg">
                   {formatShareCount(equity.total_shares)}
                 </p>
-                <p className="text-[10px] text-[#404E3F]/50 mt-0.5">
+                <p className="text-[10px] text-brand-fg/50 mt-0.5">
                   ({equity.total_shares.toLocaleString()} shares total)
                 </p>
               </div>
             </div>
           )}
           {company.website && (
-            <div className="flex items-start gap-2 p-3 rounded-lg bg-[#F3F1E5]">
+            <div className="flex items-start gap-2 p-3 rounded-lg bg-brand-soft">
               <Globe className="h-4 w-4 text-[#2B5288] mt-0.5 flex-shrink-0" />
               <div>
-                <p className="text-xs text-[#404E3F]/60">Website</p>
+                <p className="text-xs text-brand-fg/60">Website</p>
                 <a
                   href={
                     company.website.startsWith("http")
@@ -188,27 +188,27 @@ export function CompanyOverview({
             </div>
           )}
           {bookValue != null && (
-            <div className="flex items-start gap-2 p-3 rounded-lg bg-[#F3F1E5]">
+            <div className="flex items-start gap-2 p-3 rounded-lg bg-brand-soft">
               <Building2 className="h-4 w-4 text-[#2B5288] mt-0.5 flex-shrink-0" />
               <div>
                 <MetricExplainer
                   label="Book Value / Share (BVPS)"
                   explanation="If the company sold everything and paid off all debts, this is what each share would be worth. If stock price is below book value, some investors consider it undervalued."
                 />
-                <p className="text-sm font-medium text-[#404E3F]">
+                <p className="text-sm font-medium text-brand-fg">
                   Rs. {bookValue.toFixed(2)}
                 </p>
                 {price.current != null && bookValue > 0 && (
                   <>
-                    <div className="mt-2 pt-2 border-t border-[#E5E0D9]/60">
+                    <div className="mt-2 pt-2 border-t border-brand-border/60">
                       <MetricExplainer
                         label="P/B Ratio"
                         explanation="Stock price ÷ book value per share. Below 1 means trading below book value (potentially cheap). Above 1 means investors are paying a premium over book value."
                       />
-                      <p className="text-sm font-medium text-[#404E3F]">
+                      <p className="text-sm font-medium text-brand-fg">
                         {(price.current / bookValue).toFixed(2)}
                       </p>
-                      <p className={`text-xs ${price.current < bookValue ? "text-[#4BC232]" : "text-[#404E3F]/50"}`}>
+                      <p className={`text-xs ${price.current < bookValue ? "text-[#4BC232]" : "text-brand-fg/50"}`}>
                         {price.current < bookValue
                           ? "Price is below book value"
                           : "Price is above book value"}
@@ -220,17 +220,17 @@ export function CompanyOverview({
             </div>
           )}
           {faceValue != null && (
-            <div className="flex items-start gap-2 p-3 rounded-lg bg-[#F3F1E5]">
+            <div className="flex items-start gap-2 p-3 rounded-lg bg-brand-soft">
               <Building2 className="h-4 w-4 text-[#2B5288] mt-0.5 flex-shrink-0" />
               <div>
                 <MetricExplainer
                   label="Face Value (Par Value)"
                   explanation="The nominal value set when the company first issued shares. PSX states dividends as a % of face value, so this is what % announcements get multiplied by. Most PSX stocks use Rs. 10; some use Rs. 5, 2, or 1."
                 />
-                <p className="text-sm font-medium text-[#404E3F]">
+                <p className="text-sm font-medium text-brand-fg">
                   Rs. {faceValue.toFixed(2)}
                 </p>
-                <p className="text-[10px] text-[#404E3F]/50 mt-0.5">
+                <p className="text-[10px] text-brand-fg/50 mt-0.5">
                   Per share, set at listing
                 </p>
               </div>
@@ -240,29 +240,29 @@ export function CompanyOverview({
 
         {/* 52-Week Range */}
         {w52Low > 0 && w52High > 0 && (
-          <div className="p-4 rounded-lg bg-[#F8F3EA]">
+          <div className="p-4 rounded-lg bg-brand-bg">
             <MetricExplainer
               label="52-Week Price Range"
               explanation="The lowest and highest price this stock reached in the past year. It helps you see if the current price is near the top or bottom."
             />
             <div className="mt-3">
               <div className="flex justify-between text-sm mb-1">
-                <span className="text-[#404E3F]/70">
+                <span className="text-brand-fg/70">
                   Low: Rs. {w52Low.toFixed(2)}
                 </span>
-                <span className="text-[#404E3F]/70">
+                <span className="text-brand-fg/70">
                   High: Rs. {w52High.toFixed(2)}
                 </span>
               </div>
               <div className="relative h-3 bg-gradient-to-r from-red-200 via-yellow-200 to-green-200 rounded-full overflow-hidden">
                 <div
-                  className="absolute top-0 h-full w-1 bg-[#404E3F] rounded-full shadow-md"
+                  className="absolute top-0 h-full w-1 bg-brand-fg rounded-full shadow-md"
                   style={{ left: `${Math.min(Math.max(rangePercent, 2), 98)}%` }}
                 />
               </div>
               <div className="flex items-center justify-center gap-1 mt-2">
-                <ArrowRight className="h-3 w-3 text-[#404E3F]/60" />
-                <span className="text-xs text-[#404E3F]/70">
+                <ArrowRight className="h-3 w-3 text-brand-fg/60" />
+                <span className="text-xs text-brand-fg/70">
                   Current price is at {rangePercent.toFixed(0)}% of the 52-week
                   range
                 </span>
@@ -288,9 +288,9 @@ export function CompanyOverview({
 
 function QuickStat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="text-center p-2 rounded-lg bg-[#F3F1E5]">
-      <p className="text-xs text-[#404E3F]/60">{label}</p>
-      <p className="text-sm font-semibold text-[#404E3F]">{value}</p>
+    <div className="text-center p-2 rounded-lg bg-brand-soft">
+      <p className="text-xs text-brand-fg/60">{label}</p>
+      <p className="text-sm font-semibold text-brand-fg">{value}</p>
     </div>
   );
 }

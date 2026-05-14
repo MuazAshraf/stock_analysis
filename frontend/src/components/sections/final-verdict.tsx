@@ -87,15 +87,15 @@ export function FinalVerdict({ analysis }: FinalVerdictProps) {
   const HealthIcon = healthConfig.icon;
 
   return (
-    <Card className="border-[#E5E0D9] bg-white shadow-sm">
+    <Card className="border-brand-border bg-brand-card shadow-sm">
       <CardHeader className="pb-3">
-        <CardTitle className="text-xl font-bold text-[#404E3F] flex items-center gap-2">
+        <CardTitle className="text-xl font-bold text-brand-fg flex items-center gap-2">
           Final Verdict
-          <Badge className="bg-[#F8F3EA] text-[#404E3F] text-xs font-normal">
+          <Badge className="bg-brand-bg text-brand-fg text-xs font-normal">
             Summary
           </Badge>
         </CardTitle>
-        <p className="text-sm text-[#404E3F]/60">
+        <p className="text-sm text-brand-fg/60">
           Our overall assessment of this stock, explained simply.
         </p>
       </CardHeader>
@@ -106,7 +106,7 @@ export function FinalVerdict({ analysis }: FinalVerdictProps) {
           <div
             className={`p-5 rounded-xl ${healthConfig.bg} border ${healthConfig.border}`}
           >
-            <p className="text-xs font-medium text-[#404E3F]/60 mb-2">
+            <p className="text-xs font-medium text-brand-fg/60 mb-2">
               Overall Health
             </p>
             <div className="flex items-center gap-3">
@@ -122,20 +122,20 @@ export function FinalVerdict({ analysis }: FinalVerdictProps) {
               </span>
             </div>
             {getUrduHealth(analysis.financial_health) && (
-              <p className="text-xs text-[#404E3F]/50 mt-2 italic">
+              <p className="text-xs text-brand-fg/50 mt-2 italic">
                 {getUrduHealth(analysis.financial_health)}
               </p>
             )}
           </div>
 
           {/* Risk Meter */}
-          <div className="p-5 rounded-xl bg-[#F8F3EA]">
-            <p className="text-xs font-medium text-[#404E3F]/60 mb-2">
+          <div className="p-5 rounded-xl bg-brand-bg">
+            <p className="text-xs font-medium text-brand-fg/60 mb-2">
               Risk Level
             </p>
             <div className="relative h-3 bg-gradient-to-r from-green-300 via-yellow-300 to-red-400 rounded-full overflow-hidden mt-3">
               <div
-                className="absolute top-0 h-full w-1.5 bg-[#404E3F] rounded-full shadow-md transition-all duration-700"
+                className="absolute top-0 h-full w-1.5 bg-brand-fg rounded-full shadow-md transition-all duration-700"
                 style={{
                   left: `${Math.min(Math.max(riskConfig.percent, 2), 98)}%`,
                 }}
@@ -152,7 +152,7 @@ export function FinalVerdict({ analysis }: FinalVerdictProps) {
             >
               {riskConfig.label}
             </Badge>
-            <p className="text-xs text-[#404E3F]/50 mt-2 italic">
+            <p className="text-xs text-brand-fg/50 mt-2 italic">
               {getUrduRisk(analysis.risk_level)}
             </p>
           </div>
@@ -160,16 +160,16 @@ export function FinalVerdict({ analysis }: FinalVerdictProps) {
 
         {/* Valuation */}
         {analysis.valuation && (
-          <div className="p-4 rounded-xl bg-[#F3F1E5] flex items-start gap-3">
+          <div className="p-4 rounded-xl bg-brand-soft flex items-start gap-3">
             <Tag className="h-5 w-5 text-[#2B5288] mt-0.5 flex-shrink-0" />
             <div>
-              <p className="text-sm font-semibold text-[#404E3F]">
+              <p className="text-sm font-semibold text-brand-fg">
                 Is this stock expensive or cheap right now?
               </p>
-              <p className="text-sm text-[#404E3F]/80 mt-1">
+              <p className="text-sm text-brand-fg/80 mt-1">
                 {analysis.valuation}
               </p>
-              <p className="text-xs text-[#404E3F]/50 mt-1 italic">
+              <p className="text-xs text-brand-fg/50 mt-1 italic">
                 {getUrduValuation(analysis.valuation)}
               </p>
             </div>
@@ -178,16 +178,16 @@ export function FinalVerdict({ analysis }: FinalVerdictProps) {
 
         {/* Business Verdict */}
         {analysis.business_verdict && (
-          <div className="p-4 rounded-xl bg-[#F8F3EA] flex items-start gap-3">
+          <div className="p-4 rounded-xl bg-brand-bg flex items-start gap-3">
             <CircleDot className="h-5 w-5 text-[#4BC232] mt-0.5 flex-shrink-0" />
             <div>
-              <p className="text-sm font-semibold text-[#404E3F]">
+              <p className="text-sm font-semibold text-brand-fg">
                 Business Verdict
               </p>
-              <p className="text-sm text-[#404E3F]/80 mt-1">
+              <p className="text-sm text-brand-fg/80 mt-1">
                 {analysis.business_verdict}
               </p>
-              <p className="text-xs text-[#404E3F]/50 mt-1 italic">
+              <p className="text-xs text-brand-fg/50 mt-1 italic">
                 {getUrduVerdict(analysis.business_verdict)}
               </p>
             </div>
@@ -197,19 +197,19 @@ export function FinalVerdict({ analysis }: FinalVerdictProps) {
         {/* Summary Points */}
         {analysis.summary_points && analysis.summary_points.length > 0 && (
           <div>
-            <h4 className="text-sm font-semibold text-[#404E3F] mb-3">
+            <h4 className="text-sm font-semibold text-brand-fg mb-3">
               Key Takeaways (in plain English)
             </h4>
             <ul className="space-y-2">
               {analysis.summary_points.map((point, idx) => (
                 <li
                   key={idx}
-                  className="flex items-start gap-3 p-3 rounded-lg bg-[#F3F1E5]"
+                  className="flex items-start gap-3 p-3 rounded-lg bg-brand-soft"
                 >
                   <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[#2B5288] text-white text-xs flex items-center justify-center font-semibold">
                     {idx + 1}
                   </span>
-                  <span className="text-sm text-[#404E3F] leading-relaxed">
+                  <span className="text-sm text-brand-fg leading-relaxed">
                     {point}
                   </span>
                 </li>

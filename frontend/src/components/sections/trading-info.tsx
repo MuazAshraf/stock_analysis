@@ -9,6 +9,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { ShieldCheck, ShieldAlert, Users, TrendingUp, TrendingDown, Info } from "lucide-react";
+import { useChartColors } from "@/components/theme-toggle";
 import type { Price, RatioYear } from "@/types/stock";
 
 interface TradingInfoProps {
@@ -17,6 +18,7 @@ interface TradingInfoProps {
 }
 
 export function TradingInfo({ price, ratios }: TradingInfoProps) {
+  const c = useChartColors();
   const ldcp = price.ldcp;
   const currentClose = price.current;
   const openPrice = price.open;
@@ -36,15 +38,15 @@ export function TradingInfo({ price, ratios }: TradingInfoProps) {
   const epsGrowth = latestRatio?.eps_growth ?? null;
 
   return (
-    <Card className="border-[#E5E0D9] bg-white shadow-sm">
+    <Card className="border-brand-border bg-brand-card shadow-sm">
       <CardHeader className="pb-3">
-        <CardTitle className="text-xl font-bold text-[#404E3F] flex items-center gap-2">
+        <CardTitle className="text-xl font-bold text-brand-fg flex items-center gap-2">
           Trading Info
-          <Badge className="bg-[#F8F3EA] text-[#404E3F] text-xs font-normal">
+          <Badge className="bg-brand-bg text-brand-fg text-xs font-normal">
             Daily Indicators
           </Badge>
         </CardTitle>
-        <p className="text-sm text-[#404E3F]/60">
+        <p className="text-sm text-brand-fg/60">
           Key trading signals that show buyer and seller activity today.
         </p>
       </CardHeader>
@@ -58,7 +60,7 @@ export function TradingInfo({ price, ratios }: TradingInfoProps) {
           >
             {ldcp != null ? (
               <>
-                <p className="text-xl font-bold text-[#404E3F]">Rs. {ldcp.toFixed(2)}</p>
+                <p className="text-xl font-bold text-brand-fg">Rs. {ldcp.toFixed(2)}</p>
                 {currentClose != null && currentClose !== ldcp && (
                   <p className={`text-xs font-medium mt-1 ${currentClose > ldcp ? "text-[#4BC232]" : "text-red-500"}`}>
                     {currentClose > ldcp ? "+" : ""}{(currentClose - ldcp).toFixed(2)} today
@@ -66,7 +68,7 @@ export function TradingInfo({ price, ratios }: TradingInfoProps) {
                 )}
               </>
             ) : (
-              <p className="text-sm text-[#404E3F]/40">N/A</p>
+              <p className="text-sm text-brand-fg/40">N/A</p>
             )}
           </QuickMetric>
 
@@ -87,21 +89,21 @@ export function TradingInfo({ price, ratios }: TradingInfoProps) {
                       x1="100" y1="95"
                       x2={100 + 70 * Math.cos(Math.PI - (Math.min(Math.max(peRatio / 50, 0), 1)) * Math.PI)}
                       y2={95 - 70 * Math.sin(Math.PI - (Math.min(Math.max(peRatio / 50, 0), 1)) * Math.PI)}
-                      stroke="#404E3F" strokeWidth="3" strokeLinecap="round"
+                      stroke={c.fg} strokeWidth="3" strokeLinecap="round"
                     />
-                    <circle cx="100" cy="95" r="5" fill="#404E3F" />
+                    <circle cx="100" cy="95" r="5" fill={c.fg} />
                   </svg>
                 </div>
-                <p className="text-xl font-bold text-[#404E3F]">{peRatio.toFixed(1)}</p>
-                <p className="text-xs text-[#404E3F]/60 mt-1">
+                <p className="text-xl font-bold text-brand-fg">{peRatio.toFixed(1)}</p>
+                <p className="text-xs text-brand-fg/60 mt-1">
                   {peRatio < 15 ? "Looks Cheap" : peRatio < 25 ? "Fair Price" : "Expensive"}
                 </p>
-                <p className="text-[10px] text-[#404E3F]/40 mt-0.5">
+                <p className="text-[10px] text-brand-fg/40 mt-0.5">
                   &lt;15 cheap | 15-25 fair | &gt;25 expensive
                 </p>
               </>
             ) : (
-              <p className="text-sm text-[#404E3F]/40">N/A</p>
+              <p className="text-sm text-brand-fg/40">N/A</p>
             )}
           </QuickMetric>
 
@@ -112,8 +114,8 @@ export function TradingInfo({ price, ratios }: TradingInfoProps) {
           >
             {netProfitMargin != null ? (
               <>
-                <p className="text-xl font-bold text-[#404E3F]">{netProfitMargin.toFixed(1)}%</p>
-                <div className="w-full h-2 bg-[#E5E0D9] rounded-full mt-2">
+                <p className="text-xl font-bold text-brand-fg">{netProfitMargin.toFixed(1)}%</p>
+                <div className="w-full h-2 bg-brand-border rounded-full mt-2">
                   <div
                     className="h-full rounded-full transition-all"
                     style={{
@@ -122,12 +124,12 @@ export function TradingInfo({ price, ratios }: TradingInfoProps) {
                     }}
                   />
                 </div>
-                <p className="text-xs text-[#404E3F]/60 mt-1">
+                <p className="text-xs text-brand-fg/60 mt-1">
                   {netProfitMargin >= 15 ? "Strong margins" : netProfitMargin >= 5 ? "Average margins" : "Thin margins"}
                 </p>
               </>
             ) : (
-              <p className="text-sm text-[#404E3F]/40">N/A</p>
+              <p className="text-sm text-brand-fg/40">N/A</p>
             )}
           </QuickMetric>
 
@@ -148,18 +150,18 @@ export function TradingInfo({ price, ratios }: TradingInfoProps) {
                     {epsGrowth >= 0 ? "+" : ""}{epsGrowth.toFixed(1)}%
                   </p>
                 </div>
-                <p className="text-xs text-[#404E3F]/60 mt-1">
+                <p className="text-xs text-brand-fg/60 mt-1">
                   {epsGrowth > 10 ? "Growing well" : epsGrowth >= 0 ? "Slow growth" : "Declining"}
                 </p>
               </>
             ) : (
-              <p className="text-sm text-[#404E3F]/40">N/A</p>
+              <p className="text-sm text-brand-fg/40">N/A</p>
             )}
           </QuickMetric>
         </div>
 
         {/* Buyer vs Seller Strength */}
-        <div className="p-4 rounded-xl bg-[#F3F1E5]">
+        <div className="p-4 rounded-xl bg-brand-soft">
           <MetricExplainer
             label="Who is Winning Today?"
             explanation="If the current price is higher than today's opening price, buyers are in control (they're pushing the price up). If it's lower, sellers are in control (they're pushing it down)."
@@ -171,7 +173,7 @@ export function TradingInfo({ price, ratios }: TradingInfoProps) {
                 <span className="text-lg font-bold text-[#4BC232]">
                   Buyers are Stronger
                 </span>
-                <p className="text-xs text-[#404E3F]/60">
+                <p className="text-xs text-brand-fg/60">
                   Current price (Rs. {currentClose?.toFixed(2)}) is above
                   today&apos;s open (Rs. {openPrice?.toFixed(2)}) — buyers
                   pushed the price up
@@ -182,7 +184,7 @@ export function TradingInfo({ price, ratios }: TradingInfoProps) {
                 <span className="text-lg font-bold text-red-500">
                   Sellers are Stronger
                 </span>
-                <p className="text-xs text-[#404E3F]/60">
+                <p className="text-xs text-brand-fg/60">
                   Current price (Rs. {currentClose?.toFixed(2)}) is below
                   today&apos;s open (Rs. {openPrice?.toFixed(2)}) — sellers
                   pushed the price down
@@ -190,10 +192,10 @@ export function TradingInfo({ price, ratios }: TradingInfoProps) {
               </div>
             ) : (
               <div>
-                <span className="text-lg font-bold text-[#404E3F]">
+                <span className="text-lg font-bold text-brand-fg">
                   Market is Neutral
                 </span>
-                <p className="text-xs text-[#404E3F]/60">
+                <p className="text-xs text-brand-fg/60">
                   Price is roughly the same as today&apos;s open — no clear
                   winner yet
                 </p>
@@ -204,33 +206,33 @@ export function TradingInfo({ price, ratios }: TradingInfoProps) {
 
         {/* Circuit Breaker */}
         {cbLow != null && cbHigh != null && (
-          <div className="p-4 rounded-xl bg-[#F8F3EA]">
+          <div className="p-4 rounded-xl bg-brand-bg">
             <MetricExplainer
               label="Circuit Breaker"
               fullForm="Price Safety Limit"
               explanation="The stock exchange sets a maximum limit on how much a stock price can go up or down in a single day. If the price hits this limit, trading may be paused to protect investors from extreme swings. Think of it like speed limits on a road."
             />
             <div className="mt-3 grid grid-cols-2 gap-3">
-              <div className="flex items-center gap-2 p-3 rounded-lg bg-white">
+              <div className="flex items-center gap-2 p-3 rounded-lg bg-brand-card">
                 <ShieldAlert className="h-5 w-5 text-red-400 flex-shrink-0" />
                 <div>
-                  <p className="text-[10px] text-[#404E3F]/60">Lower Limit</p>
+                  <p className="text-[10px] text-brand-fg/60">Lower Limit</p>
                   <p className="text-sm font-bold text-red-500">
                     Rs. {cbLow.toFixed(2)}
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-2 p-3 rounded-lg bg-white">
+              <div className="flex items-center gap-2 p-3 rounded-lg bg-brand-card">
                 <ShieldCheck className="h-5 w-5 text-[#4BC232] flex-shrink-0" />
                 <div>
-                  <p className="text-[10px] text-[#404E3F]/60">Upper Limit</p>
+                  <p className="text-[10px] text-brand-fg/60">Upper Limit</p>
                   <p className="text-sm font-bold text-[#4BC232]">
                     Rs. {cbHigh.toFixed(2)}
                   </p>
                 </div>
               </div>
             </div>
-            <p className="text-xs text-[#404E3F]/60 mt-2">
+            <p className="text-xs text-brand-fg/60 mt-2">
               Today this stock can only trade between Rs. {cbLow.toFixed(2)} and
               Rs. {cbHigh.toFixed(2)}. If it hits either limit, trading may halt
               temporarily.
@@ -252,9 +254,9 @@ function QuickMetric({
   children: React.ReactNode;
 }) {
   return (
-    <div className="p-4 rounded-xl bg-[#F8F3EA] text-center">
+    <div className="p-4 rounded-xl bg-brand-bg text-center">
       <div className="flex items-center justify-center gap-1.5 mb-2">
-        <p className="text-xs font-semibold text-[#404E3F]/60 uppercase tracking-wide">
+        <p className="text-xs font-semibold text-brand-fg/60 uppercase tracking-wide">
           {label}
         </p>
         <Tooltip>
@@ -265,7 +267,7 @@ function QuickMetric({
           </TooltipTrigger>
           <TooltipContent
             side="top"
-            className="max-w-xs bg-[#404E3F] text-white text-sm"
+            className="max-w-xs bg-brand-fg text-white text-sm"
           >
             {info}
           </TooltipContent>

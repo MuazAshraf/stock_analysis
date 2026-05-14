@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { MetricExplainer } from "@/components/metric-explainer";
 import { TrendingUp, TrendingDown } from "lucide-react";
+import { useChartColors } from "@/components/theme-toggle";
 import type { Price, RatioYear } from "@/types/stock";
 
 interface HealthCheckProps {
@@ -17,7 +18,8 @@ function getPERating(pe: number | null): {
   bgColor: string;
 } {
   if (pe == null || pe <= 0)
-    return { label: "N/A", color: "#404E3F", bgColor: "#E5E0D9" };
+    // Use CSS variables so the N/A badge respects light/dark mode automatically.
+    return { label: "N/A", color: "var(--brand-fg)", bgColor: "var(--brand-border)" };
   if (pe < 15)
     return {
       label: "Looks Cheap",
@@ -38,6 +40,7 @@ function getPERating(pe: number | null): {
 }
 
 export function HealthCheck({ price, ratios }: HealthCheckProps) {
+  const c = useChartColors();
   const latestRatio = ratios.length > 0 ? ratios[ratios.length - 1] : null;
   const peRatio = price.pe_ratio ?? 0;
   const peRating = getPERating(price.pe_ratio);
@@ -45,22 +48,22 @@ export function HealthCheck({ price, ratios }: HealthCheckProps) {
   const gaugePercent = Math.min(Math.max((peRatio / 50) * 100, 0), 100);
 
   return (
-    <Card className="border-[#E5E0D9] bg-white shadow-sm">
+    <Card className="border-brand-border bg-brand-card shadow-sm">
       <CardHeader className="pb-3">
-        <CardTitle className="text-xl font-bold text-[#404E3F] flex items-center gap-2">
+        <CardTitle className="text-xl font-bold text-brand-fg flex items-center gap-2">
           Health Check
-          <Badge className="bg-[#F8F3EA] text-[#404E3F] text-xs font-normal">
+          <Badge className="bg-brand-bg text-brand-fg text-xs font-normal">
             Financial Ratios
           </Badge>
         </CardTitle>
-        <p className="text-sm text-[#404E3F]/60">
+        <p className="text-sm text-brand-fg/60">
           Quick health indicators -- is this stock healthy, fair-priced, and
           growing?
         </p>
       </CardHeader>
       <CardContent className="space-y-6">
         {/* P/E Ratio Gauge */}
-        <div className="p-5 rounded-xl bg-[#F8F3EA]">
+        <div className="p-5 rounded-xl bg-brand-bg">
           <MetricExplainer
             label="P/E"
             fullForm="Price to Earnings Ratio"
@@ -74,7 +77,7 @@ export function HealthCheck({ price, ratios }: HealthCheckProps) {
                 <path
                   d="M 10 95 A 85 85 0 0 1 190 95"
                   fill="none"
-                  stroke="#E5E0D9"
+                  stroke={c.border}
                   strokeWidth="12"
                   strokeLinecap="round"
                 />
@@ -120,15 +123,15 @@ export function HealthCheck({ price, ratios }: HealthCheckProps) {
                         Math.PI - (gaugePercent / 100) * Math.PI
                       )
                   }
-                  stroke="#404E3F"
+                  stroke={c.fg}
                   strokeWidth="3"
                   strokeLinecap="round"
                 />
-                <circle cx="100" cy="95" r="6" fill="#404E3F" />
+                <circle cx="100" cy="95" r="6" fill={c.fg} />
               </svg>
             </div>
             <div className="text-center mt-2">
-              <span className="text-3xl font-bold text-[#404E3F]">
+              <span className="text-3xl font-bold text-brand-fg">
                 {peRatio > 0 ? peRatio.toFixed(1) : "N/A"}
               </span>
               <Badge
@@ -138,7 +141,7 @@ export function HealthCheck({ price, ratios }: HealthCheckProps) {
                 {peRating.label}
               </Badge>
             </div>
-            <p className="text-xs text-[#404E3F]/60 mt-1">
+            <p className="text-xs text-brand-fg/60 mt-1">
               Under 15 = cheap | 15-25 = fair | Over 25 = expensive (for PSX
               stocks)
             </p>
@@ -147,17 +150,17 @@ export function HealthCheck({ price, ratios }: HealthCheckProps) {
 
         {/* Net Profit Margin */}
         {latestRatio && latestRatio.net_profit_margin != null && (
-          <div className="p-5 rounded-xl bg-[#F3F1E5]">
+          <div className="p-5 rounded-xl bg-brand-soft">
             <div className="flex items-center justify-between mb-3">
               <MetricExplainer
                 label="Net Profit Margin"
                 explanation="Out of every Rs. 100 the company earns, how much is actual profit? Higher is better. A margin of 20% means Rs. 20 profit for every Rs. 100 earned."
               />
-              <span className="text-sm font-semibold text-[#404E3F]">
+              <span className="text-sm font-semibold text-brand-fg">
                 {latestRatio.net_profit_margin.toFixed(1)}%
               </span>
             </div>
-            <div className="relative h-4 bg-[#E5E0D9] rounded-full overflow-hidden">
+            <div className="relative h-4 bg-brand-border rounded-full overflow-hidden">
               <div
                 className="h-full rounded-full transition-all duration-700"
                 style={{
@@ -171,7 +174,7 @@ export function HealthCheck({ price, ratios }: HealthCheckProps) {
                 }}
               />
             </div>
-            <p className="text-xs text-[#404E3F]/60 mt-2">
+            <p className="text-xs text-brand-fg/60 mt-2">
               {latestRatio.net_profit_margin >= 15
                 ? "Healthy margins -- the company keeps a good chunk of its revenue as profit."
                 : latestRatio.net_profit_margin >= 5
@@ -183,7 +186,7 @@ export function HealthCheck({ price, ratios }: HealthCheckProps) {
 
         {/* EPS Growth */}
         {latestRatio && latestRatio.eps_growth != null && (
-          <div className="p-5 rounded-xl bg-[#F8F3EA]">
+          <div className="p-5 rounded-xl bg-brand-bg">
             <div className="flex items-center justify-between">
               <MetricExplainer
                 label="EPS Growth"
@@ -208,7 +211,7 @@ export function HealthCheck({ price, ratios }: HealthCheckProps) {
                 </span>
               </div>
             </div>
-            <p className="text-xs text-[#404E3F]/60 mt-2">
+            <p className="text-xs text-brand-fg/60 mt-2">
               {latestRatio.eps_growth >= 10
                 ? "Strong growth! The company's per-share profit is increasing nicely."
                 : latestRatio.eps_growth >= 0
