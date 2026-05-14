@@ -147,7 +147,20 @@ export function DividendCheck({ payouts, dividendStatus }: DividendCheckProps) {
             </div>
             <div className="space-y-3">
               {upcoming.map(({ payout, start, end }, idx) => {
-                const daysLeft = daysUntil(end);
+                // Use START date for the countdown — that's the deadline to
+                // own the stock. Counting to END (the old behavior) is
+                // misleading because buying inside the closure window doesn't
+                // qualify you for the dividend.
+                const daysToStart = daysUntil(start);
+                const inClosure = daysToStart < 0 && daysUntil(end) >= 0;
+                const label = inClosure ? "In closure now" : "Buy by";
+                const value = inClosure
+                  ? "Closes " + (daysUntil(end) === 0 ? "today" : `in ${daysUntil(end)} day${daysUntil(end) === 1 ? "" : "s"}`)
+                  : daysToStart === 0
+                    ? "Today"
+                    : daysToStart === 1
+                      ? "1 day left"
+                      : `${daysToStart} days left`;
                 return (
                   <div
                     key={idx}
@@ -163,14 +176,8 @@ export function DividendCheck({ payouts, dividendStatus }: DividendCheckProps) {
                       </p>
                     </div>
                     <div className="text-left sm:text-right">
-                      <p className="text-xs text-brand-fg/50">Closes in</p>
-                      <p className="text-sm font-bold text-[#4BC232]">
-                        {daysLeft === 0
-                          ? "Today"
-                          : daysLeft === 1
-                          ? "1 day"
-                          : `${daysLeft} days`}
-                      </p>
+                      <p className="text-xs text-brand-fg/50">{label}</p>
+                      <p className="text-sm font-bold text-[#4BC232]">{value}</p>
                     </div>
                   </div>
                 );
