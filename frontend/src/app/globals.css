@@ -96,6 +96,10 @@
   --brand-soft: #F3F1E5;      /* slightly warmer card / pill background */
   --brand-fg: #404E3F;        /* body / heading text */
   --brand-border: #E5E0D9;    /* default borders */
+  --brand-accent: #28701C;    /* accessible green for solid controls */
+  --brand-accent-hover: #226318;
+  --brand-accent-text: #28701C;
+  --brand-readable-muted: #667064;
 }
 
 .dark {
@@ -138,6 +142,10 @@
   --brand-soft: #2A2622;      /* softer card / pill background */
   --brand-fg: #F8F3EA;        /* body / heading text (was the cream bg in light) */
   --brand-border: #3D3833;    /* default borders */
+  --brand-accent: #28701C;
+  --brand-accent-hover: #226318;
+  --brand-accent-text: #5ED944;
+  --brand-readable-muted: #C3CCBF;
 }
 
 @layer base {
@@ -152,4 +160,37 @@
     @apply bg-brand-bg text-brand-fg;
     overflow-x: hidden;
   }
+}
+
+/* Accessibility compatibility layer.
+   Older pages used light green text and low-opacity foreground utilities that
+   fail WCAG contrast on the cream/white surfaces. Keep the class names stable,
+   but map the rendered colors to accessible tokens. */
+.text-\[\#4BC232\] {
+  color: var(--brand-accent-text) !important;
+}
+
+.hover\:text-\[\#4BC232\]:hover {
+  color: var(--brand-accent-text) !important;
+}
+
+.bg-\[\#4BC232\] {
+  background-color: var(--brand-accent) !important;
+}
+
+.hover\:bg-\[\#3da828\]:hover {
+  background-color: var(--brand-accent-hover) !important;
+}
+
+.text-brand-fg\/30,
+.text-brand-fg\/40,
+.text-brand-fg\/50,
+.text-brand-fg\/60,
+.text-brand-fg\/70 {
+  color: var(--brand-readable-muted) !important;
+}
+
+.placeholder\:text-brand-fg\/30::placeholder {
+  color: var(--brand-readable-muted) !important;
+  opacity: 1;
 }
