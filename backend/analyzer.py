@@ -9,7 +9,7 @@ import json
 import logging
 import math
 import re
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from pathlib import Path
 
 from models import (
@@ -171,22 +171,29 @@ def calculate_dividend_growth(
     payouts: list[PayoutRecord],
     years: int = 3,
 ) -> tuple[float | None, int | None]:
-    """Historical Dividend Growth — N-year CAGR of annual cash-dividend totals.
+    """Trailing-12-month (TTM) dividend growth — annualised CAGR.
 
-        g = ((Latest Year Total / Earliest Year Total) ^ (1 / span)) − 1
+        TTM      = sum of cash dividend % paid in the last 365 days
+        Prior    = sum of cash dividend % paid in the 365 days ending `years` ago
+        g        = (TTM / Prior) ^ (1 / years) − 1
 
-    Groups all cash dividends by announcement *calendar year* and sums the
-    `% of face value` per year. Face value cancels out in the ratio so this
-    works in raw percent without conversion to PKR.
+    Uses rolling 365-day windows anchored to today, not calendar-year buckets.
+    Eliminates the partial-current-year bias and fiscal-vs-calendar-year
+    mismatch that calendar-grouping introduces. Industry standard (Bloomberg,
+    Reuters, etc. all use TTM for dividend growth).
 
-    Returns `(growth_pct, span_years)` so the UI can label the figure with
-    the actual window used. Returns (None, None) when we don't have at least
-    two distinct years of cash dividend history.
+    Face value cancels out in the ratio so this works in raw % without
+    conversion to PKR.
+
+    Returns `(growth_pct, span_years)` — span is capped at how much actual
+    history we have. Returns `(None, None)` when either window has no cash
+    dividends to compare.
     """
     if not payouts:
         return (None, None)
 
-    annual_totals: dict[int, float] = {}
+    today = date.today()
+    cash_points: list[tuple[date, float]] = []
     for p in payouts:
         details = (p.details or "").upper()
         if "CASH DIVIDEND" not in details and "(D)" not in details:
@@ -201,25 +208,32 @@ def calculate_dividend_growth(
             pct = float(m.group(1))
         except ValueError:
             continue
-        annual_totals[when.year] = annual_totals.get(when.year, 0.0) + pct
+        cash_points.append((when.date(), pct))
 
-    if len(annual_totals) < 2:
+    if len(cash_points) < 2:
         return (None, None)
 
-    sorted_years = sorted(annual_totals.keys())
-    latest_year = sorted_years[-1]
+    earliest = min(d for d, _ in cash_points)
+    available_years = (today - earliest).days // 365
     # Use the longest window available up to the requested years.
-    earliest_year = max(sorted_years[0], latest_year - years)
-    span = latest_year - earliest_year
+    span = min(years, available_years)
     if span < 1:
         return (None, None)
 
-    latest_total = annual_totals[latest_year]
-    earliest_total = annual_totals[earliest_year]
-    if earliest_total <= 0:
+    ttm_end = today
+    ttm_start = today - timedelta(days=365)
+    prior_end = today - timedelta(days=365 * span)
+    prior_start = today - timedelta(days=365 * (span + 1))
+
+    ttm_total = sum(pct for d, pct in cash_points if ttm_start <= d <= ttm_end)
+    prior_total = sum(
+        pct for d, pct in cash_points if prior_start <= d < prior_end
+    )
+
+    if ttm_total <= 0 or prior_total <= 0:
         return (None, None)
 
-    growth = ((latest_total / earliest_total) ** (1.0 / span) - 1) * 100.0
+    growth = ((ttm_total / prior_total) ** (1.0 / span) - 1) * 100.0
     return (growth, span)
 
 
