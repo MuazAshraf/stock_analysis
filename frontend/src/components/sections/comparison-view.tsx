@@ -545,6 +545,12 @@ function InvestorMetricsCompare({
   const cagrYearsLabel = cagrYearsA ?? cagrYearsB ?? 5;
   const cagrWinner = pickWinner(cagrA, cagrB);
 
+  const dgA = a?.dividend_growth_pct ?? null;
+  const dgB = b?.dividend_growth_pct ?? null;
+  const dgYearsLabel =
+    a?.dividend_growth_years ?? b?.dividend_growth_years ?? 3;
+  const dgWinner = pickWinner(dgA, dgB);
+
   // Per-metric "winner" flags (the side with the higher value, for metrics
   // where higher is universally better). Payout Ratio has no clear winner —
   // neither high nor low is universally good — so we leave it un-highlighted.
@@ -552,6 +558,7 @@ function InvestorMetricsCompare({
     dy: dyWinner,
     roe: roeWinner,
     cagr: cagrWinner,
+    dg: dgWinner,
   };
 
   // Each row is one metric, rendered once per stock column.
@@ -560,6 +567,7 @@ function InvestorMetricsCompare({
     { key: "payout", label: "Payout Ratio", aValue: payA, bValue: payB },
     { key: "roe", label: "ROE", aValue: roeA, bValue: roeB },
     { key: "cagr", label: `${cagrYearsLabel}-Yr Price CAGR`, aValue: cagrA, bValue: cagrB },
+    { key: "dg", label: `${dgYearsLabel}-Yr Div Growth`, aValue: dgA, bValue: dgB },
   ];
 
   const renderTile = (

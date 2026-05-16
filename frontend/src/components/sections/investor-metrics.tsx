@@ -85,6 +85,33 @@ function roeBucket(r: number | null | undefined) {
   };
 }
 
+function dividendGrowthBucket(g: number | null | undefined) {
+  if (g == null) return null;
+  if (g < 0)
+    return {
+      label: "Shrinking",
+      color: "#ef4444",
+      hint: "Dividends have been getting smaller over time — a warning sign for income investors.",
+    };
+  if (g < 5)
+    return {
+      label: "Stagnant",
+      color: "#d97706",
+      hint: "Dividends have barely changed. Inflation may be eroding your real income.",
+    };
+  if (g < 15)
+    return {
+      label: "Steady",
+      color: "#4BC232",
+      hint: "Dividends are growing meaningfully — a healthy track record for an income stock.",
+    };
+  return {
+    label: "Strong",
+    color: "#16a34a",
+    hint: "Dividends have grown rapidly. Sustainability depends on whether earnings are growing too.",
+  };
+}
+
 function cagrBucket(c: number | null | undefined) {
   if (c == null) return null;
   if (c < 0)
@@ -121,14 +148,20 @@ export function InvestorMetricsSection({ metrics }: Props) {
     roe_pct,
     price_cagr_pct,
     price_cagr_years,
+    dividend_growth_pct,
+    dividend_growth_years,
   } = metrics;
   const dy = dividendYieldBucket(dividend_yield_pct);
   const payout = payoutBucket(payout_ratio_pct);
   const roe = roeBucket(roe_pct);
   const cagr = cagrBucket(price_cagr_pct);
+  const divGrowth = dividendGrowthBucket(dividend_growth_pct);
   const cagrYearsLabel = price_cagr_years
     ? `${price_cagr_years}-Year Price CAGR`
     : "Price CAGR";
+  const divGrowthYearsLabel = dividend_growth_years
+    ? `${dividend_growth_years}-Year Dividend Growth`
+    : "Dividend Growth";
 
   return (
     <Card className="border-brand-border bg-brand-card shadow-sm">
@@ -143,7 +176,7 @@ export function InvestorMetricsSection({ metrics }: Props) {
           Quick parameters that help you judge whether a stock is rewarding shareholders and using their capital efficiently.
         </p>
       </CardHeader>
-      <CardContent className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <CardContent className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {/* Dividend Yield */}
         <div className="p-4 rounded-xl bg-brand-bg border border-brand-border">
           <MetricExplainer
@@ -263,6 +296,39 @@ export function InvestorMetricsSection({ metrics }: Props) {
           </p>
           <p className="text-[10px] text-brand-fg/40 mt-2 font-mono">
             (Latest ÷ Earliest) ^ (1 ÷ years) − 1
+          </p>
+        </div>
+
+        {/* Dividend Growth */}
+        <div className="p-4 rounded-xl bg-brand-bg border border-brand-border">
+          <MetricExplainer
+            label={divGrowthYearsLabel}
+            explanation="Annualised growth rate of the total cash dividends paid per year. Tells you whether the company is raising, holding, or cutting dividends over time. Computed from the actual dividend history — no assumptions about future earnings."
+          />
+          <div className="flex items-baseline gap-2 mt-2">
+            <span className="text-3xl font-bold text-brand-fg">
+              {formatPct(dividend_growth_pct)}
+              {dividend_growth_pct != null && dividend_growth_pct >= 0 ? (
+                <TrendingUp className="inline h-5 w-5 ml-1 text-[#4BC232]" />
+              ) : dividend_growth_pct != null && dividend_growth_pct < 0 ? (
+                <TrendingDown className="inline h-5 w-5 ml-1 text-red-500" />
+              ) : null}
+            </span>
+            {divGrowth && (
+              <Badge
+                className="text-white text-xs"
+                style={{ backgroundColor: divGrowth.color }}
+              >
+                {divGrowth.label}
+              </Badge>
+            )}
+          </div>
+          <p className="text-xs text-brand-fg/70 mt-2 leading-relaxed">
+            {divGrowth?.hint ??
+              "Need at least two years of cash dividend history. New listings or non-payers won't have this metric yet."}
+          </p>
+          <p className="text-[10px] text-brand-fg/40 mt-2 font-mono">
+            (Latest yr DPS ÷ Earliest yr DPS) ^ (1 ÷ years) − 1
           </p>
         </div>
       </CardContent>

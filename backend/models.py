@@ -108,7 +108,9 @@ class InvestorMetrics(BaseModel):
     payout_ratio_pct: float | None = Field(None, description="Trailing 12-month payout ratio, %")
     roe_pct: float | None = Field(None, description="Return on Equity, %")
     price_cagr_pct: float | None = Field(None, description="Annualised price growth over the available history (~5 years on PSX), %")
-    price_cagr_years: float | None = Field(None, description="Actual number of years used for the CAGR calculation")
+    price_cagr_years: float | None = Field(None, description="Actual number of years used for the price CAGR")
+    dividend_growth_pct: float | None = Field(None, description="Annualised growth in cash dividend totals (up to 3 years), %")
+    dividend_growth_years: int | None = Field(None, description="Actual number of years used for the dividend CAGR")
 
 
 class ValueCheck(BaseModel):

@@ -159,6 +159,8 @@ export interface InvestorMetrics {
   roe_pct: number | null;
   price_cagr_pct: number | null;
   price_cagr_years: number | null;
+  dividend_growth_pct: number | null;
+  dividend_growth_years: number | null;
 }
 
 export interface StockData {

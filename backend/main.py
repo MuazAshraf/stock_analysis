@@ -19,6 +19,7 @@ from slowapi.util import get_remote_address
 
 from analyzer import (
     analyze,
+    calculate_dividend_growth,
     calculate_dividend_yield,
     calculate_payout_ratio,
     calculate_price_cagr,
@@ -269,6 +270,9 @@ async def analyze_company(request: Request, body: AnalyzeRequest):
 
     cagr_target_years = 5
     cagr_pct = calculate_price_cagr(price_history, years=cagr_target_years)
+    div_growth_pct, div_growth_span = calculate_dividend_growth(
+        scraped["payouts"], years=3,
+    )
     investor_metrics = InvestorMetrics(
         dividend_yield_pct=calculate_dividend_yield(
             payouts=scraped["payouts"],
@@ -286,6 +290,8 @@ async def analyze_company(request: Request, body: AnalyzeRequest):
         ),
         price_cagr_pct=cagr_pct,
         price_cagr_years=cagr_target_years if cagr_pct is not None else None,
+        dividend_growth_pct=div_growth_pct,
+        dividend_growth_years=div_growth_span,
     )
 
     return AnalyzeResponse(
@@ -369,6 +375,9 @@ async def compare_companies(request: Request, body: CompareRequest):
         symbol = scraped["company"].symbol.upper()
 
         cagr_pct = calculate_price_cagr(price_history, years=cagr_target_years)
+        div_growth_pct, div_growth_span = calculate_dividend_growth(
+            scraped["payouts"], years=3,
+        )
         investor_metrics = InvestorMetrics(
             dividend_yield_pct=calculate_dividend_yield(
                 payouts=scraped["payouts"],
@@ -386,6 +395,8 @@ async def compare_companies(request: Request, body: CompareRequest):
             ),
             price_cagr_pct=cagr_pct,
             price_cagr_years=cagr_target_years if cagr_pct is not None else None,
+            dividend_growth_pct=div_growth_pct,
+            dividend_growth_years=div_growth_span,
         )
 
         return AnalyzeResponse(

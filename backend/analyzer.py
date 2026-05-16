@@ -167,6 +167,62 @@ def calculate_dividend_yield(
     return (dps_pkr / current_price) * 100.0
 
 
+def calculate_dividend_growth(
+    payouts: list[PayoutRecord],
+    years: int = 3,
+) -> tuple[float | None, int | None]:
+    """Historical Dividend Growth — N-year CAGR of annual cash-dividend totals.
+
+        g = ((Latest Year Total / Earliest Year Total) ^ (1 / span)) − 1
+
+    Groups all cash dividends by announcement *calendar year* and sums the
+    `% of face value` per year. Face value cancels out in the ratio so this
+    works in raw percent without conversion to PKR.
+
+    Returns `(growth_pct, span_years)` so the UI can label the figure with
+    the actual window used. Returns (None, None) when we don't have at least
+    two distinct years of cash dividend history.
+    """
+    if not payouts:
+        return (None, None)
+
+    annual_totals: dict[int, float] = {}
+    for p in payouts:
+        details = (p.details or "").upper()
+        if "CASH DIVIDEND" not in details and "(D)" not in details:
+            continue
+        when = _parse_payout_date(p.date)
+        if when is None:
+            continue
+        m = _PERCENT_RE.search(p.details or "")
+        if not m:
+            continue
+        try:
+            pct = float(m.group(1))
+        except ValueError:
+            continue
+        annual_totals[when.year] = annual_totals.get(when.year, 0.0) + pct
+
+    if len(annual_totals) < 2:
+        return (None, None)
+
+    sorted_years = sorted(annual_totals.keys())
+    latest_year = sorted_years[-1]
+    # Use the longest window available up to the requested years.
+    earliest_year = max(sorted_years[0], latest_year - years)
+    span = latest_year - earliest_year
+    if span < 1:
+        return (None, None)
+
+    latest_total = annual_totals[latest_year]
+    earliest_total = annual_totals[earliest_year]
+    if earliest_total <= 0:
+        return (None, None)
+
+    growth = ((latest_total / earliest_total) ** (1.0 / span) - 1) * 100.0
+    return (growth, span)
+
+
 def calculate_roe(
     financials_annual: list[FinancialYear],
     book_value_per_share: float | None,
